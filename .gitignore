@@ -1,0 +1,15 @@
+# compliation
+.idea/
+__pycache__/
+*/__pycache__/
+*ipynb_checkpoint*
+
+# other
+.DS_Store
+
+# pip stuff
+dist/
+Topyfic.egg-info/
+
+# test
+tutorials/test.ipynb
