@@ -19,7 +19,6 @@ setup(
         'numpy',  # base python distribution
         'scipy',
         'scikit-learn>=0.24.2',
-        'multiprocessing',
         'matplotlib',
         'seaborn',
         'itertools',
