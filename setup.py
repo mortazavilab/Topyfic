@@ -11,7 +11,7 @@ setup(
     author='Narges Rezaie',  # your name
     author_email='nargesrezaie80@gmail.com',  # your email
     url='https://github.com/nargesr/Topyfic',  # url to your git repo
-    download_url='https://github.com/mortazavilab/PyWGCNA/archive/refs/tags/v1.0.0.tar.gz',  # link to the tar.gz file associated with this release
+    download_url='https://github.com/nargesr/Topyfic/archive/refs/tags/v0.0.1-alpha.tar.gz',  # link to the tar.gz file associated with this release
     keywords=['Cellular Programs', 'Latent Dirichlet allocation', 'single-cell multiome', 'single-cell RNA-seq',
               'gene regulatory network'],  #
     install_requires=[  # these can also include >, <, == to enforce version compatibility
