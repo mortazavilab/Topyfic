@@ -12,4 +12,4 @@ dist/
 Topyfic.egg-info/
 
 # test
-tutorials/test.ipynb
+test/
