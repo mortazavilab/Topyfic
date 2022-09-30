@@ -116,8 +116,9 @@ class Train:
                      "doc_topic_prior",
                      "topic_word_prior"])
 
+        count = 0
         for random_state in self.random_state_range:
-            components, exp_dirichlet_component, others = self.top_models[random_state].get_top_models_attributes()
+            components, exp_dirichlet_component, others = self.top_models[count].get_top_models_attributes()
 
             all_components.loc[[f"Topic{i + 1}_R{random_state}" for i in range(self.k)], :] = components.values
 
@@ -129,6 +130,8 @@ class Train:
             all_others.loc[[f"Topic{i + 1}_R{random_state}" for i in range(self.k)], "bound"] = others.bound.values
             all_others.loc[[f"Topic{i + 1}_R{random_state}" for i in range(self.k)], "doc_topic_prior"] = others.doc_topic_prior.values
             all_others.loc[[f"Topic{i + 1}_R{random_state}" for i in range(self.k)], "topic_word_prior"] = others.topic_word_prior.values
+
+            count = count + 1
 
         return all_components, all_exp_dirichlet_component, all_others
 
