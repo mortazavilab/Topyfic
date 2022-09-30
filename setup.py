@@ -3,14 +3,14 @@ from setuptools import setup
 setup(
     name='Topyfic',  # the name of your package
     packages=['Topyfic'],  # same as above
-    version='v0.0.5',  # version number
+    version='v0.0.7',  # version number
     license='MIT',  # license type
     description='Topyfic is a Python package designed to identify reproducible latent dirichlet allocation (LDA) '
                 'using leiden clustering and harmony for single cell epigenomics data',
     # short description
     author='Narges Rezaie',  # your name
     author_email='nargesrezaie80@gmail.com',  # your email
-    url='https://github.com/nargesr/Topyfic',  # url to your git repo
+    url='https://github.com/mortazavilab/Topyfic',  # url to your git repo
     download_url='https://github.com/mortazavilab/Topyfic/archive/refs/tags/v0.0.5-alpha.tar.gz',  # link to the tar.gz file associated with this release
     keywords=['Cellular Programs', 'Latent Dirichlet allocation', 'single-cell multiome', 'single-cell RNA-seq',
               'gene regulatory network'],  #
