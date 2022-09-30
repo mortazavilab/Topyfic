@@ -51,10 +51,12 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
-    def make_single_LDA_model(self, data, random_state):
+    def make_single_LDA_model(self, data, random_state, name):
         """
         train simple LDA model using sklearn package and embed it to TopModel class
 
+        :param name: name of LDA model
+        :type name: str
         :param data: processed gene count data along with cells and genes information
         :type data: anndata
         :param random_state: Pass an int for reproducible results across multiple function calls
@@ -73,7 +75,10 @@ class Train:
                                     columns=[f'Topic{i + 1}_R{random_state}' for i in range(self.k)],
                                     index=data.var.index.tolist())
 
-        TopModel_lda_model = TopModel(N=gene_weights.shape[1], gene_weights=gene_weights, rlda=lda_model)
+        TopModel_lda_model = TopModel(name=f"{name}_{random_state}",
+                                      N=gene_weights.shape[1],
+                                      gene_weights=gene_weights,
+                                      rlda=lda_model)
 
         return TopModel_lda_model
 
@@ -88,7 +93,7 @@ class Train:
             n_thread = self.n_runs
 
         self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
-                                                           zip(repeat(data), self.random_state_range))
+                                                           zip(repeat(data), self.random_state_range, self.name))
         print(f"{self.n_runs} LDA models with {self.k} topics learned\n")
 
     def make_LDA_models_attributes(self):
