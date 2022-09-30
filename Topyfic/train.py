@@ -93,7 +93,7 @@ class Train:
             n_thread = self.n_runs
 
         self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
-                                                           zip(repeat(data), self.random_state_range, self.name))
+                                                           zip(repeat(data), self.random_state_range, repeat(self.name)))
         print(f"{self.n_runs} LDA models with {self.k} topics learned\n")
 
     def make_LDA_models_attributes(self):
@@ -118,6 +118,7 @@ class Train:
 
         count = 0
         for random_state in self.random_state_range:
+            print(self.top_models)
             components, exp_dirichlet_component, others = self.top_models[count].get_top_models_attributes()
 
             all_components.loc[[f"Topic{i + 1}_R{random_state}" for i in range(self.k)], :] = components.values
