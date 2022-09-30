@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='Topyfic',  # the name of your package
     packages=['Topyfic'],  # same as above
-    version='v0.0.2',  # version number
+    version='v0.0.3',  # version number
     license='MIT',  # license type
     description='Topyfic is a Python package designed to identify reproducible latent dirichlet allocation (LDA) '
                 'using leiden clustering and harmony for single cell epigenomics data',
@@ -14,6 +14,7 @@ setup(
     download_url='https://github.com/mortazavilab/Topyfic/archive/refs/tags/v0.0.1-alpha.tar.gz',  # link to the tar.gz file associated with this release
     keywords=['Cellular Programs', 'Latent Dirichlet allocation', 'single-cell multiome', 'single-cell RNA-seq',
               'gene regulatory network'],  #
+    python_requires='>=3.8',
     install_requires=[  # these can also include >, <, == to enforce version compatibility
         'pandas',  # make sure the packages you put here are those NOT included in the
         'numpy',  # base python distribution
@@ -21,12 +22,10 @@ setup(
         'scikit-learn>=0.24.2',
         'matplotlib',
         'seaborn',
-        'itertools',
         'joblib',
         'pytest',
         'scanpy',
-        'anndata',
-        'random'
+        'anndata'
     ],
     classifiers=[  # choose from here: https://pypi.org/classifiers/
         'Development Status :: 3 - Alpha',
