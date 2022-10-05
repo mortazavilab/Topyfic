@@ -130,7 +130,7 @@ class TopModel:
 
     def save_topModel(self, name="topModel", save_path=""):
         """
-        save Train class as a pickle file
+        save TopModel class as a pickle file
         :param name: name of the pickle file (default: topModel)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)

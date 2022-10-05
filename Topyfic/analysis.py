@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import anndata
 import sys
-from scipy.stats import t
+from scipy import stats
 import warnings
 import random
 
@@ -378,48 +378,56 @@ class Analysis:
 
         return datTraits
 
-    @staticmethod
-    def corPvalue(cor, nSamples):
-        T = np.sqrt(nSamples - 2) * (cor / np.sqrt(1 - (cor ** 2)))
-        pt = pd.DataFrame(t.cdf(np.abs(T), nSamples - 2), index=T.index, columns=T.columns)
-        return 2 * pt
-
     def TopicTraitRelationshipHeatmap(self,
-                                      metadata,
+                                      metaData,
                                       save=True,
                                       show=True,
                                       format_file="pdf",
                                       file_name='topic-traitRelationships'):
-        # Define numbers of genes and cells
-        nCells = self.cell_participation.shape[0]
+        """
+        plot topic-trait relationship heatmap
+        :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)
+        :type metaData: list
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param format_file: indicate the format of plot (default: pdf)
+        :type format_file: str
+        :param file_name: name and path of the plot use for save (default: topic-traitRelationships)
+        :type file_name: str
+        """
+        datTraits = Analysis.convertDatTraits(self.cell_participation.obs[metaData])
 
-        datTraits = Analysis.convertDatTraits(self.cell_participation.obs[metadata])
+        topicsTraitCor = pd.DataFrame(index=self.cell_participation.to_df().columns,
+                                      columns=datTraits.columns,
+                                      dtype="float")
+        topicsTraitPvalue = pd.DataFrame(index=self.cell_participation.to_df().columns,
+                                         columns=datTraits.columns,
+                                         dtype="float")
 
-        names = np.concatenate((self.cell_participation.to_df().columns, datTraits.columns))
-        topicsTraitCor = pd.DataFrame(np.corrcoef(self.cell_participation.to_df().T, datTraits.T),
-                                      index=names, columns=names)
-        topicTraitCor = topicsTraitCor.iloc[0:self.cell_participation.shape[1], self.cell_participation.shape[1]:]
-        topicTraitPvalue = Analysis.corPvalue(topicTraitCor, nCells)
+        for i in self.cell_participation.to_df().columns:
+            for j in datTraits.columns:
+                tmp = stats.pearsonr(self.cell_participation.to_df()[i], datTraits[j])
+                topicsTraitCor.loc[i, j] = tmp[0]
+                topicsTraitPvalue.loc[i, j] = tmp[1]
 
-        fig, ax = plt.subplots(figsize=(topicTraitPvalue.shape[0] * 1.5,
-                                        topicTraitPvalue.shape[1] * 1.5), facecolor='white')
+        fig, ax = plt.subplots(figsize=(topicsTraitPvalue.shape[0] * 1.5,
+                                        topicsTraitPvalue.shape[1] * 1.5), facecolor='white')
 
         xlabels = self.cell_participation.to_df().columns
         ylabels = datTraits.columns
 
         # Loop over data dimensions and create text annotations.
-        tmp_cor = topicTraitCor.T.round(decimals=2)
-        topicTraitPvalue[topicTraitPvalue == 0] = sys.float_info.epsilon
-        tmp_pvalue = (topicTraitPvalue.apply(np.log10))
-        tmp_pvalue = -1 * tmp_pvalue
-        tmp_pvalue = tmp_pvalue.T.round(decimals=2)
+        tmp_cor = topicsTraitCor.T.round(decimals=2)
+        tmp_pvalue = topicsTraitPvalue.T.round(decimals=2)
         labels = (np.asarray(["{0}\n({1})".format(cor, pvalue)
                               for cor, pvalue in zip(tmp_cor.values.flatten(),
                                                      tmp_pvalue.values.flatten())])) \
-            .reshape(topicTraitCor.T.shape)
+            .reshape(topicsTraitCor.T.shape)
 
         sns.set(font_scale=1.5)
-        res = sns.heatmap(topicTraitCor.T, annot=labels, fmt="", cmap='RdBu_r',
+        res = sns.heatmap(topicsTraitCor.T, annot=labels, fmt="", cmap='RdBu_r',
                           vmin=-1, vmax=1, ax=ax, annot_kws={'size': 20, "weight": "bold"},
                           xticklabels=xlabels, yticklabels=ylabels)
         res.set_xticklabels(res.get_xmajorticklabels(), fontsize=20, fontweight="bold", rotation=90)
@@ -437,7 +445,13 @@ class Analysis:
             plt.close()
 
     def save_analysis(self, name="analysis", save_path=""):
-
+        """
+        save Analysis class as a pickle file
+        :param name: name of the pickle file (default: analysis)
+        :type name: str
+        :param save_path: directory you want to use to save pickle file (default is saving near script)
+        :type save_path: str
+        """
         print(f"Saving analysis class as {name}.p")
 
         picklefile = open(f"{save_path}{name}.p", "wb")
