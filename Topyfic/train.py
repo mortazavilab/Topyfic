@@ -30,7 +30,7 @@ class Train:
     :type n_runs: int
     :param random_state_range: list of random state, we used to run LDA models (default: range(n_runs))
     :type random_state_range: list of int
-    :param top_models: list of top_models which each of them save the LDA model with specific random_state
+    :param top_models: list of TopModel class to save all LDA models
     :type top_models: list of TopModel
     """
 
@@ -42,8 +42,8 @@ class Train:
 
         if random_state_range is None:
             random_state_range = range(n_runs)
-        else:
-            n_runs = len(random_state_range)
+        elif n_runs != len(random_state_range):
+            sys.exit("number of runs and length of random state did not match!")
 
         self.name = name
         self.k = k
@@ -62,7 +62,7 @@ class Train:
         :param random_state: Pass an int for reproducible results across multiple function calls
         :type random_state: int
 
-        :return: LDA model embeded in TopModel class
+        :return: LDA model embedded in TopModel class
         :rtype: TopModel
         """
         lda_model = LatentDirichletAllocation(n_components=self.k,
@@ -82,12 +82,13 @@ class Train:
 
         return TopModel_lda_model
 
-    def run_LDA_models(self, data, n_thread=None):
+    def run_LDA_models(self, data, n_thread=1):
         """
-        train LDA model
-        :param data:
-        :param n_thread:
-        :return:
+        train LDA models
+        :param data: data embeded in anndata format use to train LDA model
+        :type data: anndata
+        :param n_thread: number of threds you used to learn LDA models (default=1)
+        :type n_thread: int
         """
         if n_thread is None:
             n_thread = self.n_runs
@@ -97,6 +98,13 @@ class Train:
         print(f"{self.n_runs} LDA models with {self.k} topics learned\n")
 
     def make_LDA_models_attributes(self):
+        """
+        make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)
+        :return: three data frame which the first one is gathering all components_ from all LDA runs,
+        the second one is exp_dirichlet_component_ from all LDA runs and
+        the last one is combining the rest of LDA attributes which put them to gather as a dataframe
+        :rtype: pandas dataframe, pandas dataframe, pandas dataframe
+        """
         feature = self.top_models[0].get_feature_name()
 
         all_components = pd.DataFrame(
@@ -118,8 +126,7 @@ class Train:
 
         count = 0
         for random_state in self.random_state_range:
-            print(self.top_models)
-            components, exp_dirichlet_component, others = self.top_models[count].get_top_models_attributes()
+            components, exp_dirichlet_component, others = self.top_models[count].get_top_model_attributes()
 
             all_components.loc[[f"Topic{i + 1}_R{random_state}" for i in range(self.k)], :] = components.values
 
@@ -137,6 +144,13 @@ class Train:
         return all_components, all_exp_dirichlet_component, all_others
 
     def save_train(self, name=None, save_path=""):
+        """
+        save Train class as a pickle file
+        :param name: name of the pickle file (default is train_{name of class})
+        :type name: str
+        :param save_path: directory you want to use to save pickle file (default is saving near script)
+        :type save_path: str
+        """
         if name is None:
             name = f"train_{self.name}"
 

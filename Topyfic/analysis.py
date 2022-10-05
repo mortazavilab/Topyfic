@@ -19,10 +19,19 @@ warnings.filterwarnings('ignore')
 
 
 class Analysis:
-
+    """
+    A class used to investigate the topics and gene weights compositions
+    :param Top_model: top model that used for analysing topics, gene weights compositions and calculate cell participation
+    :type Top_model: TopModel
+    :param colors_topics: dataframe that mapped colored to topics
+    :type colors_topics: pandas dataframe
+    :param cell_participation: anndata that stores cell participation along with cell information in obs
+    :type cell_participation: anndata
+    """
     def __init__(self,
                  Top_model,
-                 colors_topics=None):
+                 colors_topics=None,
+                 cell_participation=None):
         self.top_model = Top_model
 
         if colors_topics is None:
@@ -37,9 +46,12 @@ class Analysis:
         else:
             self.colors_topics = colors_topics
 
-        self.cell_participation = None
+        self.cell_participation = cell_participation
 
     def calculate_cell_participation(self, data):
+        if self.cell_participation is not None:
+            print("cell participation is not empty!")
+            print("new cell participation will be replaced!")
 
         lda_output = self.top_model.rLDA.transform(data.X)
         cell_participation = pd.DataFrame(lda_output,
@@ -48,8 +60,8 @@ class Analysis:
         self.cell_participation = anndata.AnnData(cell_participation, obs=data.obs)
 
     def pie_structure_Chart(self,
-                            level='subtypes',
-                            category=[],
+                            level,
+                            category=None,
                             ascending=None,
                             n=5,
                             save=True,
@@ -57,6 +69,32 @@ class Analysis:
                             figsize=None,
                             format_file="pdf",
                             file_name="piechart_topicAvgCell"):
+        """
+        plot pie charts that shows contribution of each topics to each category (i.e cell type)
+        :param level: name of the column from cell_participation.obs
+        :type level: str
+        :param category: list of items you want to plot pie charts which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
+        :type category: list of str
+        :param ascending: for each pie chart on which order you want to sort your data (default is descending for all pie charts)
+        :type ascending: list of bool
+        :param n: number of topics you want to annotate in pie charts (default: 5)
+        :type n: int
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param format_file: indicate the format of plot (default: pdf)
+        :type format_file: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
+        if self.cell_participation is None:
+            sys.exit("self.cell_participation is empty, you need to fill it by using 'calculate_cell_participation'")
+
+        if category is None:
+            category = self.cell_participation.obs[level].unique().tolist()
 
         if figsize is None:
             figsize = (10 * (len(category) + 1), 10)
@@ -68,15 +106,13 @@ class Analysis:
         colors = self.colors_topics
 
         if ascending is None:
-            ascending = [True] * len(category)
+            ascending = [False] * len(category)
 
         for i in range(len(category)):
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
-            order = tmp.mean().sort_values(ascending=False).index.tolist()
+            order = tmp.mean().sort_values(ascending=ascending[i]).index.tolist()
             index = tmp[order].sort_values(by=order, ascending=False).index.tolist()
-            tmp = tmp.reindex(index)
-            index = tmp[order[:2]].sum(axis=1).sort_values(ascending=ascending[i]).index.tolist()
             tmp = tmp.reindex(columns=order)
             tmp = tmp.reindex(index)
             colors = colors.reindex(order)
@@ -121,8 +157,8 @@ class Analysis:
             plt.close()
 
     def structure_plot(self,
-                       level='subtypes',
-                       category=[],
+                       level,
+                       category,
                        ascending=None,
                        metaData=None,
                        metaData_palette=None,
@@ -134,7 +170,35 @@ class Analysis:
                        figsize=None,
                        format_file="pdf",
                        file_name="structure_topicAvgCell"):
-
+        """
+        plot structure which shows contribution of each topics for each cells in given categories
+        :param level: name of the column from cell_participation.obs
+        :type level: str
+        :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
+        :type category: list of str
+        :param ascending: for each structure plot on which order you want to sort your data (default is descending for all structure plot)
+        :type ascending: list of bool
+        :param metaData: if you want to add annotation for each cell add column name of that information (make sure you have that inforamtion in your cell_participation.obs)
+        :type metaData: list
+        :param metaData_palette: color palette for each metaData you add
+        :type metaData_palette: dict
+        :param width: width ratios of each category (default is based on the number of the cells we have in each category)
+        :type width: list of int
+        :param n: number of topics you want to annotate in pie charts (default: 5)
+        :type n: int
+        :param order_cells: determine which kind of sorting options you want to use ('sum', 'hierarchy', sort by metaData); sum: sort cells by sum of top n topics; hierarchy: sort data by doing hierarchical clustring; metaData sort by metaData (default: ['hierarchy'])
+        :type order_cells: list
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param format_file: indicate the format of plot (default: pdf)
+        :type format_file: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
         if figsize is None:
             figsize = (10 * (len(category) + 1), 10)
 
@@ -317,7 +381,7 @@ class Analysis:
     @staticmethod
     def corPvalue(cor, nSamples):
         T = np.sqrt(nSamples - 2) * (cor / np.sqrt(1 - (cor ** 2)))
-        pt = 1 - pd.DataFrame(t.cdf(np.abs(T), nSamples - 2), index=T.index, columns=T.columns)
+        pt = pd.DataFrame(t.cdf(np.abs(T), nSamples - 2), index=T.index, columns=T.columns)
         return 2 * pt
 
     def TopicTraitRelationshipHeatmap(self,
@@ -337,7 +401,7 @@ class Analysis:
         topicTraitCor = topicsTraitCor.iloc[0:self.cell_participation.shape[1], self.cell_participation.shape[1]:]
         topicTraitPvalue = Analysis.corPvalue(topicTraitCor, nCells)
 
-        fig, ax = plt.subplots(figsize=(max(30, topicTraitPvalue.shape[0] * 1.5),
+        fig, ax = plt.subplots(figsize=(topicTraitPvalue.shape[0] * 1.5,
                                         topicTraitPvalue.shape[1] * 1.5), facecolor='white')
 
         xlabels = self.cell_participation.to_df().columns
@@ -366,7 +430,7 @@ class Analysis:
         ax.set_facecolor('white')
 
         if save:
-            fig.savefig(f"{file_name}.{format_file}")
+            fig.savefig(f"{file_name}.{format_file}", bbox_inches='tight')
         if show:
             plt.show()
         else:
