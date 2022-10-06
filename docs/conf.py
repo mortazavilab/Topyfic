@@ -30,7 +30,7 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.intersphinx', 'sphinx.ext.todo',
               'sphinx.ext.ifconfig', 'sphinx.ext.viewcode',
               'sphinx.ext.inheritance_diagram',
-              'sphinx.ext.autosummary', 'myst_parser',
+              'sphinx.ext.autosummary', 
               'sphinx.ext.duration'
               ]
 
