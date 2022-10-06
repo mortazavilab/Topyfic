@@ -12,15 +12,14 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../Topyfic'))
 
+sys.path.insert(0, os.path.abspath('../Topyfic'))
 
 # -- Project information -----------------------------------------------------
 
 project = 'Topyfic'
 copyright = '2022, Narges Rezaie'
 author = 'Narges Rezaie'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -31,8 +30,9 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.intersphinx', 'sphinx.ext.todo',
               'sphinx.ext.ifconfig', 'sphinx.ext.viewcode',
               'sphinx.ext.inheritance_diagram',
-              'sphinx.ext.autosummary',
-          'myst_parser']
+              'sphinx.ext.autosummary', 'myst_parser',
+              'sphinx.ext.duration'
+              ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -50,8 +50,7 @@ source_suffix = {
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build',
                     'dist', 'Topyfic.egg-info', 'setup.py', 'test',
-            '__pycache__', '.DS_Store']
-
+                    '__pycache__', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 

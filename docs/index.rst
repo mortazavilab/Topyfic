@@ -9,13 +9,16 @@ Topyfic is a Python library designed to apply rLDA to single_cells/bulk RNA-seq 
 .. image:: TopicModels.png
    :width: 600
 
+.. image:: Topyfic.png
+   :width: 600
+
 You can find GitHub pages `here <https://github.com/mortazavilab/Topyfic>`_.
 
 .. toctree::
    :maxdepth: 2
 
    README.md
-   modules
+   api
 
 Indices and tables
 ==================
