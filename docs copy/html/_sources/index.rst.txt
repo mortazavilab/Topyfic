@@ -17,12 +17,8 @@ You can find GitHub pages `here <https://github.com/mortazavilab/Topyfic>`_.
 .. toctree::
    :maxdepth: 2
 
-   installation
-    tutorials
-    cite
-    api
-
-
+   README.md
+   api
 
 Indices and tables
 ==================

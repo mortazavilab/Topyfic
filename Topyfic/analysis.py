@@ -202,7 +202,8 @@ class Analysis:
         if figsize is None:
             figsize = (10 * (len(category) + 1), 10)
 
-        check = ['hierarchy', 'sum'] + metaData
+        check = ["hierarchy", "sum"] + metaData
+        print(check)
         for order_cell in order_cells:
             if order_cell not in check:
                 return "order cell was not valid"
