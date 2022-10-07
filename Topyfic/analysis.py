@@ -203,7 +203,6 @@ class Analysis:
             figsize = (10 * (len(category) + 1), 10)
 
         check = ["hierarchy", "sum"] + metaData
-        print(check)
         for order_cell in order_cells:
             if order_cell not in check:
                 return "order cell was not valid"
@@ -257,16 +256,17 @@ class Analysis:
                 count = 0
                 index = []
                 for j in range(groups.shape[0]):
-                    sub = tissue.iloc[count:count + groups.loc[j, 'count'], :]
-                    sub = tmp.loc[sub.index, :]
-                    if sub.shape[0] > 1:
-                        Z = ward(sub)
-                        sub = leaves_list(Z).tolist()
-                        sub = [x + count for x in sub]
-                        index = index + sub
-                    else:
-                        index = index + [count]
-                    count = count + groups.loc[j, 'count']
+                    if groups.loc[j, 'count'] != 0:
+                        sub = tissue.iloc[count:count + groups.loc[j, 'count'], :]
+                        sub = tmp.loc[sub.index, :]
+                        if sub.shape[0] > 1:
+                            Z = ward(sub)
+                            sub = leaves_list(Z).tolist()
+                            sub = [x + count for x in sub]
+                            index = index + sub
+                        else:
+                            index = index + [count]
+                        count = count + groups.loc[j, 'count']
 
                 tmp = tmp.iloc[index, :]
 
