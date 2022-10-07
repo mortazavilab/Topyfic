@@ -18,9 +18,9 @@ You can find GitHub pages `here <https://github.com/mortazavilab/Topyfic>`_.
    :maxdepth: 2
 
    installation
-    tutorials
-    cite
-    api
+   tutorials
+   cite
+   api
 
 
 

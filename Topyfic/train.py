@@ -100,8 +100,8 @@ class Train:
     def make_LDA_models_attributes(self):
         """
         make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)
-        :return: three data frame which the first one is gathering all components_ from all LDA runs,
-        the second one is exp_dirichlet_component_ from all LDA runs and
+        :return: three data frame which the first one is gathering all components from all LDA runs,
+        the second one is exp_dirichlet_component from all LDA runs and
         the last one is combining the rest of LDA attributes which put them to gather as a dataframe
         :rtype: pandas dataframe, pandas dataframe, pandas dataframe
         """

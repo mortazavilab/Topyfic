@@ -9,13 +9,13 @@ Install from PyPi (recommended)
 
 Install the most recent release, run
 
-::
-	pip install Topyfic
+``pip install Topyfic``
 
 
 Install with the most recent commits
 ------------------------------------
 
-git cloning the [Topyfic repository](https://github.com/mortazavilab/Topyfic), going to the Topyfic directory, run
-::
-	pip install .
+git cloning the `Topyfic repository <https://github.com/mortazavilab/Topyfic>`_, going to the Topyfic directory, run
+
+``pip install .``
+
