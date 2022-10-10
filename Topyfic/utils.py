@@ -20,6 +20,27 @@ from Topyfic.topModel import *
 warnings.filterwarnings("ignore")
 
 
+def subset_data(data, keep, loc='var'):
+    """
+    Subsetting data
+    :param data: data we want to subset
+    :type data: anndata
+    :param keep: values in the obs/var_names
+    :type keep: list
+    :param loc: subsetting in which direction (default: 'var')
+    :return: data we want to keep
+    :rtype: anndata
+    """
+    if loc == 'var':
+        data = data[:, keep]
+    elif loc == 'obs':
+        data = data[keep, :]
+    else:
+        sys.exit("loc is not correct! it should be 'obs' or 'var'")
+
+    return data
+
+
 def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
     """
     Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics
