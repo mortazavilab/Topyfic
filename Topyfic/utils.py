@@ -99,6 +99,7 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
                                       index=data.obs.index)
 
     keep = cell_participation.sum() > data.to_df().shape[0] / 10000
+    print(f"{keep.sum()} topics our of {keep.shape[0]} topics participate in more than {data.to_df().shape[0] / 10000} cells")
     clustering = clustering.iloc[[i for i in range(keep.shape[0]) if keep[i]]]
     n_rtopics = len(np.unique(clustering[f"leiden"]))
     rlda, gene_weights_T = filter_LDA_model(rlda, keep)
@@ -235,7 +236,7 @@ def filter_LDA_model(main_lda, keep):
     df = pd.DataFrame(np.transpose(components),
                       columns=[f'Topic{i + 1}' for i in range(n_topics)])
     for topic in range(n_topics):
-        df_sorted = df.sort_values([f'Topic{topic + 1}'], axis=0, ascending=False)[f'Topic{topic}']
+        df_sorted = df.sort_values([f'Topic{topic + 1}'], axis=0, ascending=False)[f'Topic{topic + 1}']
         tmp = df_sorted.cumsum()
         tmp = tmp[tmp > 0.9 * df_sorted.sum()]
         df.loc[tmp.index, f'Topic{topic + 1}'] = 1 / n_topics
