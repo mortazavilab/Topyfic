@@ -89,6 +89,9 @@ class Train:
         :type data: anndata
         :param n_thread: number of threds you used to learn LDA models (default=1)
         :type n_thread: int
+
+        :return: None
+        :rtype: None
         """
         if n_thread is None:
             n_thread = self.n_runs

@@ -20,7 +20,20 @@ from Topyfic.topModel import *
 warnings.filterwarnings("ignore")
 
 
-def calculate_leiden_clustering(trains, data):
+def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
+    """
+    Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics
+    :param trains: list of train class
+    :type trains: list of Train
+    :param data: gene-count data with cells and genes information
+    :type data: anndata
+    :param n_top_genes: Number of highly-variable genes to keep (default: 50)
+    :type n_top_genes: int
+    :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
+    :type resolution: int
+    :return: final topmodel instance after clustering and trimming, dataframe containing which run goes to which topic
+    :rtype: TopModel, pandas dataframe
+    """
     all_batches = None
     all_components = None
     all_exp_dirichlet_component = None
@@ -46,42 +59,26 @@ def calculate_leiden_clustering(trains, data):
     if len(trains) == 1:
         adata = anndata.AnnData(all_components)
         sc.pp.log1p(adata)
-        sc.pp.highly_variable_genes(adata, n_top_genes=50)
+        sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
         sc.pp.neighbors(adata)
         sc.tl.umap(adata)
-        sc.tl.leiden(adata)
+        sc.tl.leiden(adata, resolution=resolution)
         sc.pl.umap(adata, color=["leiden"],
                    title=[f"Topic space UMAP leiden clusters (k={trains[0].k})"],
                    save="_leiden_clustring.pdf")
 
-        clustering = adata.obs.copy(deep=True)
-        n_rtopics = len(np.unique(clustering[f"leiden"]))
-
-        rlda = initialize_rLDA_model(all_components,
-                                     all_exp_dirichlet_component,
-                                     all_others,
-                                     clusters=clustering)
-
-        gene_weights = pd.DataFrame(rlda.components_,
-                                    index=[f"Topic{i + 1}" for i in range(n_rtopics)],
-                                    columns=all_components.columns).T
-
-        top_model = TopModel(name=trains[0].name,
-                             N=n_rtopics,
-                             gene_weights=gene_weights,
-                             rlda=rlda)
     else:
         adata = anndata.AnnData(all_components)
         adata.obs['assays'] = all_batches
         sc.pp.log1p(adata)
-        sc.pp.highly_variable_genes(adata, n_top_genes=100)
+        sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
         sc.pp.neighbors(adata)
         sce.pp.harmony_integrate(adata, 'assays')
         adata.obsm['X_pca'] = adata.obsm['X_pca_harmony']
         sc.pp.neighbors(adata)
         sc.pp.neighbors(adata)
         sc.tl.umap(adata)
-        sc.tl.leiden(adata, resolution=1)
+        sc.tl.leiden(adata, resolution=resolution)
         sc.pl.umap(adata, color=['leiden'],
                    title=[f'Topic space UMAP leiden clusters'],
                    save='_leiden_clustring_harmony.png')
@@ -89,25 +86,32 @@ def calculate_leiden_clustering(trains, data):
                    title=['Topic space UMAP leiden clusters'],
                    save='_technology_harmony.png')
 
-        clustering = adata.obs.copy(deep=True)
-        n_rtopics = len(np.unique(clustering[f"leiden"]))
+    clustering = adata.obs.copy(deep=True)
+    n_rtopics = len(np.unique(clustering[f"leiden"]))
 
-        rlda = initialize_rLDA_model(all_components,
-                                     all_exp_dirichlet_component,
-                                     all_others,
-                                     clusters=clustering)
-        lda_output = rlda.transform(data.X)
-        cell_participation = pd.DataFrame(np.round(lda_output, 2),
-                                          columns=[f"Topic{i + 1}" for i in range(n_rtopics)],
-                                          index=data.obs.index)
+    rlda = initialize_rLDA_model(all_components,
+                                 all_exp_dirichlet_component,
+                                 all_others,
+                                 clusters=clustering)
+    lda_output = rlda.transform(data.X)
+    cell_participation = pd.DataFrame(np.round(lda_output, 2),
+                                      columns=[f"Topic{i + 1}" for i in range(n_rtopics)],
+                                      index=data.obs.index)
 
-        keep = cell_participation.sum() > data.to_df().shape[0] / 10000
-        clustering = clustering.iloc[[i for i in range(keep.shape[0]) if keep[i]]]
-        n_rtopics = len(np.unique(clustering[f"leiden"]))
-        rlda, gene_weights_T = filter_LDA_model(rlda, keep)
+    keep = cell_participation.sum() > data.to_df().shape[0] / 10000
+    clustering = clustering.iloc[[i for i in range(keep.shape[0]) if keep[i]]]
+    n_rtopics = len(np.unique(clustering[f"leiden"]))
+    rlda, gene_weights_T = filter_LDA_model(rlda, keep)
 
-        gene_weights = gene_weights_T.T
+    gene_weights = gene_weights_T.T
 
+    if len(trains) == 1:
+        top_model = TopModel(name=trains[0].name,
+                             N=n_rtopics,
+                             gene_weights=gene_weights,
+                             rlda=rlda)
+
+    else:
         name = np.unique(all_batches).tolist()
         name = '_'.join(name)
 
@@ -120,6 +124,25 @@ def calculate_leiden_clustering(trains, data):
 
 
 def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_others, clusters):
+    """
+    Initialize reproducible LDA model by calculating all necessary attributes using clustering.
+    :param all_components: Variational parameters for topic gene distribution from all single LDA models
+    :type all_components: pandas dataframe
+    :param all_exp_dirichlet_component: Exponential value of expectation of log topic gene distribution from all single LDA models
+    :type all_exp_dirichlet_component: pandas dataframe
+    :param all_others: dataframe contains remaining necessary attributes including
+            n_batch_iter: Number of iterations of the EM step.
+            n_features: Number of features seen during fit.
+            n_iter: Number of passes over the dataset.
+            bound: Final perplexity score on training set.
+            doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
+            topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
+    :type all_others: pandas dataframe
+    :param clusters: dataframe that mapped each LDA run to each clusters
+    :type clusters: pandas dataframe
+    :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
+    :rtype: sklearn.decomposition.LatentDirichletAllocation
+    """
     n_rtopics = len(np.unique(clusters[f"leiden"]))
 
     components = np.zeros((n_rtopics, all_components.shape[1]), dtype=float)
@@ -161,6 +184,24 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
 
 
 def initialize_lda_model(components, exp_dirichlet_component, others):
+    """
+    Initialize LDA model by passing all necessary attributes
+    :param components: Variational parameters for topic gene distribution
+    :type components: pandas dataframe
+    :param exp_dirichlet_component: Exponential value of expectation of log topic gene distribution
+    :type exp_dirichlet_component: pandas dataframe
+    :param others: dataframe contains remaining necessary attributes including
+            n_batch_iter: Number of iterations of the EM step.
+            n_features_in: Number of features seen during fit.
+            n_iter: Number of passes over the dataset.
+            bound: Final perplexity score on training set.
+            doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
+            topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
+    :type others: pandas dataframe
+    :param components: Variational parameters for topic gene distribution from all single LDA models
+    :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
+    :rtype: sklearn.decomposition.LatentDirichletAllocation
+    """
     n_topics = components.shape[0]
 
     LDA = LatentDirichletAllocation(n_components=n_topics)
@@ -178,6 +219,15 @@ def initialize_lda_model(components, exp_dirichlet_component, others):
 
 
 def filter_LDA_model(main_lda, keep):
+    """
+    filter LDA based on the topics we want to keep
+    :param main_lda: Latent Dirichlet Allocation with online variational Bayes algorithm.
+    :type main_lda: sklearn.decomposition.LatentDirichletAllocation
+    :param keep: dataframe that define which topics we want to keep
+    :type keep: pandas dataframe
+    :return: Latent Dirichlet Allocation with online variational Bayes algorithm, weights of genes in each topics (indexes are topics and columns are genes)
+    :rtype: sklearn.decomposition.LatentDirichletAllocation, pandas dataframe
+    """
     n_topics = keep.sum()
     lda = LatentDirichletAllocation(n_components=n_topics)
 
@@ -206,6 +256,13 @@ def filter_LDA_model(main_lda, keep):
 
 
 def read_train(file):
+    """
+    reading train pickle file
+    :param file: path of the pickle file
+    :type file: str
+    :return: train instance
+    :rtype: Train class
+    """
     if not os.path.isfile(file):
         raise ValueError('Train object not found at given path!')
 
@@ -217,6 +274,13 @@ def read_train(file):
 
 
 def read_topModel(file):
+    """
+    reading topModel pickle file
+    :param file: path of the pickle file
+    :type file: str
+    :return: topModel instance
+    :rtype: TopModel class
+    """
     if not os.path.isfile(file):
         raise ValueError('TopModel object not found at given path!')
 
@@ -228,6 +292,13 @@ def read_topModel(file):
 
 
 def read_analysis(file):
+    """
+    reading analysis pickle file
+    :param file: path of the pickle file
+    :type file: str
+    :return: analysis instance
+    :rtype: Analysis class
+    """
     if not os.path.isfile(file):
         raise ValueError('Analysis object not found at given path!')
 
