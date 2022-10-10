@@ -198,7 +198,6 @@ def initialize_lda_model(components, exp_dirichlet_component, others):
             doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
             topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
     :type others: pandas dataframe
-    :param components: Variational parameters for topic gene distribution from all single LDA models
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
     :rtype: sklearn.decomposition.LatentDirichletAllocation
     """

@@ -1,107 +1,161 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Documentation &mdash; Topyfic 0.0.11 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/js/theme.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>API Documentation &#8212; Topyfic 0.0.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Citation" href="cite.html" /> 
-</head>
+    <link rel="prev" title="Citation" href="cite.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Topyfic
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Topyfic</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cite.html">Citation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Topyfic.train.Train"><code class="docutils literal notranslate"><span class="pre">Train</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.train.Train.make_LDA_models_attributes"><code class="docutils literal notranslate"><span class="pre">Train.make_LDA_models_attributes()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.train.Train.make_single_LDA_model"><code class="docutils literal notranslate"><span class="pre">Train.make_single_LDA_model()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.train.Train.run_LDA_models"><code class="docutils literal notranslate"><span class="pre">Train.run_LDA_models()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.train.Train.save_train"><code class="docutils literal notranslate"><span class="pre">Train.save_train()</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a></li>
+</ul>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#Topyfic.topic.Topic"><code class="docutils literal notranslate"><span class="pre">Topic</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Topyfic.topModel.TopModel"><code class="docutils literal notranslate"><span class="pre">TopModel</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.topModel.TopModel.get_feature_name"><code class="docutils literal notranslate"><span class="pre">TopModel.get_feature_name()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.topModel.TopModel.get_gene_weights"><code class="docutils literal notranslate"><span class="pre">TopModel.get_gene_weights()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.topModel.TopModel.get_ranked_gene_weight"><code class="docutils literal notranslate"><span class="pre">TopModel.get_ranked_gene_weight()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.topModel.TopModel.get_top_model_attributes"><code class="docutils literal notranslate"><span class="pre">TopModel.get_top_model_attributes()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.topModel.TopModel.save_rLDA_model"><code class="docutils literal notranslate"><span class="pre">TopModel.save_rLDA_model()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.topModel.TopModel.save_topModel"><code class="docutils literal notranslate"><span class="pre">TopModel.save_topModel()</span></code></a></li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">API Documentation</a><ul>
+<li><a class="reference internal" href="#Topyfic.train.Train"><code class="docutils literal notranslate"><span class="pre">Train</span></code></a><ul>
+<li><a class="reference internal" href="#Topyfic.train.Train.make_LDA_models_attributes"><code class="docutils literal notranslate"><span class="pre">Train.make_LDA_models_attributes()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.train.Train.make_single_LDA_model"><code class="docutils literal notranslate"><span class="pre">Train.make_single_LDA_model()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.train.Train.run_LDA_models"><code class="docutils literal notranslate"><span class="pre">Train.run_LDA_models()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.train.Train.save_train"><code class="docutils literal notranslate"><span class="pre">Train.save_train()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#Topyfic.analysis.Analysis"><code class="docutils literal notranslate"><span class="pre">Analysis</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap"><code class="docutils literal notranslate"><span class="pre">Analysis.TopicTraitRelationshipHeatmap()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.analysis.Analysis.convertDatTraits"><code class="docutils literal notranslate"><span class="pre">Analysis.convertDatTraits()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.analysis.Analysis.pie_structure_Chart"><code class="docutils literal notranslate"><span class="pre">Analysis.pie_structure_Chart()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.analysis.Analysis.save_analysis"><code class="docutils literal notranslate"><span class="pre">Analysis.save_analysis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Topyfic.analysis.Analysis.structure_plot"><code class="docutils literal notranslate"><span class="pre">Analysis.structure_plot()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topic.Topic"><code class="docutils literal notranslate"><span class="pre">Topic</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel"><code class="docutils literal notranslate"><span class="pre">TopModel</span></code></a><ul>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_feature_name"><code class="docutils literal notranslate"><span class="pre">TopModel.get_feature_name()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_gene_weights"><code class="docutils literal notranslate"><span class="pre">TopModel.get_gene_weights()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_ranked_gene_weight"><code class="docutils literal notranslate"><span class="pre">TopModel.get_ranked_gene_weight()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_top_model_attributes"><code class="docutils literal notranslate"><span class="pre">TopModel.get_top_model_attributes()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.save_rLDA_model"><code class="docutils literal notranslate"><span class="pre">TopModel.save_rLDA_model()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.save_topModel"><code class="docutils literal notranslate"><span class="pre">TopModel.save_topModel()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis"><code class="docutils literal notranslate"><span class="pre">Analysis</span></code></a><ul>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap"><code class="docutils literal notranslate"><span class="pre">Analysis.TopicTraitRelationshipHeatmap()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis.convertDatTraits"><code class="docutils literal notranslate"><span class="pre">Analysis.convertDatTraits()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis.pie_structure_Chart"><code class="docutils literal notranslate"><span class="pre">Analysis.pie_structure_Chart()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis.save_analysis"><code class="docutils literal notranslate"><span class="pre">Analysis.save_analysis()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis.structure_plot"><code class="docutils literal notranslate"><span class="pre">Analysis.structure_plot()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Topyfic.utils.calculate_leiden_clustering"><code class="docutils literal notranslate"><span class="pre">calculate_leiden_clustering()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.filter_LDA_model"><code class="docutils literal notranslate"><span class="pre">filter_LDA_model()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.initialize_lda_model"><code class="docutils literal notranslate"><span class="pre">initialize_lda_model()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.initialize_rLDA_model"><code class="docutils literal notranslate"><span class="pre">initialize_rLDA_model()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.read_analysis"><code class="docutils literal notranslate"><span class="pre">read_analysis()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.read_topModel"><code class="docutils literal notranslate"><span class="pre">read_topModel()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.read_train"><code class="docutils literal notranslate"><span class="pre">read_train()</span></code></a></li>
 </ul>
 </li>
 </ul>
-</li>
 </ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="cite.html" title="Previous Chapter: Citation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Citation</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="_sources/api.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
 
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
         </div>
-      </div>
-    </nav>
+    </div>
+  </div>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Topyfic</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>API Documentation</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
   <section id="module-Topyfic.train">
-<span id="api-documentation"></span><h1>API Documentation<a class="headerlink" href="#module-Topyfic.train" title="Permalink to this heading"></a></h1>
+<span id="api-documentation"></span><h1>API Documentation<a class="headerlink" href="#module-Topyfic.train" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="Topyfic.train.Train">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.train.</span></span><span class="sig-name descname"><span class="pre">Train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_runs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.train.</span></span><span class="sig-name descname"><span class="pre">Train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_runs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to train reproducible latent dirichlet allocation (rLDA) model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -116,17 +170,17 @@
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.make_LDA_models_attributes">
-<span class="sig-name descname"><span class="pre">make_LDA_models_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_LDA_models_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_LDA_models_attributes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_LDA_models_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_LDA_models_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_LDA_models_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)
-:return: three data frame which the first one is gathering all <a href="#id1"><span class="problematic" id="id2">components_</span></a> from all LDA runs,
-the second one is <a href="#id3"><span class="problematic" id="id4">exp_dirichlet_component_</span></a> from all LDA runs and
+:return: three data frame which the first one is gathering all components from all LDA runs,
+the second one is exp_dirichlet_component from all LDA runs and
 the last one is combining the rest of LDA attributes which put them to gather as a dataframe
 :rtype: pandas dataframe, pandas dataframe, pandas dataframe</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.make_single_LDA_model">
-<span class="sig-name descname"><span class="pre">make_single_LDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_single_LDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_single_LDA_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_single_LDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_single_LDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_single_LDA_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>train simple LDA model using sklearn package and embed it to TopModel class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -147,17 +201,25 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.run_LDA_models">
-<span class="sig-name descname"><span class="pre">run_LDA_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.run_LDA_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.run_LDA_models" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run_LDA_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.run_LDA_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.run_LDA_models" title="Permalink to this definition">¶</a></dt>
 <dd><p>train LDA models
 :param data: data embeded in anndata format use to train LDA model
 :type data: anndata
 :param n_thread: number of threds you used to learn LDA models (default=1)
 :type n_thread: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.save_train">
-<span class="sig-name descname"><span class="pre">save_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.save_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.save_train" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.save_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.save_train" title="Permalink to this definition">¶</a></dt>
 <dd><p>save Train class as a pickle file
 :param name: name of the pickle file (default is train_{name of class})
 :type name: str
@@ -169,7 +231,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <span class="target" id="module-Topyfic.topic"></span><dl class="py class">
 <dt class="sig sig-object py" id="Topyfic.topic.Topic">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.topic.</span></span><span class="sig-name descname"><span class="pre">Topic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_gene_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topic.html#Topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topic.Topic" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.topic.</span></span><span class="sig-name descname"><span class="pre">Topic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_gene_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_information</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topic.html#Topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topic.Topic" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class saved topic along with other useful information
 :param topic_id: ID of topic which is unique
 :type topic_id: int
@@ -185,7 +247,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <span class="target" id="module-Topyfic.topModel"></span><dl class="py class">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.topModel.</span></span><span class="sig-name descname"><span class="pre">TopModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rlda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.topModel.</span></span><span class="sig-name descname"><span class="pre">TopModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rlda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class that saved a model
 :param name: name of class
 :type name: str
@@ -197,7 +259,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type rLDA: sklearn.decomposition.LatentDirichletAllocation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.get_feature_name">
-<span class="sig-name descname"><span class="pre">get_feature_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_feature_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_feature_name" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_feature_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_feature_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_feature_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>get feature(gene) name
 :return: list of feature(gene) name
 :rtype: list</p>
@@ -205,7 +267,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.get_gene_weights">
-<span class="sig-name descname"><span class="pre">get_gene_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_gene_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_gene_weights" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_gene_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_gene_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_gene_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>get feature(gene) weights
 :return: dataframe contains feature(gene) weights; genes are indexes and topics are columns
 :rtype: pandas dataframe</p>
@@ -213,7 +275,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.get_ranked_gene_weight">
-<span class="sig-name descname"><span class="pre">get_ranked_gene_weight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_ranked_gene_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_ranked_gene_weight" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_ranked_gene_weight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_ranked_gene_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_ranked_gene_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>get sorted feature(gene) weights. each value is gene and weights on each topics
 :return: dataframe contains feature(gene) and their weights; ranks are indexes and topics are columns
 :rtype: pandas dataframe</p>
@@ -221,16 +283,16 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.get_top_model_attributes">
-<span class="sig-name descname"><span class="pre">get_top_model_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_top_model_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_top_model_attributes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_top_model_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_top_model_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_top_model_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>get top model attributes to be able to make sklearn.decomposition.LatentDirichletAllocation
-:return: three data frame which the first one is <a href="#id5"><span class="problematic" id="id6">components_</span></a>, vthe second one is <a href="#id7"><span class="problematic" id="id8">exp_dirichlet_component_</span></a> and
+:return: three data frame which the first one is components, the second one is exp_dirichlet_component and
 the last one is combining the rest of LDA attributes which put them to gather as a dataframe
 :rtype: pandas dataframe, pandas dataframe, pandas dataframe</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.save_rLDA_model">
-<span class="sig-name descname"><span class="pre">save_rLDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rLDA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.save_rLDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.save_rLDA_model" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save_rLDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rLDA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.save_rLDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.save_rLDA_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>save Train class as a pickle file
 :param name: name of the pickle file (default: rLDA)
 :type name: str
@@ -240,7 +302,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.save_topModel">
-<span class="sig-name descname"><span class="pre">save_topModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topModel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.save_topModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.save_topModel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save_topModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topModel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.save_topModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.save_topModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>save TopModel class as a pickle file
 :param name: name of the pickle file (default: topModel)
 :type name: str
@@ -252,7 +314,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <span class="target" id="module-Topyfic.analysis"></span><dl class="py class">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.analysis.</span></span><span class="sig-name descname"><span class="pre">Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Top_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors_topics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_participation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Topyfic.analysis.</span></span><span class="sig-name descname"><span class="pre">Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Top_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors_topics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_participation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class used to investigate the topics and gene weights compositions
 :param Top_model: top model that used for analysing topics, gene weights compositions and calculate cell participation
 :type Top_model: TopModel
@@ -262,7 +324,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type cell_participation: anndata</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap">
-<span class="sig-name descname"><span class="pre">TopicTraitRelationshipHeatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metaData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topic-traitRelationships'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.TopicTraitRelationshipHeatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TopicTraitRelationshipHeatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metaData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topic-traitRelationships'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.TopicTraitRelationshipHeatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot topic-trait relationship heatmap
 :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)
 :type metaData: list
@@ -278,7 +340,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.convertDatTraits">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convertDatTraits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.convertDatTraits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.convertDatTraits" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convertDatTraits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.convertDatTraits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.convertDatTraits" title="Permalink to this definition">¶</a></dt>
 <dd><p>get data trait module base on samples information
 :return: a dataframe contains information in suitable format for plotting module trait relationship heatmap
 :rtype: pandas dataframe</p>
@@ -286,7 +348,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.pie_structure_Chart">
-<span class="sig-name descname"><span class="pre">pie_structure_Chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'piechart_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.pie_structure_Chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.pie_structure_Chart" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pie_structure_Chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'piechart_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.pie_structure_Chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.pie_structure_Chart" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot pie charts that shows contribution of each topics to each category (i.e cell type)
 :param level: name of the column from cell_participation.obs
 :type level: str
@@ -310,7 +372,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.save_analysis">
-<span class="sig-name descname"><span class="pre">save_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'analysis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.save_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.save_analysis" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'analysis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.save_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.save_analysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>save Analysis class as a pickle file
 :param name: name of the pickle file (default: analysis)
 :type name: str
@@ -320,7 +382,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.structure_plot">
-<span class="sig-name descname"><span class="pre">structure_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['hierarchy']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structure_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.structure_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.structure_plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">structure_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['hierarchy']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structure_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.structure_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.structure_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot structure which shows contribution of each topics for each cells in given categories
 :param level: name of the column from cell_participation.obs
 :type level: str
@@ -352,36 +414,142 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 </dd></dl>
 
-<span class="target" id="module-Topyfic.utils"></span></section>
+<span class="target" id="module-Topyfic.utils"></span><dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.calculate_leiden_clustering">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">calculate_leiden_clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_top_genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#calculate_leiden_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.calculate_leiden_clustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics
+:param trains: list of train class
+:type trains: list of Train
+:param data: gene-count data with cells and genes information
+:type data: anndata
+:param n_top_genes: Number of highly-variable genes to keep (default: 50)
+:type n_top_genes: int
+:param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
+:type resolution: int
+:return: final topmodel instance after clustering and trimming, dataframe containing which run goes to which topic
+:rtype: TopModel, pandas dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.filter_LDA_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">filter_LDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main_lda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#filter_LDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.filter_LDA_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter LDA based on the topics we want to keep
+:param main_lda: Latent Dirichlet Allocation with online variational Bayes algorithm.
+:type main_lda: sklearn.decomposition.LatentDirichletAllocation
+:param keep: dataframe that define which topics we want to keep
+:type keep: pandas dataframe
+:return: Latent Dirichlet Allocation with online variational Bayes algorithm, weights of genes in each topics (indexes are topics and columns are genes)
+:rtype: sklearn.decomposition.LatentDirichletAllocation, pandas dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.initialize_lda_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">initialize_lda_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_dirichlet_component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#initialize_lda_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.initialize_lda_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize LDA model by passing all necessary attributes
+:param components: Variational parameters for topic gene distribution
+:type components: pandas dataframe
+:param exp_dirichlet_component: Exponential value of expectation of log topic gene distribution
+:type exp_dirichlet_component: pandas dataframe
+:param others: dataframe contains remaining necessary attributes including</p>
+<blockquote>
+<div><p>n_batch_iter: Number of iterations of the EM step.
+n_features_in: Number of features seen during fit.
+n_iter: Number of passes over the dataset.
+bound: Final perplexity score on training set.
+doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
+topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>components</strong> – Variational parameters for topic gene distribution from all single LDA models</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Latent Dirichlet Allocation with online variational Bayes algorithm.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>sklearn.decomposition.LatentDirichletAllocation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.initialize_rLDA_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">initialize_rLDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_exp_dirichlet_component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_others</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clusters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#initialize_rLDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.initialize_rLDA_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize reproducible LDA model by calculating all necessary attributes using clustering.
+:param all_components: Variational parameters for topic gene distribution from all single LDA models
+:type all_components: pandas dataframe
+:param all_exp_dirichlet_component: Exponential value of expectation of log topic gene distribution from all single LDA models
+:type all_exp_dirichlet_component: pandas dataframe
+:param all_others: dataframe contains remaining necessary attributes including</p>
+<blockquote>
+<div><p>n_batch_iter: Number of iterations of the EM step.
+n_features: Number of features seen during fit.
+n_iter: Number of passes over the dataset.
+bound: Final perplexity score on training set.
+doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
+topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>clusters</strong> (<em>pandas dataframe</em>) – dataframe that mapped each LDA run to each clusters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Latent Dirichlet Allocation with online variational Bayes algorithm.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>sklearn.decomposition.LatentDirichletAllocation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.read_analysis">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">read_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#read_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.read_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>reading analysis pickle file
+:param file: path of the pickle file
+:type file: str
+:return: analysis instance
+:rtype: Analysis class</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.read_topModel">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">read_topModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#read_topModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.read_topModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>reading topModel pickle file
+:param file: path of the pickle file
+:type file: str
+:return: topModel instance
+:rtype: TopModel class</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.read_train">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">read_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#read_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.read_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>reading train pickle file
+:param file: path of the pickle file
+:type file: str
+:return: train instance
+:rtype: Train class</p>
+</dd></dl>
+
+</section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="cite.html" class="btn btn-neutral float-left" title="Citation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2022, Narges Rezaie.</p>
+      
   </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2022, Narges Rezaie.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.2.3.<br/>
+    </p>
+  </div>
 </footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
-
-</body>
+  </body>
 </html>
