@@ -120,7 +120,7 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
                                       index=data.obs.index)
 
     keep = cell_participation.sum() > data.to_df().shape[0] / 10000
-    print(f"{keep.sum()} topics our of {keep.shape[0]} topics have participation in more than {data.to_df().shape[0] / 10000}")
+    print(f"{keep.sum()} topics our of {keep.shape[0]} topics have participation more than {data.to_df().shape[0] / 10000}")
     n_rtopics = keep.sum()
     rlda, gene_weights_T = filter_LDA_model(rlda, keep)
 
