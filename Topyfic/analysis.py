@@ -67,7 +67,7 @@ class Analysis:
                             save=True,
                             show=True,
                             figsize=None,
-                            format_file="pdf",
+                            file_format="pdf",
                             file_name="piechart_topicAvgCell"):
         """
         plot pie charts that shows contribution of each topics to each category (i.e cell type)
@@ -85,8 +85,8 @@ class Analysis:
         :type show: bool
         :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
         :type figsize: tuple of int
-        :param format_file: indicate the format of plot (default: pdf)
-        :type format_file: str
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
         :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
         :type file_name: str
         """
@@ -150,7 +150,7 @@ class Analysis:
             axs[len(category)].axis('off')
 
         if save:
-            fig.savefig(f"{file_name}.{format_file}")
+            fig.savefig(f"{file_name}.{file_format}")
         if show:
             plt.show()
         else:
@@ -168,7 +168,7 @@ class Analysis:
                        save=True,
                        show=True,
                        figsize=None,
-                       format_file="pdf",
+                       file_format="pdf",
                        file_name="structure_topicAvgCell"):
         """
         plot structure which shows contribution of each topics for each cells in given categories
@@ -194,8 +194,8 @@ class Analysis:
         :type show: bool
         :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
         :type figsize: tuple of int
-        :param format_file: indicate the format of plot (default: pdf)
-        :type format_file: str
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
         :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
         :type file_name: str
         """
@@ -345,7 +345,7 @@ class Analysis:
                 axs[j + 1, len(category)].axis('off')
 
         if save:
-            fig.savefig(f"{file_name}.{format_file}")
+            fig.savefig(f"{file_name}.{file_format}")
         if show:
             plt.show()
         else:
@@ -383,7 +383,7 @@ class Analysis:
                                       metaData,
                                       save=True,
                                       show=True,
-                                      format_file="pdf",
+                                      file_format="pdf",
                                       file_name='topic-traitRelationships'):
         """
         plot topic-trait relationship heatmap
@@ -393,8 +393,8 @@ class Analysis:
         :type save: bool
         :param show: indicate if you want to show the plot or not (default: True)
         :type show: bool
-        :param format_file: indicate the format of plot (default: pdf)
-        :type format_file: str
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
         :param file_name: name and path of the plot use for save (default: topic-traitRelationships)
         :type file_name: str
         """
@@ -439,11 +439,82 @@ class Analysis:
         ax.set_facecolor('white')
 
         if save:
-            fig.savefig(f"{file_name}.{format_file}", bbox_inches='tight')
+            fig.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
         if show:
             plt.show()
         else:
             plt.close()
+
+    def extract_cells(self,
+                      level,
+                      category,
+                      top_cells=0.05,
+                      min_cell_participation=0.05,
+                      min_cells=50,
+                      file_name=None,
+                      save=False):
+        """
+        extract subset of cells and cells participation with specific criteria
+        :param level: name of the column from cell_participation.obs
+        :type level: str
+        :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
+        :type category: list of str
+        :param top_cells: fraction of the cells you want to be considers (default: 0.05)
+        :type top_cells: float
+        :param min_cell_participation: minimum cell participation each cells in each topics should have to be count (default: 0.05)
+        :type min_cell_participation: float
+        :param min_cells: minimum number of cells each topics should have to be reported (default: 50)
+        :type min_cells: int
+        :param file_name: name and path of the plot use for save (default: selectedCells_top{top_cells}_{min_cell_score}min_score_{min_cells}min_cells.csv and cellParticipation_selectedCells_top{top_cells}_{min_cell_score}min_score_{min_cells}min_cells.csv)
+        :type file_name: str
+        :param save: indicate if you want to save the data or not (default: False)
+        :type save: bool
+        :return: table contains cell ID that pass threshold for each topic, table contains cell particiaption for cells that pass threshold for each topic (same order as fist table)
+        :rtype: pandas dataframe, pandas dataframe
+        """
+        cells = self.cell_participation.obs[self.cell_participation.obs[level].isin(category)]
+        cell_topics = self.cell_participation.to_df().loc[cells.index, :]
+        cell_topics = cell_topics[cell_topics > min_cell_participation]
+        res = cell_topics.count() * top_cells
+        res = res.round()
+
+        selected_cell = pd.DataFrame(index=range(cells.shape[0]),
+                                     columns=cell_topics.columns)
+        selected_cell_participation = pd.DataFrame(index=range(cells.shape[0]),
+                                                   columns=cell_topics.columns)
+
+        for i in range(cell_topics.shape[1]):
+            tmp = cell_topics.sort_values(cell_topics.columns[i], ascending=False)
+            selected_cell[tmp.columns[i]][:int(res[tmp.columns[i]])] = tmp.index.tolist()[:int(res[tmp.columns[i]])]
+            a = tmp[:int(res[tmp.columns[i]])]
+            selected_cell_participation[tmp.columns[i]][:int(res[tmp.columns[i]])] = a[tmp.columns[i]].values.tolist()
+
+        selected_cell.dropna(axis=0, how='all', inplace=True)
+        selected_cell.dropna(axis=1, how='all', inplace=True)
+        selected_cell = selected_cell[selected_cell.columns[selected_cell.count() > min_cells]]
+        selected_cell.fillna("", inplace=True)
+
+        selected_cell_participation.dropna(axis=0, how='all', inplace=True)
+        selected_cell_participation.dropna(axis=1, how='all', inplace=True)
+        selected_cell_participation = selected_cell_participation[
+            selected_cell_participation.columns[selected_cell_participation.count() > min_cells]]
+        selected_cell_participation.fillna("", inplace=True)
+
+        if save:
+            if file_name is None:
+                selected_cell.to_csv(f"selectedCells_top{top_cells}_{min_cell_participation}min_score_{min_cells}min_cells.csv")
+                selected_cell_participation.to_csv(f"cellParticipation_selectedCells_top{top_cells}_{min_cell_participation}min_score_{min_cells}min_cells.csv")
+            else:
+                selected_cell.to_csv(f"selectedCells_{file_name}.csv")
+                selected_cell_participation.to_csv(f"cellParticipation_selectedCells_{file_name}.csv")
+
+        else:
+            return selected_cell, selected_cell_participation
+
+    def average_cell_participation(self,
+                                   label=None):
+        df = self.cell_participation.to_df().mean()
+        print(df)
 
     def save_analysis(self, name="analysis", save_path=""):
         """

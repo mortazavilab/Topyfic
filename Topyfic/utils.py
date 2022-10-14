@@ -1,5 +1,5 @@
 import sys
-
+import random
 import pandas as pd
 import numpy as np
 import anndata
@@ -11,7 +11,9 @@ from multiprocessing import Pool
 from itertools import repeat
 import pickle
 from sklearn.decomposition import LatentDirichletAllocation
+from scipy import stats as st
 import scanpy.external as sce
+import networkx as nx
 
 from Topyfic.train import *
 from Topyfic.topic import *
@@ -73,9 +75,9 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
             all_others = others
         else:
             all_batches = batch + all_batches
-            all_components = pd.concat([components, all_components], axis=1)
-            all_exp_dirichlet_component = pd.concat([exp_dirichlet_component, all_exp_dirichlet_component], axis=1)
-            all_others = pd.concat([others, all_others], axis=1)
+            all_components = pd.concat([components, all_components], axis=0)
+            all_exp_dirichlet_component = pd.concat([exp_dirichlet_component, all_exp_dirichlet_component], axis=0)
+            all_others = pd.concat([others, all_others], axis=0)
 
     if len(trains) == 1:
         adata = anndata.AnnData(all_components)
@@ -120,7 +122,7 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
                                       index=data.obs.index)
 
     keep = cell_participation.sum() > data.to_df().shape[0] / 10000
-    print(f"{keep.sum()} topics our of {keep.shape[0]} topics have participation more than {data.to_df().shape[0] / 10000}")
+    print(f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {data.to_df().shape[0] / 10000}")
     n_rtopics = keep.sum()
     rlda, gene_weights_T = filter_LDA_model(rlda, keep)
 
@@ -328,3 +330,150 @@ def read_analysis(file):
 
     print(f"Reading TopModel done!")
     return analysis
+
+
+def compare_topModels(topModels,
+                      output_type='circular',
+                      threshold=0.8,
+                      topModels_color=None,
+                      topModels_label=None,
+                      save=False,
+                      plot_show=True,
+                      figsize=None,
+                      plot_format="pdf",
+                      file_name="compare_topics"):
+    """
+    compare several topModels
+    :param topModels: list of topModel class you want to compare to each other
+    :type topModels: list of TopModel class
+    :param output_type: indicate the type of output you want. circular: plot as a circle plot, heatmap: plot as a heatmap, table: table contains correlation
+    :type output_type: str
+    :param threshold: only apply when you choose circular which only show correlation above that
+    :type threshold: float
+    :param topModels_color: dictionary of colors mapping each topics to each color (default: blue)
+    :type topModels_color: dict
+    :param topModels_label: dictionary of label mapping each topics to each label
+    :type topModels_label: dict
+    :param save: indicate if you want to save the plot or not (default: True)
+    :type save: bool
+    :param plot_show: indicate if you want to show the plot or not (default: True)
+    :type plot_show: bool
+    :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+    :type figsize: tuple of int
+    :param plot_format: indicate the format of plot (default: pdf)
+    :type plot_format: str
+    :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+    :type file_name: str
+    :return: table contains correlation between topics only when table is choose and save is False
+    :rtype: pandas dataframe
+    """
+    if output_type not in ['circular', 'heatmap', 'table']:
+        sys.exit("output_type is not valid! it should be one of 'circular', 'heatmap' or 'table'")
+
+    all_gene_weights = None
+
+    for topModel in topModels:
+        gene_weights = topModel.get_gene_weights()
+        if all_gene_weights is None:
+            all_gene_weights = gene_weights
+        else:
+            all_gene_weights = pd.concat([gene_weights, all_gene_weights], axis=1)
+
+    corrs = pd.DataFrame(index=all_gene_weights.columns, columns=all_gene_weights.columns)
+
+    for d1 in all_gene_weights.columns.tolist():
+        for d2 in all_gene_weights.columns.tolist():
+            if d1 == d2:
+                corrs.at[d1, d2] = 1
+                continue
+            a = all_gene_weights[[d1, d2]]
+            a.dropna(axis=0, how='all', inplace=True)
+            a.fillna(0, inplace=True)
+            corr = st.pearsonr(a[d1].tolist(), a[d2].tolist())
+            corrs.at[d1, d2] = corr[0]
+
+    if output_type == 'table':
+        if save:
+            corrs.to_csv(f"{file_name}.csv")
+        else:
+            return corrs
+
+    if output_type == 'heatmap':
+        sns.clustermap(corrs,
+                       figsize=None)
+        if save:
+            plt.savefig(f"{file_name}.{plot_format}")
+        if plot_show:
+            plt.show()
+        else:
+            plt.close()
+
+        return
+
+    if output_type == 'circular':
+        corrs.values[[np.arange(corrs.shape[0])] * 2] = 0
+        corrs[corrs < threshold] = np.nan
+        res = corrs.stack()
+        res = pd.DataFrame(res)
+        res.reset_index(inplace=True)
+        res.columns = ['source', 'dest', 'weight']
+        res['weight'] = res['weight'].astype(float).round(decimals=2)
+        res['source_label'] = res['source']
+        res['dest_label'] = res['dest']
+        res['source_color'] = res['source']
+        res['dest_color'] = res['dest']
+
+        if topModels_label is not None:
+            res['source_label'].replace(topModels_label, inplace=True)
+            res['dest_label'].replace(topModels_label, inplace=True)
+        if topModels_color is None:
+            res['source_color'] = "blue"
+            res['dest_color'] = "blue"
+        else:
+            res['source_color'].replace(topModels_color, inplace=True)
+            res['dest_color'].replace(topModels_color, inplace=True)
+
+        if figsize is None:
+            figsize = (max(10.0, res.shape[0]/10), max(10.0, res.shape[0]/10))
+
+        plt.figure(figsize=figsize, facecolor='white')
+
+        G = nx.Graph()
+        for i in range(res.shape[0]):
+            G.add_node(res.source_label[i], color=res.source_color[i])
+            G.add_node(res.dest_label[i], color=res.dest_color[i])
+            G.add_edge(res.source_label[i], res.dest_label[i], weight=res.weight[i])
+
+        nodePos = nx.circular_layout(G)
+        nx.draw_networkx_nodes(G, nodePos, node_size=800)
+
+        edge_labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, nodePos, edge_labels)
+
+        node_color = nx.get_node_attributes(G, "color").values()
+        weights = nx.get_edge_attributes(G, 'weight').values()
+
+        nx.draw(G,
+                pos=nodePos,
+                width=list(weights),
+                with_labels=True,
+                node_color=list(node_color),
+                node_size=1750)
+
+        plt.axis('off')
+        plt.tight_layout()
+
+        if save:
+            plt.savefig(f"{file_name}.{plot_format}")
+        if plot_show:
+            plt.show()
+        else:
+            plt.close()
+
+        return
+
+
+
+
+
+

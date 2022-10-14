@@ -1,10 +1,14 @@
+import sys
 import warnings
 import joblib
 import pickle
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import LatentDirichletAllocation
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.set_theme(style="white")
 warnings.filterwarnings('ignore')
 
 from Topyfic.topic import *
@@ -22,6 +26,7 @@ class TopModel:
     :param rLDA: store reproducible LDA model
     :type rLDA: sklearn.decomposition.LatentDirichletAllocation
     """
+
     def __init__(self,
                  name,
                  N,
@@ -126,6 +131,78 @@ class TopModel:
         others.loc[[f"Topic{i + 1}" for i in range(self.N)], "topic_word_prior"] = self.rLDA.topic_word_prior_
 
         return components, exp_dirichlet_component, others
+
+    def gene_weight_heatmap(self,
+                            genes=None,
+                            topics=None,
+                            genes_cluster=True,
+                            topics_cluster=False,
+                            cmap='viridis',
+                            method='average',
+                            metric='euclidean',
+                            save=True,
+                            show=True,
+                            figsize=None,
+                            file_format="pdf",
+                            file_name="gene_weight_heatmap"):
+        """
+        plot selected genes weight in selected topics
+        :param genes: list of genes you want to see their weights (default: all genes)
+        :type genes: list
+        :param topics: list of topics
+        :type topics: list
+        :param genes_cluster: indicate whether you want to cluster the genes or not. (default: True)
+        :type genes_cluster: bool
+        :param topics_cluster: indicate whether you want to cluster the topics or not. (default: False)
+        :type topics_cluster: bool
+        :param cmap: The mapping from data values to color space (default: viridis)
+        :type cmap: matplotlib colormap name or object, or list of colors
+        :param method: Linkage method to use for calculating clusters. See scipy.cluster.hierarchy.linkage() documentation for more information. (default: 'average')
+        :type method: str
+        :param metric: Distance metric to use for the data. See scipy.spatial.distance.pdist() documentation for more options. (default: 'euclidean')
+        :type metric: str
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
+        if genes is None:
+            genes = self.get_feature_name()
+        elif not (set(genes) & set(self.get_feature_name())) == set(genes):
+            sys.exit("some/all of genes are not part of topModel!")
+
+        if topics is None:
+            topics = [f'{self.name}_Topic{i + 1}' for i in range(self.rLDA.components_.shape[0])]
+        elif not (set(topics) & set(
+                [f'{self.name}_Topic{i + 1}' for i in range(self.rLDA.components_.shape[0])])) == set(topics):
+            sys.exit("some/all of topics are not part of topModel!")
+
+        if figsize is None:
+            figsize = (len(genes) * 5, self.N)
+
+        gene_weights = self.get_gene_weights()
+        gene_weights = gene_weights.loc[genes, topics]
+
+        sns.clustermap(gene_weights,
+                       figsize=figsize,
+                       row_cluster=genes_cluster,
+                       col_cluster=topics_cluster,
+                       cmap=cmap,
+                       method=method,
+                       metric=metric)
+
+        if save:
+            plt.savefig(f"{file_name}.{file_format}")
+        if show:
+            plt.show()
+        else:
+            plt.close()
 
     def save_topModel(self, name="topModel", save_path=""):
         """
