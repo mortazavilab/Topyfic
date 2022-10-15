@@ -54,7 +54,7 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
     :type n_top_genes: int
     :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
     :type resolution: int
-    :return: final topmodel instance after clustering and trimming, dataframe containing which run goes to which topic
+    :return: final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic
     :rtype: TopModel, pandas dataframe
     """
     all_batches = None
@@ -154,13 +154,7 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
     :type all_components: pandas dataframe
     :param all_exp_dirichlet_component: Exponential value of expectation of log topic gene distribution from all single LDA models
     :type all_exp_dirichlet_component: pandas dataframe
-    :param all_others: dataframe contains remaining necessary attributes including
-            n_batch_iter: Number of iterations of the EM step.
-            n_features: Number of features seen during fit.
-            n_iter: Number of passes over the dataset.
-            bound: Final perplexity score on training set.
-            doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
-            topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
+    :param all_others: dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
     :type all_others: pandas dataframe
     :param clusters: dataframe that mapped each LDA run to each clusters
     :type clusters: pandas dataframe
@@ -214,13 +208,7 @@ def initialize_lda_model(components, exp_dirichlet_component, others):
     :type components: pandas dataframe
     :param exp_dirichlet_component: Exponential value of expectation of log topic gene distribution
     :type exp_dirichlet_component: pandas dataframe
-    :param others: dataframe contains remaining necessary attributes including
-            n_batch_iter: Number of iterations of the EM step.
-            n_features_in: Number of features seen during fit.
-            n_iter: Number of passes over the dataset.
-            bound: Final perplexity score on training set.
-            doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
-            topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
+    :param others: dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
     :type others: pandas dataframe
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
     :rtype: sklearn.decomposition.LatentDirichletAllocation

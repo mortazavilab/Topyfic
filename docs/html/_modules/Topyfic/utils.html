@@ -127,6 +127,27 @@
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="subset_data"><a class="viewcode-back" href="../../api.html#Topyfic.utils.subset_data">[docs]</a><span class="k">def</span> <span class="nf">subset_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subsetting data</span>
+<span class="sd">    :param data: data we want to subset</span>
+<span class="sd">    :type data: anndata</span>
+<span class="sd">    :param keep: values in the obs/var_names</span>
+<span class="sd">    :type keep: list</span>
+<span class="sd">    :param loc: subsetting in which direction (default: &#39;var&#39;)</span>
+<span class="sd">    :return: data we want to keep</span>
+<span class="sd">    :rtype: anndata</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;var&#39;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">keep</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;obs&#39;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">keep</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;loc is not correct! it should be &#39;obs&#39; or &#39;var&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
 <div class="viewcode-block" id="calculate_leiden_clustering"><a class="viewcode-back" href="../../api.html#Topyfic.utils.calculate_leiden_clustering">[docs]</a><span class="k">def</span> <span class="nf">calculate_leiden_clustering</span><span class="p">(</span><span class="n">trains</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics</span>
@@ -206,11 +227,12 @@
                                       <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
     <span class="n">keep</span> <span class="o">=</span> <span class="n">cell_participation</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">data</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10000</span>
-    <span class="n">clustering</span> <span class="o">=</span> <span class="n">clustering</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">keep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">keep</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span>
-    <span class="n">n_rtopics</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clustering</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;leiden&quot;</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">keep</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> topics our of </span><span class="si">{</span><span class="n">keep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> topics have participation in more than </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10000</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">n_rtopics</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="n">rlda</span><span class="p">,</span> <span class="n">gene_weights_T</span> <span class="o">=</span> <span class="n">filter_LDA_model</span><span class="p">(</span><span class="n">rlda</span><span class="p">,</span> <span class="n">keep</span><span class="p">)</span>
 
     <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights_T</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">gene_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">trains</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">top_model</span> <span class="o">=</span> <span class="n">TopModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">trains</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
@@ -305,7 +327,6 @@
 <span class="sd">            doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.</span>
 <span class="sd">            topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</span>
 <span class="sd">    :type others: pandas dataframe</span>
-<span class="sd">    :param components: Variational parameters for topic gene distribution from all single LDA models</span>
 <span class="sd">    :return: Latent Dirichlet Allocation with online variational Bayes algorithm.</span>
 <span class="sd">    :rtype: sklearn.decomposition.LatentDirichletAllocation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -343,7 +364,7 @@
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">components</span><span class="p">),</span>
                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">)])</span>
     <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">):</span>
-        <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">tmp</span> <span class="o">&gt;</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">sum</span><span class="p">()]</span>
         <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n_topics</span>
