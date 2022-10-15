@@ -132,35 +132,23 @@ class TopModel:
 
         return components, exp_dirichlet_component, others
 
-    def gene_weight_heatmap(self,
-                            genes=None,
-                            topics=None,
-                            genes_cluster=True,
-                            topics_cluster=False,
-                            cmap='viridis',
-                            method='average',
-                            metric='euclidean',
-                            save=True,
-                            show=True,
-                            figsize=None,
-                            file_format="pdf",
-                            file_name="gene_weight_heatmap"):
+    def gene_weight_rank_heatmap(self,
+                                 genes=None,
+                                 topics=None,
+                                 show_rank=True,
+                                 save=True,
+                                 show=True,
+                                 figsize=None,
+                                 file_format="pdf",
+                                 file_name="gene_weight_rank_heatmap"):
         """
-        plot selected genes weight in selected topics
+        plot selected genes weights and their ranks in selected topics
         :param genes: list of genes you want to see their weights (default: all genes)
         :type genes: list
         :param topics: list of topics
         :type topics: list
-        :param genes_cluster: indicate whether you want to cluster the genes or not. (default: True)
-        :type genes_cluster: bool
-        :param topics_cluster: indicate whether you want to cluster the topics or not. (default: False)
-        :type topics_cluster: bool
-        :param cmap: The mapping from data values to color space (default: viridis)
-        :type cmap: matplotlib colormap name or object, or list of colors
-        :param method: Linkage method to use for calculating clusters. See scipy.cluster.hierarchy.linkage() documentation for more information. (default: 'average')
-        :type method: str
-        :param metric: Distance metric to use for the data. See scipy.spatial.distance.pdist() documentation for more options. (default: 'euclidean')
-        :type metric: str
+        :param show_rank: indicate if you want to show the rank of significant genes or not (default: True)
+        :type show_rank: bool
         :param save: indicate if you want to save the plot or not (default: True)
         :type save: bool
         :param show: indicate if you want to show the plot or not (default: True)
@@ -184,18 +172,46 @@ class TopModel:
             sys.exit("some/all of topics are not part of topModel!")
 
         if figsize is None:
-            figsize = (len(genes) * 5, self.N)
+            figsize = (self.N * 1.5, len(genes))
+
+        gene_weights = self.get_gene_weights()
+        gene_weights = gene_weights.loc[:, topics]
+        gene_rank = gene_weights.loc[genes, topics]
+        for topic in topics:
+            tmp = gene_weights.sort_values([topic], ascending=False)
+            tmp['rank'] = range(1, tmp.shape[0] + 1)
+            gene_rank.loc[genes, topic] = tmp.loc[genes, 'rank'].values
 
         gene_weights = self.get_gene_weights()
         gene_weights = gene_weights.loc[genes, topics]
 
-        sns.clustermap(gene_weights,
-                       figsize=figsize,
-                       row_cluster=genes_cluster,
-                       col_cluster=topics_cluster,
-                       cmap=cmap,
-                       method=method,
-                       metric=metric)
+        gene_weights = gene_weights.reindex(genes)
+        gene_weights = gene_weights.reindex(topics, axis="columns")
+
+        gene_rank = gene_rank.reindex(genes)
+        gene_rank = gene_rank.reindex(topics, axis="columns")
+        gene_rank = gene_rank.astype(int)
+        gene_rank[gene_weights <= self.N] = 0
+        gene_rank = gene_rank.astype(str)
+        gene_rank[gene_rank == "0"] = ""
+
+        fig, ax = plt.subplots(figsize=figsize,
+                               facecolor='white')
+
+        if show_rank:
+            sns.heatmap(gene_weights,
+                        cmap='viridis',
+                        annot=gene_rank,
+                        linewidths=.5,
+                        fmt='',
+                        ax=ax)
+            ax.set_title('gene weights with rank')
+        else:
+            sns.heatmap(gene_weights,
+                        cmap='viridis',
+                        linewidths=.5,
+                        ax=ax)
+            ax.set_title('gene weights')
 
         if save:
             plt.savefig(f"{file_name}.{file_format}")

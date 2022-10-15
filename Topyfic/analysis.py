@@ -5,7 +5,7 @@ import sys
 from scipy import stats
 import warnings
 import random
-
+from statsmodels.stats.multitest import fdrcorrection
 from scipy.cluster.hierarchy import ward, dendrogram, leaves_list
 
 import matplotlib.pyplot as plt
@@ -409,7 +409,7 @@ class Analysis:
 
         for i in self.cell_participation.to_df().columns:
             for j in datTraits.columns:
-                tmp = stats.pearsonr(self.cell_participation.to_df()[i], datTraits[j])
+                tmp = stats.pearsonr(self.cell_participation.to_df()[i], datTraits[j], alternative='greater')
                 topicsTraitCor.loc[i, j] = tmp[0]
                 topicsTraitPvalue.loc[i, j] = tmp[1]
 
@@ -418,6 +418,14 @@ class Analysis:
 
         xlabels = self.cell_participation.to_df().columns
         ylabels = datTraits.columns
+
+        # print(topicsTraitPvalue)
+        # for i in range(topicsTraitPvalue.shape[0]):
+        #     rejected, tmp = fdrcorrection(topicsTraitPvalue.iloc[i, :])
+        #     print(rejected)
+        #     if not rejected:
+        #         topicsTraitPvalue.iloc[i, :] = tmp
+        # print(topicsTraitPvalue)
 
         # Loop over data dimensions and create text annotations.
         tmp_cor = topicsTraitCor.T.round(decimals=2)
@@ -512,9 +520,33 @@ class Analysis:
             return selected_cell, selected_cell_participation
 
     def average_cell_participation(self,
-                                   label=None):
-        df = self.cell_participation.to_df().mean()
-        print(df)
+                                   label=None,
+                                   color="blue",
+                                   save=True,
+                                   show=True,
+                                   figsize=None,
+                                   file_format="pdf",
+                                   file_name="average_cell_participation"):
+        df = pd.DataFrame(self.cell_participation.to_df().mean())
+        df.reset_index(inplace=True)
+        df.replace(label, inplace=True)
+
+        if figsize is None:
+            figsize = (df.shape[0], 5)
+
+        fig = plt.figure(figsize=figsize, facecolor='white')
+
+        plt.bar(df['index'], df[0], color=color, width=0.5)
+
+        plt.xlabel(self.top_model.name)
+        plt.ylabel("Average cell participation")
+
+        if save:
+            fig.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
+        if show:
+            plt.show()
+        else:
+            plt.close()
 
     def save_analysis(self, name="analysis", save_path=""):
         """
