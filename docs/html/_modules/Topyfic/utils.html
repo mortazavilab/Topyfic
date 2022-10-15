@@ -132,11 +132,13 @@
 <div class="viewcode-block" id="subset_data"><a class="viewcode-back" href="../../api.html#Topyfic.utils.subset_data">[docs]</a><span class="k">def</span> <span class="nf">subset_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Subsetting data</span>
+
 <span class="sd">    :param data: data we want to subset</span>
 <span class="sd">    :type data: anndata</span>
 <span class="sd">    :param keep: values in the obs/var_names</span>
 <span class="sd">    :type keep: list</span>
 <span class="sd">    :param loc: subsetting in which direction (default: &#39;var&#39;)</span>
+
 <span class="sd">    :return: data we want to keep</span>
 <span class="sd">    :rtype: anndata</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -153,6 +155,7 @@
 <div class="viewcode-block" id="calculate_leiden_clustering"><a class="viewcode-back" href="../../api.html#Topyfic.utils.calculate_leiden_clustering">[docs]</a><span class="k">def</span> <span class="nf">calculate_leiden_clustering</span><span class="p">(</span><span class="n">trains</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics</span>
+
 <span class="sd">    :param trains: list of train class</span>
 <span class="sd">    :type trains: list of Train</span>
 <span class="sd">    :param data: gene-count data with cells and genes information</span>
@@ -161,6 +164,7 @@
 <span class="sd">    :type n_top_genes: int</span>
 <span class="sd">    :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)</span>
 <span class="sd">    :type resolution: int</span>
+
 <span class="sd">    :return: final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic</span>
 <span class="sd">    :rtype: TopModel, pandas dataframe</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -257,6 +261,7 @@
 <div class="viewcode-block" id="initialize_rLDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.utils.initialize_rLDA_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_rLDA_model</span><span class="p">(</span><span class="n">all_components</span><span class="p">,</span> <span class="n">all_exp_dirichlet_component</span><span class="p">,</span> <span class="n">all_others</span><span class="p">,</span> <span class="n">clusters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize reproducible LDA model by calculating all necessary attributes using clustering.</span>
+
 <span class="sd">    :param all_components: Variational parameters for topic gene distribution from all single LDA models</span>
 <span class="sd">    :type all_components: pandas dataframe</span>
 <span class="sd">    :param all_exp_dirichlet_component: Exponential value of expectation of log topic gene distribution from all single LDA models</span>
@@ -265,6 +270,7 @@
 <span class="sd">    :type all_others: pandas dataframe</span>
 <span class="sd">    :param clusters: dataframe that mapped each LDA run to each clusters</span>
 <span class="sd">    :type clusters: pandas dataframe</span>
+
 <span class="sd">    :return: Latent Dirichlet Allocation with online variational Bayes algorithm.</span>
 <span class="sd">    :rtype: sklearn.decomposition.LatentDirichletAllocation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -311,12 +317,14 @@
 <div class="viewcode-block" id="initialize_lda_model"><a class="viewcode-back" href="../../api.html#Topyfic.utils.initialize_lda_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_lda_model</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize LDA model by passing all necessary attributes</span>
+
 <span class="sd">    :param components: Variational parameters for topic gene distribution</span>
 <span class="sd">    :type components: pandas dataframe</span>
 <span class="sd">    :param exp_dirichlet_component: Exponential value of expectation of log topic gene distribution</span>
 <span class="sd">    :type exp_dirichlet_component: pandas dataframe</span>
 <span class="sd">    :param others: dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</span>
 <span class="sd">    :type others: pandas dataframe</span>
+
 <span class="sd">    :return: Latent Dirichlet Allocation with online variational Bayes algorithm.</span>
 <span class="sd">    :rtype: sklearn.decomposition.LatentDirichletAllocation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -339,10 +347,12 @@
 <div class="viewcode-block" id="filter_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.utils.filter_LDA_model">[docs]</a><span class="k">def</span> <span class="nf">filter_LDA_model</span><span class="p">(</span><span class="n">main_lda</span><span class="p">,</span> <span class="n">keep</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filter LDA based on the topics we want to keep</span>
+
 <span class="sd">    :param main_lda: Latent Dirichlet Allocation with online variational Bayes algorithm.</span>
 <span class="sd">    :type main_lda: sklearn.decomposition.LatentDirichletAllocation</span>
 <span class="sd">    :param keep: dataframe that define which topics we want to keep</span>
 <span class="sd">    :type keep: pandas dataframe</span>
+
 <span class="sd">    :return: Latent Dirichlet Allocation with online variational Bayes algorithm, weights of genes in each topics (indexes are topics and columns are genes)</span>
 <span class="sd">    :rtype: sklearn.decomposition.LatentDirichletAllocation, pandas dataframe</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -376,8 +386,10 @@
 <div class="viewcode-block" id="read_train"><a class="viewcode-back" href="../../api.html#Topyfic.utils.read_train">[docs]</a><span class="k">def</span> <span class="nf">read_train</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    reading train pickle file</span>
+
 <span class="sd">    :param file: path of the pickle file</span>
 <span class="sd">    :type file: str</span>
+
 <span class="sd">    :return: train instance</span>
 <span class="sd">    :rtype: Train class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -394,8 +406,10 @@
 <div class="viewcode-block" id="read_topModel"><a class="viewcode-back" href="../../api.html#Topyfic.utils.read_topModel">[docs]</a><span class="k">def</span> <span class="nf">read_topModel</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    reading topModel pickle file</span>
+
 <span class="sd">    :param file: path of the pickle file</span>
 <span class="sd">    :type file: str</span>
+
 <span class="sd">    :return: topModel instance</span>
 <span class="sd">    :rtype: TopModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -412,8 +426,10 @@
 <div class="viewcode-block" id="read_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.utils.read_analysis">[docs]</a><span class="k">def</span> <span class="nf">read_analysis</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    reading analysis pickle file</span>
+
 <span class="sd">    :param file: path of the pickle file</span>
 <span class="sd">    :type file: str</span>
+
 <span class="sd">    :return: analysis instance</span>
 <span class="sd">    :rtype: Analysis class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -439,6 +455,7 @@
                       <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;compare_topics&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    compare several topModels</span>
+
 <span class="sd">    :param topModels: list of topModel class you want to compare to each other</span>
 <span class="sd">    :type topModels: list of TopModel class</span>
 <span class="sd">    :param output_type: indicate the type of output you want. circular: plot as a circle plot, heatmap: plot as a heatmap, table: table contains correlation</span>
@@ -459,6 +476,7 @@
 <span class="sd">    :type plot_format: str</span>
 <span class="sd">    :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)</span>
 <span class="sd">    :type file_name: str</span>
+
 <span class="sd">    :return: table contains correlation between topics only when table is choose and save is False</span>
 <span class="sd">    :rtype: pandas dataframe</span>
 <span class="sd">    &quot;&quot;&quot;</span>

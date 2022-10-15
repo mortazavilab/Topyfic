@@ -191,6 +191,7 @@
 <div class="viewcode-block" id="Train.run_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.run_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">run_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_thread</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        train LDA models</span>
+
 <span class="sd">        :param data: data embeded in anndata format use to train LDA model</span>
 <span class="sd">        :type data: anndata</span>
 <span class="sd">        :param n_thread: number of threds you used to learn LDA models (default=1)</span>
@@ -209,6 +210,7 @@
 <div class="viewcode-block" id="Train.make_LDA_models_attributes"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_LDA_models_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">make_LDA_models_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)</span>
+
 <span class="sd">        :return: three data frame which the first one is gathering all components from all LDA runs,</span>
 <span class="sd">        the second one is exp_dirichlet_component from all LDA runs and</span>
 <span class="sd">        the last one is combining the rest of LDA attributes which put them to gather as a dataframe</span>
@@ -255,6 +257,7 @@
 <div class="viewcode-block" id="Train.save_train"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.save_train">[docs]</a>    <span class="k">def</span> <span class="nf">save_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        save Train class as a pickle file</span>
+
 <span class="sd">        :param name: name of the pickle file (default is train_{name of class})</span>
 <span class="sd">        :type name: str</span>
 <span class="sd">        :param save_path: directory you want to use to save pickle file (default is saving near script)</span>
