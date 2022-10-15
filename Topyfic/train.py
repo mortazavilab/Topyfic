@@ -84,6 +84,7 @@ class Train:
     def run_LDA_models(self, data, n_thread=1):
         """
         train LDA models
+
         :param data: data embeded in anndata format use to train LDA model
         :type data: anndata
         :param n_thread: number of threds you used to learn LDA models (default=1)
@@ -102,6 +103,7 @@ class Train:
     def make_LDA_models_attributes(self):
         """
         make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)
+
         :return: three data frame which the first one is gathering all components from all LDA runs,
         the second one is exp_dirichlet_component from all LDA runs and
         the last one is combining the rest of LDA attributes which put them to gather as a dataframe
@@ -148,6 +150,7 @@ class Train:
     def save_train(self, name=None, save_path=""):
         """
         save Train class as a pickle file
+
         :param name: name of the pickle file (default is train_{name of class})
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)
