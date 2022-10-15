@@ -112,7 +112,7 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">random</span>
-
+<span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">fdrcorrection</span>
 <span class="kn">from</span> <span class="nn">scipy.cluster.hierarchy</span> <span class="kn">import</span> <span class="n">ward</span><span class="p">,</span> <span class="n">dendrogram</span><span class="p">,</span> <span class="n">leaves_list</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -174,7 +174,7 @@
                             <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">format_file</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                            <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;piechart_topicAvgCell&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot pie charts that shows contribution of each topics to each category (i.e cell type)</span>
@@ -192,8 +192,8 @@
 <span class="sd">        :type show: bool</span>
 <span class="sd">        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))</span>
 <span class="sd">        :type figsize: tuple of int</span>
-<span class="sd">        :param format_file: indicate the format of plot (default: pdf)</span>
-<span class="sd">        :type format_file: str</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
 <span class="sd">        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)</span>
 <span class="sd">        :type file_name: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -257,7 +257,7 @@
             <span class="n">axs</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">format_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -275,7 +275,7 @@
                        <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">format_file</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                       <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                        <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;structure_topicAvgCell&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot structure which shows contribution of each topics for each cells in given categories</span>
@@ -301,8 +301,8 @@
 <span class="sd">        :type show: bool</span>
 <span class="sd">        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))</span>
 <span class="sd">        :type figsize: tuple of int</span>
-<span class="sd">        :param format_file: indicate the format of plot (default: pdf)</span>
-<span class="sd">        :type format_file: str</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
 <span class="sd">        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)</span>
 <span class="sd">        :type file_name: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -452,7 +452,7 @@
                 <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">format_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -490,7 +490,7 @@
                                       <span class="n">metaData</span><span class="p">,</span>
                                       <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                       <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                      <span class="n">format_file</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                                      <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                       <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;topic-traitRelationships&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot topic-trait relationship heatmap</span>
@@ -500,8 +500,8 @@
 <span class="sd">        :type save: bool</span>
 <span class="sd">        :param show: indicate if you want to show the plot or not (default: True)</span>
 <span class="sd">        :type show: bool</span>
-<span class="sd">        :param format_file: indicate the format of plot (default: pdf)</span>
-<span class="sd">        :type format_file: str</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
 <span class="sd">        :param file_name: name and path of the plot use for save (default: topic-traitRelationships)</span>
 <span class="sd">        :type file_name: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -516,7 +516,7 @@
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">datTraits</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span> <span class="n">datTraits</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()[</span><span class="n">i</span><span class="p">],</span> <span class="n">datTraits</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;greater&#39;</span><span class="p">)</span>
                 <span class="n">topicsTraitCor</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">topicsTraitPvalue</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -525,6 +525,14 @@
 
         <span class="n">xlabels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span>
         <span class="n">ylabels</span> <span class="o">=</span> <span class="n">datTraits</span><span class="o">.</span><span class="n">columns</span>
+
+        <span class="c1"># print(topicsTraitPvalue)</span>
+        <span class="c1"># for i in range(topicsTraitPvalue.shape[0]):</span>
+        <span class="c1">#     rejected, tmp = fdrcorrection(topicsTraitPvalue.iloc[i, :])</span>
+        <span class="c1">#     print(rejected)</span>
+        <span class="c1">#     if not rejected:</span>
+        <span class="c1">#         topicsTraitPvalue.iloc[i, :] = tmp</span>
+        <span class="c1"># print(topicsTraitPvalue)</span>
 
         <span class="c1"># Loop over data dimensions and create text annotations.</span>
         <span class="n">tmp_cor</span> <span class="o">=</span> <span class="n">topicsTraitCor</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -546,11 +554,106 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">format_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Analysis.extract_cells"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.extract_cells">[docs]</a>    <span class="k">def</span> <span class="nf">extract_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">level</span><span class="p">,</span>
+                      <span class="n">category</span><span class="p">,</span>
+                      <span class="n">top_cells</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                      <span class="n">min_cell_participation</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                      <span class="n">min_cells</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                      <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        extract subset of cells and cells participation with specific criteria</span>
+<span class="sd">        :param level: name of the column from cell_participation.obs</span>
+<span class="sd">        :type level: str</span>
+<span class="sd">        :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])</span>
+<span class="sd">        :type category: list of str</span>
+<span class="sd">        :param top_cells: fraction of the cells you want to be considers (default: 0.05)</span>
+<span class="sd">        :type top_cells: float</span>
+<span class="sd">        :param min_cell_participation: minimum cell participation each cells in each topics should have to be count (default: 0.05)</span>
+<span class="sd">        :type min_cell_participation: float</span>
+<span class="sd">        :param min_cells: minimum number of cells each topics should have to be reported (default: 50)</span>
+<span class="sd">        :type min_cells: int</span>
+<span class="sd">        :param file_name: name and path of the plot use for save (default: selectedCells_top{top_cells}_{min_cell_score}min_score_{min_cells}min_cells.csv and cellParticipation_selectedCells_top{top_cells}_{min_cell_score}min_score_{min_cells}min_cells.csv)</span>
+<span class="sd">        :type file_name: str</span>
+<span class="sd">        :param save: indicate if you want to save the data or not (default: False)</span>
+<span class="sd">        :type save: bool</span>
+<span class="sd">        :return: table contains cell ID that pass threshold for each topic, table contains cell particiaption for cells that pass threshold for each topic (same order as fist table)</span>
+<span class="sd">        :rtype: pandas dataframe, pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cells</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span>
+        <span class="n">cell_topics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">cells</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">cell_topics</span> <span class="o">=</span> <span class="n">cell_topics</span><span class="p">[</span><span class="n">cell_topics</span> <span class="o">&gt;</span> <span class="n">min_cell_participation</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cell_topics</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">*</span> <span class="n">top_cells</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">round</span><span class="p">()</span>
+
+        <span class="n">selected_cell</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">cells</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                     <span class="n">columns</span><span class="o">=</span><span class="n">cell_topics</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">selected_cell_participation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">cells</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                                   <span class="n">columns</span><span class="o">=</span><span class="n">cell_topics</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell_topics</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">cell_topics</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">cell_topics</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">selected_cell</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]][:</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]])]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[:</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]])]</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]])]</span>
+            <span class="n">selected_cell_participation</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]][:</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]])]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">selected_cell</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">selected_cell</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">selected_cell</span> <span class="o">=</span> <span class="n">selected_cell</span><span class="p">[</span><span class="n">selected_cell</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">selected_cell</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">min_cells</span><span class="p">]]</span>
+        <span class="n">selected_cell</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">selected_cell_participation</span> <span class="o">=</span> <span class="n">selected_cell_participation</span><span class="p">[</span>
+            <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">min_cells</span><span class="p">]]</span>
+        <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">selected_cell</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;selectedCells_top</span><span class="si">{</span><span class="n">top_cells</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">min_cell_participation</span><span class="si">}</span><span class="s2">min_score_</span><span class="si">{</span><span class="n">min_cells</span><span class="si">}</span><span class="s2">min_cells.csv&quot;</span><span class="p">)</span>
+                <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cellParticipation_selectedCells_top</span><span class="si">{</span><span class="n">top_cells</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">min_cell_participation</span><span class="si">}</span><span class="s2">min_score_</span><span class="si">{</span><span class="n">min_cells</span><span class="si">}</span><span class="s2">min_cells.csv&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">selected_cell</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;selectedCells_</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
+                <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cellParticipation_selectedCells_</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">selected_cell</span><span class="p">,</span> <span class="n">selected_cell_participation</span></div>
+
+    <span class="k">def</span> <span class="nf">average_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+                                   <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                                   <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;average_cell_participation&quot;</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average cell participation&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Analysis.save_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.save_analysis">[docs]</a>    <span class="k">def</span> <span class="nf">save_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;analysis&quot;</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

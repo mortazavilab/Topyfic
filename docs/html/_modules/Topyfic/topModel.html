@@ -105,13 +105,17 @@
     <div class="body col-md-12 content" role="main">
       
   <h1>Source code for Topyfic.topModel</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">LatentDirichletAllocation</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">Topyfic.topic</span> <span class="kn">import</span> <span class="o">*</span>
@@ -129,6 +133,7 @@
 <span class="sd">    :param rLDA: store reproducible LDA model</span>
 <span class="sd">    :type rLDA: sklearn.decomposition.LatentDirichletAllocation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span><span class="p">,</span>
                  <span class="n">N</span><span class="p">,</span>
@@ -233,6 +238,94 @@
         <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;topic_word_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rLDA</span><span class="o">.</span><span class="n">topic_word_prior_</span>
 
         <span class="k">return</span> <span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span></div>
+
+<div class="viewcode-block" id="TopModel.gene_weight_rank_heatmap"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.gene_weight_rank_heatmap">[docs]</a>    <span class="k">def</span> <span class="nf">gene_weight_rank_heatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                 <span class="n">genes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">topics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">show_rank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                 <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                                 <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;gene_weight_rank_heatmap&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot selected genes weights and their ranks in selected topics</span>
+<span class="sd">        :param genes: list of genes you want to see their weights (default: all genes)</span>
+<span class="sd">        :type genes: list</span>
+<span class="sd">        :param topics: list of topics</span>
+<span class="sd">        :type topics: list</span>
+<span class="sd">        :param show_rank: indicate if you want to show the rank of significant genes or not (default: True)</span>
+<span class="sd">        :type show_rank: bool</span>
+<span class="sd">        :param save: indicate if you want to save the plot or not (default: True)</span>
+<span class="sd">        :type save: bool</span>
+<span class="sd">        :param show: indicate if you want to show the plot or not (default: True)</span>
+<span class="sd">        :type show: bool</span>
+<span class="sd">        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))</span>
+<span class="sd">        :type figsize: tuple of int</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
+<span class="sd">        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)</span>
+<span class="sd">        :type file_name: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">genes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">genes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">()))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">genes</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;some/all of genes are not part of topModel!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">topics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">topics</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rLDA</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">topics</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span>
+                <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rLDA</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">topics</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;some/all of topics are not part of topModel!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">))</span>
+
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gene_weights</span><span class="p">()</span>
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">topics</span><span class="p">]</span>
+        <span class="n">gene_rank</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">,</span> <span class="n">topics</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="n">topic</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">gene_rank</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">,</span> <span class="n">topic</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">,</span> <span class="s1">&#39;rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_gene_weights</span><span class="p">()</span>
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">genes</span><span class="p">,</span> <span class="n">topics</span><span class="p">]</span>
+
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+
+        <span class="n">gene_rank</span> <span class="o">=</span> <span class="n">gene_rank</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+        <span class="n">gene_rank</span> <span class="o">=</span> <span class="n">gene_rank</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;columns&quot;</span><span class="p">)</span>
+        <span class="n">gene_rank</span> <span class="o">=</span> <span class="n">gene_rank</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">gene_rank</span><span class="p">[</span><span class="n">gene_weights</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">gene_rank</span> <span class="o">=</span> <span class="n">gene_rank</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">gene_rank</span><span class="p">[</span><span class="n">gene_rank</span> <span class="o">==</span> <span class="s2">&quot;0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+                               <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">show_rank</span><span class="p">:</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">gene_weights</span><span class="p">,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                        <span class="n">annot</span><span class="o">=</span><span class="n">gene_rank</span><span class="p">,</span>
+                        <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span>
+                        <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;gene weights with rank&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">gene_weights</span><span class="p">,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
+                        <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;gene weights&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TopModel.save_topModel"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.save_topModel">[docs]</a>    <span class="k">def</span> <span class="nf">save_topModel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;topModel&quot;</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

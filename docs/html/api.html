@@ -83,6 +83,7 @@
 </li>
 <li><a class="reference internal" href="#Topyfic.topic.Topic"><code class="docutils literal notranslate"><span class="pre">Topic</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.topModel.TopModel"><code class="docutils literal notranslate"><span class="pre">TopModel</span></code></a><ul>
+<li><a class="reference internal" href="#Topyfic.topModel.TopModel.gene_weight_rank_heatmap"><code class="docutils literal notranslate"><span class="pre">TopModel.gene_weight_rank_heatmap()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_feature_name"><code class="docutils literal notranslate"><span class="pre">TopModel.get_feature_name()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_gene_weights"><code class="docutils literal notranslate"><span class="pre">TopModel.get_gene_weights()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.topModel.TopModel.get_ranked_gene_weight"><code class="docutils literal notranslate"><span class="pre">TopModel.get_ranked_gene_weight()</span></code></a></li>
@@ -94,12 +95,14 @@
 <li><a class="reference internal" href="#Topyfic.analysis.Analysis"><code class="docutils literal notranslate"><span class="pre">Analysis</span></code></a><ul>
 <li><a class="reference internal" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap"><code class="docutils literal notranslate"><span class="pre">Analysis.TopicTraitRelationshipHeatmap()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.analysis.Analysis.convertDatTraits"><code class="docutils literal notranslate"><span class="pre">Analysis.convertDatTraits()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.analysis.Analysis.extract_cells"><code class="docutils literal notranslate"><span class="pre">Analysis.extract_cells()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.analysis.Analysis.pie_structure_Chart"><code class="docutils literal notranslate"><span class="pre">Analysis.pie_structure_Chart()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.analysis.Analysis.save_analysis"><code class="docutils literal notranslate"><span class="pre">Analysis.save_analysis()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.analysis.Analysis.structure_plot"><code class="docutils literal notranslate"><span class="pre">Analysis.structure_plot()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#Topyfic.utils.calculate_leiden_clustering"><code class="docutils literal notranslate"><span class="pre">calculate_leiden_clustering()</span></code></a></li>
+<li><a class="reference internal" href="#Topyfic.utils.compare_topModels"><code class="docutils literal notranslate"><span class="pre">compare_topModels()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.utils.filter_LDA_model"><code class="docutils literal notranslate"><span class="pre">filter_LDA_model()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.utils.initialize_lda_model"><code class="docutils literal notranslate"><span class="pre">initialize_lda_model()</span></code></a></li>
 <li><a class="reference internal" href="#Topyfic.utils.initialize_rLDA_model"><code class="docutils literal notranslate"><span class="pre">initialize_rLDA_model()</span></code></a></li>
@@ -259,6 +262,28 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :param rLDA: store reproducible LDA model
 :type rLDA: sklearn.decomposition.LatentDirichletAllocation</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="Topyfic.topModel.TopModel.gene_weight_rank_heatmap">
+<span class="sig-name descname"><span class="pre">gene_weight_rank_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gene_weight_rank_heatmap'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.gene_weight_rank_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.gene_weight_rank_heatmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot selected genes weights and their ranks in selected topics
+:param genes: list of genes you want to see their weights (default: all genes)
+:type genes: list
+:param topics: list of topics
+:type topics: list
+:param show_rank: indicate if you want to show the rank of significant genes or not (default: True)
+:type show_rank: bool
+:param save: indicate if you want to save the plot or not (default: True)
+:type save: bool
+:param show: indicate if you want to show the plot or not (default: True)
+:type show: bool
+:param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+:type figsize: tuple of int
+:param file_format: indicate the format of plot (default: pdf)
+:type file_format: str
+:param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+:type file_name: str</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.topModel.TopModel.get_feature_name">
 <span class="sig-name descname"><span class="pre">get_feature_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/topModel.html#TopModel.get_feature_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.topModel.TopModel.get_feature_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>get feature(gene) name
@@ -325,7 +350,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type cell_participation: anndata</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap">
-<span class="sig-name descname"><span class="pre">TopicTraitRelationshipHeatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metaData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topic-traitRelationships'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.TopicTraitRelationshipHeatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">TopicTraitRelationshipHeatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metaData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topic-traitRelationships'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.TopicTraitRelationshipHeatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot topic-trait relationship heatmap
 :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)
 :type metaData: list
@@ -333,8 +358,8 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type save: bool
 :param show: indicate if you want to show the plot or not (default: True)
 :type show: bool
-:param format_file: indicate the format of plot (default: pdf)
-:type format_file: str
+:param file_format: indicate the format of plot (default: pdf)
+:type file_format: str
 :param file_name: name and path of the plot use for save (default: topic-traitRelationships)
 :type file_name: str</p>
 </dd></dl>
@@ -348,8 +373,30 @@ the last one is combining the rest of LDA attributes which put them to gather as
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="Topyfic.analysis.Analysis.extract_cells">
+<span class="sig-name descname"><span class="pre">extract_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cell_participation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.extract_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.extract_cells" title="Permalink to this definition">¶</a></dt>
+<dd><p>extract subset of cells and cells participation with specific criteria
+:param level: name of the column from cell_participation.obs
+:type level: str
+:param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
+:type category: list of str
+:param top_cells: fraction of the cells you want to be considers (default: 0.05)
+:type top_cells: float
+:param min_cell_participation: minimum cell participation each cells in each topics should have to be count (default: 0.05)
+:type min_cell_participation: float
+:param min_cells: minimum number of cells each topics should have to be reported (default: 50)
+:type min_cells: int
+:param file_name: name and path of the plot use for save (default: selectedCells_top{top_cells}_{min_cell_score}min_score_{min_cells}min_cells.csv and cellParticipation_selectedCells_top{top_cells}_{min_cell_score}min_score_{min_cells}min_cells.csv)
+:type file_name: str
+:param save: indicate if you want to save the data or not (default: False)
+:type save: bool
+:return: table contains cell ID that pass threshold for each topic, table contains cell particiaption for cells that pass threshold for each topic (same order as fist table)
+:rtype: pandas dataframe, pandas dataframe</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.pie_structure_Chart">
-<span class="sig-name descname"><span class="pre">pie_structure_Chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'piechart_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.pie_structure_Chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.pie_structure_Chart" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pie_structure_Chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'piechart_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.pie_structure_Chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.pie_structure_Chart" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot pie charts that shows contribution of each topics to each category (i.e cell type)
 :param level: name of the column from cell_participation.obs
 :type level: str
@@ -365,8 +412,8 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type show: bool
 :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
 :type figsize: tuple of int
-:param format_file: indicate the format of plot (default: pdf)
-:type format_file: str
+:param file_format: indicate the format of plot (default: pdf)
+:type file_format: str
 :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
 :type file_name: str</p>
 </dd></dl>
@@ -383,7 +430,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.structure_plot">
-<span class="sig-name descname"><span class="pre">structure_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['hierarchy']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structure_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.structure_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.structure_plot" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">structure_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metaData_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_cells</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['hierarchy']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'structure_topicAvgCell'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.structure_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.structure_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot structure which shows contribution of each topics for each cells in given categories
 :param level: name of the column from cell_participation.obs
 :type level: str
@@ -407,8 +454,8 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type show: bool
 :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
 :type figsize: tuple of int
-:param format_file: indicate the format of plot (default: pdf)
-:type format_file: str
+:param file_format: indicate the format of plot (default: pdf)
+:type file_format: str
 :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
 :type file_name: str</p>
 </dd></dl>
@@ -427,8 +474,36 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type n_top_genes: int
 :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
 :type resolution: int
-:return: final topmodel instance after clustering and trimming, dataframe containing which run goes to which topic
+:return: final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic
 :rtype: TopModel, pandas dataframe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utils.compare_topModels">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utils.</span></span><span class="sig-name descname"><span class="pre">compare_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'circular'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'compare_topics'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utils.html#compare_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utils.compare_topModels" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare several topModels
+:param topModels: list of topModel class you want to compare to each other
+:type topModels: list of TopModel class
+:param output_type: indicate the type of output you want. circular: plot as a circle plot, heatmap: plot as a heatmap, table: table contains correlation
+:type output_type: str
+:param threshold: only apply when you choose circular which only show correlation above that
+:type threshold: float
+:param topModels_color: dictionary of colors mapping each topics to each color (default: blue)
+:type topModels_color: dict
+:param topModels_label: dictionary of label mapping each topics to each label
+:type topModels_label: dict
+:param save: indicate if you want to save the plot or not (default: True)
+:type save: bool
+:param plot_show: indicate if you want to show the plot or not (default: True)
+:type plot_show: bool
+:param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+:type figsize: tuple of int
+:param plot_format: indicate the format of plot (default: pdf)
+:type plot_format: str
+:param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+:type file_name: str
+:return: table contains correlation between topics only when table is choose and save is False
+:rtype: pandas dataframe</p>
 </dd></dl>
 
 <dl class="py function">
@@ -451,23 +526,10 @@ the last one is combining the rest of LDA attributes which put them to gather as
 :type components: pandas dataframe
 :param exp_dirichlet_component: Exponential value of expectation of log topic gene distribution
 :type exp_dirichlet_component: pandas dataframe
-:param others: dataframe contains remaining necessary attributes including</p>
-<blockquote>
-<div><p>n_batch_iter: Number of iterations of the EM step.
-n_features_in: Number of features seen during fit.
-n_iter: Number of passes over the dataset.
-bound: Final perplexity score on training set.
-doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
-topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Latent Dirichlet Allocation with online variational Bayes algorithm.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>sklearn.decomposition.LatentDirichletAllocation</p>
-</dd>
-</dl>
+:param others: dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
+:type others: pandas dataframe
+:return: Latent Dirichlet Allocation with online variational Bayes algorithm.
+:rtype: sklearn.decomposition.LatentDirichletAllocation</p>
 </dd></dl>
 
 <dl class="py function">
@@ -478,26 +540,12 @@ topic_word_prior: Prior of topic word distribution beta. If the value is None, i
 :type all_components: pandas dataframe
 :param all_exp_dirichlet_component: Exponential value of expectation of log topic gene distribution from all single LDA models
 :type all_exp_dirichlet_component: pandas dataframe
-:param all_others: dataframe contains remaining necessary attributes including</p>
-<blockquote>
-<div><p>n_batch_iter: Number of iterations of the EM step.
-n_features: Number of features seen during fit.
-n_iter: Number of passes over the dataset.
-bound: Final perplexity score on training set.
-doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components.
-topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>clusters</strong> (<em>pandas dataframe</em>) – dataframe that mapped each LDA run to each clusters</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Latent Dirichlet Allocation with online variational Bayes algorithm.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>sklearn.decomposition.LatentDirichletAllocation</p>
-</dd>
-</dl>
+:param all_others: dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
+:type all_others: pandas dataframe
+:param clusters: dataframe that mapped each LDA run to each clusters
+:type clusters: pandas dataframe
+:return: Latent Dirichlet Allocation with online variational Bayes algorithm.
+:rtype: sklearn.decomposition.LatentDirichletAllocation</p>
 </dd></dl>
 
 <dl class="py function">
