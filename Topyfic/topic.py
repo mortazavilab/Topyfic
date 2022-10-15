@@ -9,6 +9,7 @@ warnings.filterwarnings('ignore')
 class Topic:
     """
     A class saved topic along with other useful information
+
     :param topic_id: ID of topic which is unique
     :type topic_id: int
     :param topic_name: name of the topic (default: topic_id)

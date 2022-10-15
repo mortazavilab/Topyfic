@@ -17,6 +17,7 @@ from Topyfic.topic import *
 class TopModel:
     """
     A class that saved a model
+
     :param name: name of class
     :type name: str
     :param N: number of topics
@@ -25,6 +26,7 @@ class TopModel:
     :type gene_weights: pandas dataframe
     :param rLDA: store reproducible LDA model
     :type rLDA: sklearn.decomposition.LatentDirichletAllocation
+
     """
 
     def __init__(self,
@@ -46,6 +48,7 @@ class TopModel:
     def get_feature_name(self):
         """
         get feature(gene) name
+
         :return: list of feature(gene) name
         :rtype: list
         """
@@ -55,6 +58,7 @@ class TopModel:
     def save_rLDA_model(self, name='rLDA', save_path=""):
         """
         save Train class as a pickle file
+
         :param name: name of the pickle file (default: rLDA)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)
@@ -67,6 +71,7 @@ class TopModel:
     def get_gene_weights(self):
         """
         get feature(gene) weights
+
         :return: dataframe contains feature(gene) weights; genes are indexes and topics are columns
         :rtype: pandas dataframe
         """
@@ -80,6 +85,7 @@ class TopModel:
     def get_ranked_gene_weight(self):
         """
         get sorted feature(gene) weights. each value is gene and weights on each topics
+
         :return: dataframe contains feature(gene) and their weights; ranks are indexes and topics are columns
         :rtype: pandas dataframe
         """
@@ -100,6 +106,7 @@ class TopModel:
     def get_top_model_attributes(self):
         """
         get top model attributes to be able to make sklearn.decomposition.LatentDirichletAllocation
+
         :return: three data frame which the first one is components, the second one is exp_dirichlet_component and
         the last one is combining the rest of LDA attributes which put them to gather as a dataframe
         :rtype: pandas dataframe, pandas dataframe, pandas dataframe
@@ -143,6 +150,7 @@ class TopModel:
                                  file_name="gene_weight_rank_heatmap"):
         """
         plot selected genes weights and their ranks in selected topics
+
         :param genes: list of genes you want to see their weights (default: all genes)
         :type genes: list
         :param topics: list of topics
@@ -223,6 +231,7 @@ class TopModel:
     def save_topModel(self, name="topModel", save_path=""):
         """
         save TopModel class as a pickle file
+
         :param name: name of the pickle file (default: topModel)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)

@@ -25,11 +25,13 @@ warnings.filterwarnings("ignore")
 def subset_data(data, keep, loc='var'):
     """
     Subsetting data
+
     :param data: data we want to subset
     :type data: anndata
     :param keep: values in the obs/var_names
     :type keep: list
     :param loc: subsetting in which direction (default: 'var')
+
     :return: data we want to keep
     :rtype: anndata
     """
@@ -46,6 +48,7 @@ def subset_data(data, keep, loc='var'):
 def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
     """
     Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics
+
     :param trains: list of train class
     :type trains: list of Train
     :param data: gene-count data with cells and genes information
@@ -54,6 +57,7 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
     :type n_top_genes: int
     :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
     :type resolution: int
+
     :return: final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic
     :rtype: TopModel, pandas dataframe
     """
@@ -150,6 +154,7 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
 def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_others, clusters):
     """
     Initialize reproducible LDA model by calculating all necessary attributes using clustering.
+
     :param all_components: Variational parameters for topic gene distribution from all single LDA models
     :type all_components: pandas dataframe
     :param all_exp_dirichlet_component: Exponential value of expectation of log topic gene distribution from all single LDA models
@@ -158,6 +163,7 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
     :type all_others: pandas dataframe
     :param clusters: dataframe that mapped each LDA run to each clusters
     :type clusters: pandas dataframe
+
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
     :rtype: sklearn.decomposition.LatentDirichletAllocation
     """
@@ -204,12 +210,14 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
 def initialize_lda_model(components, exp_dirichlet_component, others):
     """
     Initialize LDA model by passing all necessary attributes
+
     :param components: Variational parameters for topic gene distribution
     :type components: pandas dataframe
     :param exp_dirichlet_component: Exponential value of expectation of log topic gene distribution
     :type exp_dirichlet_component: pandas dataframe
     :param others: dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.
     :type others: pandas dataframe
+
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
     :rtype: sklearn.decomposition.LatentDirichletAllocation
     """
@@ -232,10 +240,12 @@ def initialize_lda_model(components, exp_dirichlet_component, others):
 def filter_LDA_model(main_lda, keep):
     """
     filter LDA based on the topics we want to keep
+
     :param main_lda: Latent Dirichlet Allocation with online variational Bayes algorithm.
     :type main_lda: sklearn.decomposition.LatentDirichletAllocation
     :param keep: dataframe that define which topics we want to keep
     :type keep: pandas dataframe
+
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm, weights of genes in each topics (indexes are topics and columns are genes)
     :rtype: sklearn.decomposition.LatentDirichletAllocation, pandas dataframe
     """
@@ -269,8 +279,10 @@ def filter_LDA_model(main_lda, keep):
 def read_train(file):
     """
     reading train pickle file
+
     :param file: path of the pickle file
     :type file: str
+
     :return: train instance
     :rtype: Train class
     """
@@ -287,8 +299,10 @@ def read_train(file):
 def read_topModel(file):
     """
     reading topModel pickle file
+
     :param file: path of the pickle file
     :type file: str
+
     :return: topModel instance
     :rtype: TopModel class
     """
@@ -305,8 +319,10 @@ def read_topModel(file):
 def read_analysis(file):
     """
     reading analysis pickle file
+
     :param file: path of the pickle file
     :type file: str
+
     :return: analysis instance
     :rtype: Analysis class
     """
@@ -332,6 +348,7 @@ def compare_topModels(topModels,
                       file_name="compare_topics"):
     """
     compare several topModels
+
     :param topModels: list of topModel class you want to compare to each other
     :type topModels: list of TopModel class
     :param output_type: indicate the type of output you want. circular: plot as a circle plot, heatmap: plot as a heatmap, table: table contains correlation
@@ -352,6 +369,7 @@ def compare_topModels(topModels,
     :type plot_format: str
     :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
     :type file_name: str
+
     :return: table contains correlation between topics only when table is choose and save is False
     :rtype: pandas dataframe
     """

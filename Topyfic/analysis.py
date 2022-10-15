@@ -21,6 +21,7 @@ warnings.filterwarnings('ignore')
 class Analysis:
     """
     A class used to investigate the topics and gene weights compositions
+
     :param Top_model: top model that used for analysing topics, gene weights compositions and calculate cell participation
     :type Top_model: TopModel
     :param colors_topics: dataframe that mapped colored to topics
@@ -49,6 +50,12 @@ class Analysis:
         self.cell_participation = cell_participation
 
     def calculate_cell_participation(self, data):
+        """
+        Calculate cell participation for give data
+
+        :param data: input data
+        :type data: anndata
+        """
         if self.cell_participation is not None:
             print("cell participation is not empty!")
             print("new cell participation will be replaced!")
@@ -71,6 +78,7 @@ class Analysis:
                             file_name="piechart_topicAvgCell"):
         """
         plot pie charts that shows contribution of each topics to each category (i.e cell type)
+
         :param level: name of the column from cell_participation.obs
         :type level: str
         :param category: list of items you want to plot pie charts which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
@@ -172,6 +180,7 @@ class Analysis:
                        file_name="structure_topicAvgCell"):
         """
         plot structure which shows contribution of each topics for each cells in given categories
+
         :param level: name of the column from cell_participation.obs
         :type level: str
         :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
@@ -355,6 +364,7 @@ class Analysis:
     def convertDatTraits(data):
         """
         get data trait module base on samples information
+
         :return: a dataframe contains information in suitable format for plotting module trait relationship heatmap
         :rtype: pandas dataframe
         """
@@ -387,6 +397,7 @@ class Analysis:
                                       file_name='topic-traitRelationships'):
         """
         plot topic-trait relationship heatmap
+
         :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)
         :type metaData: list
         :param save: indicate if you want to save the plot or not (default: True)
@@ -463,6 +474,7 @@ class Analysis:
                       save=False):
         """
         extract subset of cells and cells participation with specific criteria
+
         :param level: name of the column from cell_participation.obs
         :type level: str
         :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
@@ -477,6 +489,7 @@ class Analysis:
         :type file_name: str
         :param save: indicate if you want to save the data or not (default: False)
         :type save: bool
+
         :return: table contains cell ID that pass threshold for each topic, table contains cell particiaption for cells that pass threshold for each topic (same order as fist table)
         :rtype: pandas dataframe, pandas dataframe
         """
@@ -527,9 +540,28 @@ class Analysis:
                                    figsize=None,
                                    file_format="pdf",
                                    file_name="average_cell_participation"):
+        """
+        barplot showing average of cell participation in each topic
+
+        :param label: fill with dictionary contain mapping new name for each topics to name you want to show if you want to change default topic name
+        :type label: dict
+        :param color: color of bar plot (default: blue)
+        :type color: str
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
         df = pd.DataFrame(self.cell_participation.to_df().mean())
         df.reset_index(inplace=True)
-        df.replace(label, inplace=True)
+        if label is not None:
+            df.replace(label, inplace=True)
 
         if figsize is None:
             figsize = (df.shape[0], 5)
@@ -551,6 +583,7 @@ class Analysis:
     def save_analysis(self, name="analysis", save_path=""):
         """
         save Analysis class as a pickle file
+
         :param name: name of the pickle file (default: analysis)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)
