@@ -33,6 +33,7 @@ class TopModel:
                  name,
                  N,
                  gene_weights,
+                 gene_information=None,
                  rlda=None):
         self.topics = dict()
         for i in range(N):
@@ -40,7 +41,8 @@ class TopModel:
                                               index=gene_weights.index,
                                               columns=[f"Topic_{i + 1}"])
             self.topics[f"Topic_{i + 1}"] = Topic(topic_id=f"Topic_{i + 1}",
-                                                  topic_gene_weights=topic_gene_weights)
+                                                  topic_gene_weights=topic_gene_weights,
+                                                  gene_information=gene_information)
         self.name = name
         self.N = N
         self.rLDA = rlda
@@ -165,7 +167,7 @@ class TopModel:
         :type figsize: tuple of int
         :param file_format: indicate the format of plot (default: pdf)
         :type file_format: str
-        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :param file_name: name and path of the plot use for save (default: gene_weight_rank_heatmap)
         :type file_name: str
         """
         if genes is None:
