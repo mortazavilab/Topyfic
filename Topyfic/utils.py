@@ -45,7 +45,11 @@ def subset_data(data, keep, loc='var'):
     return data
 
 
-def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
+def calculate_leiden_clustering(trains,
+                                data,
+                                n_top_genes=50,
+                                resolution=1,
+                                file_format="pdf"):
     """
     Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics
 
@@ -57,6 +61,8 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
     :type n_top_genes: int
     :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
     :type resolution: int
+    :param file_format: indicate the format of plot (default: pdf)
+    :type file_format: str
 
     :return: final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic
     :rtype: TopModel, pandas dataframe
@@ -92,7 +98,11 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
         sc.tl.leiden(adata, resolution=resolution)
         sc.pl.umap(adata, color=["leiden"],
                    title=[f"Topic space UMAP leiden clusters (k={trains[0].k})"],
-                   save="_leiden_clustring.pdf")
+                   save="f_leiden_clustering.{file_format}")
+        sc.pl.umap(adata, color=['leiden'],
+                   legend_loc='on data',
+                   title=[f'Topic space UMAP leiden clusters'],
+                   save=f'_leiden_clustering_v2.{file_format}')
 
     else:
         adata = anndata.AnnData(all_components)
@@ -103,18 +113,22 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
         sce.pp.harmony_integrate(adata, 'assays')
         adata.obsm['X_pca'] = adata.obsm['X_pca_harmony']
         sc.pp.neighbors(adata)
-        sc.pp.neighbors(adata)
         sc.tl.umap(adata)
         sc.tl.leiden(adata, resolution=resolution)
         sc.pl.umap(adata, color=['leiden'],
                    title=[f'Topic space UMAP leiden clusters'],
-                   save='_leiden_clustring_harmony.png')
+                   save=f'_leiden_clustering_harmony.{file_format}')
+        sc.pl.umap(adata, color=['leiden'],
+                   legend_loc='on data',
+                   title=[f'Topic space UMAP leiden clusters'],
+                   save=f'_leiden_clustering_harmony_v2.{file_format}')
         sc.pl.umap(adata, color=['assays'],
                    title=['Topic space UMAP leiden clusters'],
-                   save='_technology_harmony.png')
+                   save=f'_technology_harmony.{file_format}')
 
     clustering = adata.obs.copy(deep=True)
-    n_rtopics = len(np.unique(clustering[f"leiden"]))
+    clustering["leiden"] = clustering["leiden"].astype(int)
+    n_rtopics = len(np.unique(clustering["leiden"]))
 
     rlda = initialize_rLDA_model(all_components,
                                  all_exp_dirichlet_component,
@@ -126,7 +140,15 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
                                       index=data.obs.index)
 
     keep = cell_participation.sum() > data.to_df().shape[0] / 10000
-    print(f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {data.to_df().shape[0] / 10000}")
+    print(
+        f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {data.to_df().shape[0] / 10000}")
+    tmp = pd.DataFrame(keep)
+    tmp["cluster"] = range(tmp.shape[0])
+    tmp = tmp.to_dict()
+    tmp = tmp[0]
+    clustering["keep"] = clustering["leiden"].astype(int) + 1
+    clustering["keep"] = "Topic" + clustering["keep"].astype(str)
+    clustering["keep"] = clustering["keep"].replace(tmp)
     n_rtopics = keep.sum()
     rlda, gene_weights_T = filter_LDA_model(rlda, keep)
 
@@ -149,6 +171,73 @@ def calculate_leiden_clustering(trains, data, n_top_genes=50, resolution=1):
                              rlda=rlda)
 
     return top_model, clustering
+
+
+def plot_cluster_contribution(clustering,
+                              feature,
+                              show_all=False,
+                              portion=True,
+                              save=True,
+                              show=True,
+                              file_format="pdf",
+                              file_name='cluster_contribution'):
+    """
+    barplot shows number of topics contribute to each cluster
+
+    :param clustering: dataframe that map each single LDA run to each cluster
+    :type clustering: pandas dataframe
+    :param feature: name of the feature you want to see the cluster contribution (should be one of the columns name of clustering df)
+    :type feature: str
+    :param show_all: Indicate if you want to show all clusters or only the ones that pass threshold (default: False)
+    :type show_all: bool
+    :param portion: Indicate if you want to normalized the bar to show percentage instead of actual value (default: True)
+    :type portion: bool
+    :param save: indicate if you want to save the plot or not (default: True)
+    :type save: bool
+    :param show: indicate if you want to show the plot or not (default: True)
+    :type show: bool
+    :param file_format: indicate the format of plot (default: pdf)
+    :type file_format: str
+    :param file_name: name and path of the plot use for save (default: cluster_contribution)
+    :type file_name: str
+    """
+    if feature not in clustering.columns:
+        sys.exit(f"{feature} is not valid! should be a columns names of clustering")
+
+    if not show_all:
+        clustering = clustering[clustering["keep"]]
+
+    options = np.unique(clustering[feature]).tolist()
+    res = pd.DataFrame(columns=options,
+                       index=range(len(clustering['leiden'].unique())))
+
+    for i in range(res.shape[0]):
+        for opt in options:
+            tmp = clustering[np.logical_and(clustering['leiden'] == i,
+                                            clustering[feature] == opt)]
+            res.loc[i, opt] = tmp.shape[0]
+    if not portion:
+        plot = res.plot.bar(stacked=True,
+                            xlabel='leiden',
+                            ylabel='number of topics',
+                            figsize=(max(res.shape[0] / 2, 5), 7))
+    else:
+        sum_feature = res.sum(axis=1)
+        for i in range(res.shape[0]):
+            for opt in options:
+                res.loc[i, opt] = res.loc[i, opt] / sum_feature[i] * 100
+
+        plot = res.plot.bar(stacked=True,
+                            xlabel='leiden',
+                            ylabel='percentage(%) of topics',
+                            figsize=(max(res.shape[0] / 2, 5), 7))
+    fig = plot.get_figure()
+    if save:
+        fig.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
+    if show:
+        plt.show()
+    else:
+        plt.close()
 
 
 def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_others, clusters):
@@ -440,7 +529,7 @@ def compare_topModels(topModels,
             res['dest_color'].replace(topModels_color, inplace=True)
 
         if figsize is None:
-            figsize = (max(10.0, res.shape[0]/10), max(10.0, res.shape[0]/10))
+            figsize = (max(10.0, res.shape[0] / 10), max(10.0, res.shape[0] / 10))
 
         plt.figure(figsize=figsize, facecolor='white')
 
@@ -477,9 +566,3 @@ def compare_topModels(topModels,
             plt.close()
 
         return
-
-
-
-
-
-
