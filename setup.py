@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='Topyfic',  # the name of your package
     packages=['Topyfic'],  # same as above
-    version='v0.0.20',  # version number
+    version='v0.0.21',  # version number
     license='MIT',  # license type
     description='Topyfic is a Python package designed to identify reproducible latent dirichlet allocation (LDA) '
                 'using leiden clustering and harmony for single cell epigenomics data',
@@ -26,7 +26,12 @@ setup(
         'pytest',
         'scanpy',
         'anndata',
-        'leidenalg'
+        'leidenalg',
+        'networkx',
+        'scanpy',
+        'setuptools',
+        'statsmodels',
+
     ],
     classifiers=[  # choose from here: https://pypi.org/classifiers/
         'Development Status :: 3 - Alpha',
