@@ -96,10 +96,12 @@ def calculate_leiden_clustering(trains,
         sc.pp.neighbors(adata)
         sc.tl.umap(adata)
         sc.tl.leiden(adata, resolution=resolution)
-        sc.pl.umap(adata, color=["leiden"],
+        adata.obs["topics"] = adata.obs["leiden"].astype(int) + 1
+        adata.obs["topics"] = "Topic_" + adata.obs["topics"].astype(str)
+        sc.pl.umap(adata, color=["topics"],
                    title=[f"Topic space UMAP leiden clusters (k={trains[0].k})"],
                    save="f_leiden_clustering.{file_format}")
-        sc.pl.umap(adata, color=['leiden'],
+        sc.pl.umap(adata, color=['topics'],
                    legend_loc='on data',
                    title=[f'Topic space UMAP leiden clusters'],
                    save=f'_leiden_clustering_v2.{file_format}')
@@ -115,10 +117,12 @@ def calculate_leiden_clustering(trains,
         sc.pp.neighbors(adata)
         sc.tl.umap(adata)
         sc.tl.leiden(adata, resolution=resolution)
-        sc.pl.umap(adata, color=['leiden'],
+        adata.obs["topics"] = adata.obs["leiden"].astype(int) + 1
+        adata.obs["topics"] = "Topic_" + adata.obs["topics"].astype(str)
+        sc.pl.umap(adata, color=['topics'],
                    title=[f'Topic space UMAP leiden clusters'],
                    save=f'_leiden_clustering_harmony.{file_format}')
-        sc.pl.umap(adata, color=['leiden'],
+        sc.pl.umap(adata, color=['topics'],
                    legend_loc='on data',
                    title=[f'Topic space UMAP leiden clusters'],
                    save=f'_leiden_clustering_harmony_v2.{file_format}')
@@ -226,7 +230,8 @@ def plot_cluster_contribution(clustering,
         for i in range(res.shape[0]):
             for opt in options:
                 res.loc[i, opt] = res.loc[i, opt] / sum_feature[i] * 100
-
+        res.index = res.index + 1
+        res.index = "Topics_" + res.index.astype(str)
         plot = res.plot.bar(stacked=True,
                             xlabel='leiden',
                             ylabel='percentage(%) of topics',

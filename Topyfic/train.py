@@ -151,7 +151,7 @@ class Train:
         """
         save Train class as a pickle file
 
-        :param name: name of the pickle file (default is train_{name of class})
+        :param name: name of the pickle file (default is train_Train.name)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)
         :type save_path: str

@@ -564,7 +564,7 @@ class Analysis:
             df.replace(label, inplace=True)
 
         if figsize is None:
-            figsize = (df.shape[0], 5)
+            figsize = (df.shape[0]/1.5, 5)
 
         fig = plt.figure(figsize=figsize, facecolor='white')
 
@@ -580,15 +580,131 @@ class Analysis:
         else:
             plt.close()
 
-    def save_analysis(self, name="analysis", save_path=""):
+    def plot_topic_composition(self,
+                               category,
+                               level="topic",
+                               biotype="biotype",
+                               save=True,
+                               show=True,
+                               file_format="pdf",
+                               file_name="gene_composition"):
+        """
+        plot gene composition dividing by gene biotype or topics
+
+        :param category: topic name or gene biotype name you want to see gene composition for
+        :type category: str
+        :param level: indicate weather if you want to show it within each topic or gene biotype (options: "topic" or "gene_biotype") (default: topic)
+        :type level: str
+        :param biotype: name of the column in gene_weight to look for gene_biotype (default: biotype)
+        :type biotype: str
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: gene_composition)
+        :type file_name: str
+        """
+        if level not in ["topic", "gene_biotype"]:
+            sys.exit("level is not correct! it should be topic or gene_biotype!")
+        minWeight = np.min(self.top_model.get_gene_weights())
+        gene_weights = self.top_model.get_gene_weights()
+        gene_weights = gene_weights[gene_weights > minWeight]
+
+        if level == "topic":
+            gene_biotype = self.top_model.topics[category].gene_information[biotype]
+            columns = gene_biotype.unique().tolist()
+            df = gene_weights.sort_values([f"{self.top_model.name}_{category}"], axis=0, ascending=False)[
+                f"{self.top_model.name}_{category}"]
+
+            df = pd.DataFrame(df)
+            df.dropna(axis=0, inplace=True)
+            df.reset_index(inplace=True)
+            df.columns = ['genes', 'weight']
+            df.index = df['genes']
+            df = pd.concat([df, gene_biotype], axis=1)
+            df.dropna(axis=0, inplace=True)
+
+            res = pd.DataFrame(columns=columns, dtype=int)
+            for index, row in df.iterrows():
+                # tmp.loc[0, 'weight'] = row['weight']
+                if res.shape[0] == 0:
+                    tmp = pd.DataFrame(0, index=[0], columns=columns, dtype=int)
+                    tmp.loc[0, row[biotype]] = 1
+                else:
+                    tmp = pd.DataFrame(res.loc[res.shape[0] - 1]).T
+                    tmp.reset_index(drop=True, inplace=True)
+                    tmp.loc[0, row[biotype]] = res[row[biotype]][res.shape[0] - 1] + 1
+                res = res.append(tmp, ignore_index=True)
+
+        else:
+            gene_weights.columns = [f'Topic_{i + 1}' for i in range(gene_weights.shape[1])]
+            res = pd.DataFrame(columns=gene_weights.columns,
+                               index=range(gene_weights.shape[0]),
+                               dtype=int)
+            gene_biotype = self.top_model.topics["Topic_1"].gene_information[biotype]
+            columns = gene_biotype.unique().tolist()
+            for col in gene_weights.columns:
+                df = gene_weights.sort_values([col], axis=0, ascending=False)[col]
+
+                df = pd.DataFrame(df)
+                df.dropna(axis=0, inplace=True)
+                df.reset_index(inplace=True)
+                df.columns = ['genes', 'weight']
+                df.index = df['genes']
+                df = pd.concat([df, gene_biotype], axis=1)
+                df.dropna(axis=0, inplace=True)
+
+                sres = pd.DataFrame(columns=columns, dtype=int)
+                for index, row in df.iterrows():
+                    # tmp.loc[0, 'weight'] = row['weight']
+                    if sres.shape[0] == 0:
+                        tmp = pd.DataFrame(0, index=[0], columns=columns, dtype=int)
+                        tmp.loc[0, row[biotype]] = 1
+                    else:
+                        tmp = pd.DataFrame(sres.loc[sres.shape[0] - 1]).T
+                        tmp.reset_index(drop=True, inplace=True)
+                        tmp.loc[0, row[biotype]] = sres[row[biotype]][sres.shape[0] - 1] + 1
+                    sres = sres.append(tmp, ignore_index=True)
+
+                res.loc[range(sres.shape[0]), col] = sres[category].values
+            res.dropna(axis=0, how='all', inplace=True)
+
+        sns.set_theme(style="white")
+        fig, ax = plt.subplots(figsize=(max(res.shape[0] / 50, 10), max(res.shape[0] / 100, 10)),
+                               facecolor='white')
+        sns.set(font_scale=1)
+        if level == "topic":
+            sns.lineplot(data=res, dashes=False, ax=ax)
+        else:
+            sns.lineplot(data=res, dashes=False, ax=ax, palette=self.colors_topics.to_dict()['colors'])
+        ax.legend(loc='center left', bbox_to_anchor=(1.01, 0.5), ncol=1,
+                  prop={'size': 15})
+        ax.set_title(f"{self.top_model.name}_{category}", fontsize=25)
+        ax.set_ylabel("#genes (log2)", fontsize=20)
+        ax.set_xlabel("gene rank", fontsize=20)
+        ax.set_yscale('log', basey=2)
+        fig.tight_layout()
+
+        if save:
+            fig.savefig(f"{file_name}.{file_format}")
+        if show:
+            plt.show()
+        else:
+            plt.close()
+
+    def save_analysis(self, name=None, save_path=""):
         """
         save Analysis class as a pickle file
 
-        :param name: name of the pickle file (default: analysis)
+        :param name: name of the pickle file (default: analysis_Analysis.top_model.name)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)
         :type save_path: str
         """
+        if name is None:
+            name = f"analysis_{self.top_model.name}"
         print(f"Saving analysis class as {name}.p")
 
         picklefile = open(f"{save_path}{name}.p", "wb")

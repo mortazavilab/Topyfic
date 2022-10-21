@@ -24,8 +24,8 @@ class TopModel:
     :type N: int
     :param gene_weights: dataframe that has weights of genes for each topics; genes are indexes and topics are columns
     :type gene_weights: pandas dataframe
-    :param rLDA: store reproducible LDA model
-    :type rLDA: sklearn.decomposition.LatentDirichletAllocation
+    :param rlda: store reproducible LDA model
+    :type rlda: sklearn.decomposition.LatentDirichletAllocation
 
     """
 
@@ -78,7 +78,7 @@ class TopModel:
         :rtype: pandas dataframe
         """
         gene_weights = pd.DataFrame(np.transpose(self.rLDA.components_),
-                                    columns=[f'{self.name}_Topic{i + 1}' for i in
+                                    columns=[f'{self.name}_Topic_{i + 1}' for i in
                                              range(self.rLDA.components_.shape[0])],
                                     index=self.get_feature_name())
 
@@ -92,10 +92,10 @@ class TopModel:
         :rtype: pandas dataframe
         """
         gene_weights = pd.DataFrame(np.transpose(self.rLDA.components_),
-                                    columns=[f'{self.name}_Topic{i + 1}' for i in
+                                    columns=[f'{self.name}_Topic_{i + 1}' for i in
                                              range(self.rLDA.components_.shape[0])],
                                     index=self.get_feature_name())
-        ranked_gene_weights = pd.DataFrame(columns=[f'{self.name}_Topic{i + 1}' for i in
+        ranked_gene_weights = pd.DataFrame(columns=[f'{self.name}_Topic_{i + 1}' for i in
                                                     range(self.rLDA.components_.shape[0])],
                                            index=range(len(self.get_feature_name())))
         for col in gene_weights.columns:
@@ -116,15 +116,15 @@ class TopModel:
         feature = self.get_feature_name()
 
         components = pd.DataFrame(self.rLDA.components_,
-                                  index=[f"Topic{i + 1}" for i in range(self.N)],
+                                  index=[f"Topic_{i + 1}" for i in range(self.N)],
                                   columns=feature)
 
         exp_dirichlet_component = pd.DataFrame(self.rLDA.exp_dirichlet_component_,
-                                               index=[f"Topic{i + 1}" for i in range(self.N)],
+                                               index=[f"Topic_{i + 1}" for i in range(self.N)],
                                                columns=feature)
 
         others = pd.DataFrame(
-            index=[f"Topic{i + 1}" for i in range(self.N)],
+            index=[f"Topic_{i + 1}" for i in range(self.N)],
             columns=["n_batch_iter",
                      "n_features_in",
                      "n_iter",
@@ -132,12 +132,12 @@ class TopModel:
                      "doc_topic_prior",
                      "topic_word_prior"])
 
-        others.loc[[f"Topic{i + 1}" for i in range(self.N)], "n_batch_iter"] = self.rLDA.n_batch_iter_
-        others.loc[[f"Topic{i + 1}" for i in range(self.N)], "n_features_in"] = self.rLDA.n_features_in_
-        others.loc[[f"Topic{i + 1}" for i in range(self.N)], "n_iter"] = self.rLDA.n_iter_
-        others.loc[[f"Topic{i + 1}" for i in range(self.N)], "bound"] = self.rLDA.bound_
-        others.loc[[f"Topic{i + 1}" for i in range(self.N)], "doc_topic_prior"] = self.rLDA.doc_topic_prior_
-        others.loc[[f"Topic{i + 1}" for i in range(self.N)], "topic_word_prior"] = self.rLDA.topic_word_prior_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_batch_iter"] = self.rLDA.n_batch_iter_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_features_in"] = self.rLDA.n_features_in_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_iter"] = self.rLDA.n_iter_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "bound"] = self.rLDA.bound_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "doc_topic_prior"] = self.rLDA.doc_topic_prior_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "topic_word_prior"] = self.rLDA.topic_word_prior_
 
         return components, exp_dirichlet_component, others
 
@@ -145,6 +145,7 @@ class TopModel:
                                  genes=None,
                                  topics=None,
                                  show_rank=True,
+                                 scale=None,
                                  save=True,
                                  show=True,
                                  figsize=None,
@@ -159,6 +160,8 @@ class TopModel:
         :type topics: list
         :param show_rank: indicate if you want to show the rank of significant genes or not (default: True)
         :type show_rank: bool
+        :param scale: indicate if you want to plot as log2, log10 or not (default: None which show actual value) other options is log2 and log10
+        :scale scale: str
         :param save: indicate if you want to save the plot or not (default: True)
         :type save: bool
         :param show: indicate if you want to show the plot or not (default: True)
@@ -176,10 +179,13 @@ class TopModel:
             sys.exit("some/all of genes are not part of topModel!")
 
         if topics is None:
-            topics = [f'{self.name}_Topic{i + 1}' for i in range(self.rLDA.components_.shape[0])]
+            topics = [f'{self.name}_Topic_{i + 1}' for i in range(self.rLDA.components_.shape[0])]
         elif not (set(topics) & set(
-                [f'{self.name}_Topic{i + 1}' for i in range(self.rLDA.components_.shape[0])])) == set(topics):
+                [f'{self.name}_Topic_{i + 1}' for i in range(self.rLDA.components_.shape[0])])) == set(topics):
             sys.exit("some/all of topics are not part of topModel!")
+
+        if scale not in ["log2", "log10"]:
+            sys.exit("scale is not valid!")
 
         if figsize is None:
             figsize = (self.N * 1.5, len(genes))
@@ -208,6 +214,11 @@ class TopModel:
         fig, ax = plt.subplots(figsize=figsize,
                                facecolor='white')
 
+        if scale == "log2":
+            gene_weights = gene_weights.applymap(np.log2)
+        if scale == "log10":
+            gene_weights = gene_weights.applymap(np.log10)
+
         if show_rank:
             sns.heatmap(gene_weights,
                         cmap='viridis',
@@ -230,15 +241,17 @@ class TopModel:
         else:
             plt.close()
 
-    def save_topModel(self, name="topModel", save_path=""):
+    def save_topModel(self, name=None, save_path=""):
         """
         save TopModel class as a pickle file
 
-        :param name: name of the pickle file (default: topModel)
+        :param name: name of the pickle file (default: topModel_TopModel.name)
         :type name: str
         :param save_path: directory you want to use to save pickle file (default is saving near script)
         :type save_path: str
         """
+        if name is None:
+            name = f"topModel_{self.name}"
         print(f"Saving topModel as {name}.p")
 
         picklefile = open(f"{save_path}{name}.p", "wb")
