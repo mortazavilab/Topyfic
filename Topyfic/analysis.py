@@ -29,6 +29,7 @@ class Analysis:
     :param cell_participation: anndata that stores cell participation along with cell information in obs
     :type cell_participation: anndata
     """
+
     def __init__(self,
                  Top_model,
                  colors_topics=None,
@@ -62,7 +63,7 @@ class Analysis:
 
         lda_output = self.top_model.rLDA.transform(data.X)
         cell_participation = pd.DataFrame(lda_output,
-                                          columns=[f"Topic_{i + 1}" for i in range(self.top_model.N)],
+                                          columns=[f"Topic_{i + 1}" for i in range(self.top_model.N)],#list(self.top_model.topics.keys())
                                           index=data.obs.index)
         self.cell_participation = anndata.AnnData(cell_participation, obs=data.obs)
 
@@ -523,8 +524,10 @@ class Analysis:
 
         if save:
             if file_name is None:
-                selected_cell.to_csv(f"selectedCells_top{top_cells}_{min_cell_participation}min_score_{min_cells}min_cells.csv")
-                selected_cell_participation.to_csv(f"cellParticipation_selectedCells_top{top_cells}_{min_cell_participation}min_score_{min_cells}min_cells.csv")
+                selected_cell.to_csv(
+                    f"selectedCells_top{top_cells}_{min_cell_participation}min_score_{min_cells}min_cells.csv")
+                selected_cell_participation.to_csv(
+                    f"cellParticipation_selectedCells_top{top_cells}_{min_cell_participation}min_score_{min_cells}min_cells.csv")
             else:
                 selected_cell.to_csv(f"selectedCells_{file_name}.csv")
                 selected_cell_participation.to_csv(f"cellParticipation_selectedCells_{file_name}.csv")
@@ -564,7 +567,7 @@ class Analysis:
             df.replace(label, inplace=True)
 
         if figsize is None:
-            figsize = (df.shape[0]/1.5, 5)
+            figsize = (df.shape[0] / 1.5, 5)
 
         fig = plt.figure(figsize=figsize, facecolor='white')
 
@@ -580,10 +583,94 @@ class Analysis:
         else:
             plt.close()
 
+    def average_cell_participation_line_plot(self,
+                                             topic,
+                                             color,
+                                             category,
+                                             color_pallet=None,
+                                             save=True,
+                                             show=True,
+                                             figsize=None,
+                                             file_format="pdf",
+                                             file_name="line_average_cell_participation"):
+        """
+        line plot showing average of cell participation in topic divided by two features of cells (i.e. cell type and time point)
+
+        :param topic: name of the topic
+        :type topic: str
+        :param color: name of the feature you want to have one line per group of that (it should be column name of cell_participation.obs)
+        :type color:str
+        :type color_pallet: color of each category of color (if it None color assign randomly)
+        :param color_pallet: dict
+        :param category: name of the feature you want to have on x axis (it should be column name of cell_participation.obs)
+        :type category: str
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
+
+        if topic not in self.top_model.topics.keys():
+            sys.exit("topic is not valid!")
+
+        if self.cell_participation is None:
+            sys.exit("Cell participation is not calculated yet!")
+
+        if category not in self.cell_participation.obs.columns:
+            sys.exit("category is not valid!")
+
+        if color not in self.cell_participation.obs.columns:
+            sys.exit("color is not valid!")
+
+        if color_pallet is None:
+            color_pallet = dict()
+            for name in self.cell_participation.obs[color].unique():
+                color_pallet[name] = "#" + ''.join([random.choice('ABCDEF0123456789') for i in range(6)])
+
+        res = pd.DataFrame(columns=self.cell_participation.obs[category].unique(),
+                           index=self.cell_participation.obs[color].unique())
+
+        for index in res.index:
+            for col in res.columns:
+                tmp = self.cell_participation[np.logical_and(self.cell_participation.obs[color] == index,
+                                                             self.cell_participation.obs[category] == col)]
+                res.loc[index, col] = tmp.to_df().mean()[topic]
+        res.fillna(0, inplace=True)
+
+        if figsize is None:
+            figsize = (res.shape[0] / 1.5, 7)
+
+        fig = plt.figure(figsize=figsize, facecolor='white')
+
+        for index in res.index:
+            plt.plot(res.columns.tolist(), res.loc[index, :].tolist(),
+                     '-o',
+                     label=index,
+                     color=color_pallet[index])
+
+        plt.legend(loc='center left', title=color, bbox_to_anchor=(1, 0.5))
+        plt.xlabel(category)
+        plt.ylabel("Average cell participation")
+        plt.title(topic)
+
+        if save:
+            fig.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
+        if show:
+            plt.show()
+        else:
+            plt.close()
+
     def plot_topic_composition(self,
                                category,
                                level="topic",
                                biotype="biotype",
+                               label=False,
                                save=True,
                                show=True,
                                file_format="pdf",
@@ -597,6 +684,8 @@ class Analysis:
         :type level: str
         :param biotype: name of the column in gene_weight to look for gene_biotype (default: biotype)
         :type biotype: str
+        :param label: show label of each line within plot or not (default: False)
+        :type label: bool
         :param save: indicate if you want to save the plot or not (default: True)
         :type save: bool
         :param show: indicate if you want to show the plot or not (default: True)
@@ -679,12 +768,19 @@ class Analysis:
             sns.lineplot(data=res, dashes=False, ax=ax)
         else:
             sns.lineplot(data=res, dashes=False, ax=ax, palette=self.colors_topics.to_dict()['colors'])
+        ax.set_yscale('log', basey=2)
+        if label:
+            for line, name in zip(ax.lines, res.columns):
+                y = int(line.get_ydata()[-1])
+                if y == 0:
+                    continue
+                x = int(line.get_xdata()[-1])
+                ax.text(x, y, name, color=line.get_color())
         ax.legend(loc='center left', bbox_to_anchor=(1.01, 0.5), ncol=1,
                   prop={'size': 15})
         ax.set_title(f"{self.top_model.name}_{category}", fontsize=25)
         ax.set_ylabel("#genes (log2)", fontsize=20)
         ax.set_xlabel("gene rank", fontsize=20)
-        ax.set_yscale('log', basey=2)
         fig.tight_layout()
 
         if save:
