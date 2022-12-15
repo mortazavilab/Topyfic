@@ -14,7 +14,7 @@ import seaborn as sns
 
 from Topyfic.topModel import *
 
-sns.set_theme(style="white")
+sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
 
@@ -54,7 +54,7 @@ class Analysis:
         """
         Calculate cell participation for give data
 
-        :param data: input data
+        :param data: processed expression data along with cells and genes/region information
         :type data: anndata
         """
         if self.cell_participation is not None:
@@ -70,6 +70,7 @@ class Analysis:
     def pie_structure_Chart(self,
                             level,
                             category=None,
+                            topic_order=None,
                             ascending=None,
                             n=5,
                             save=True,
@@ -84,6 +85,8 @@ class Analysis:
         :type level: str
         :param category: list of items you want to plot pie charts which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
         :type category: list of str
+        :param topic_order: indicate if you want to have a specific order of topics which it should be name of topics. if None, it's gonna sort by cell participation
+        :type topic_order: list of str
         :param ascending: for each pie chart on which order you want to sort your data (default is descending for all pie charts)
         :type ascending: list of bool
         :param n: number of topics you want to annotate in pie charts (default: 5)
@@ -120,7 +123,10 @@ class Analysis:
         for i in range(len(category)):
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
-            order = tmp.mean().sort_values(ascending=ascending[i]).index.tolist()
+            if topic_order is None:
+                order = tmp.mean().sort_values(ascending=False).index.tolist()
+            else:
+                order = topic_order
             index = tmp[order].sort_values(by=order, ascending=False).index.tolist()
             tmp = tmp.reindex(columns=order)
             tmp = tmp.reindex(index)
@@ -312,15 +318,23 @@ class Analysis:
             tissue = tissue[metaData]
             tissue = tissue.reindex(tmp.index.tolist())
             for j in range(len(metaData)):
-                tissue.replace(metaData_palette[metaData[j]], inplace=True)
+                if type(metaData_palette[metaData[j]]) == dict:
+                    tissue.replace(metaData_palette[metaData[j]], inplace=True)
 
             x = [i for i in range(tmp.shape[0])]
             y = np.repeat(3000, len(x))
             for j in range(len(metaData)):
                 color = tissue[metaData[j]].values
-                axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
-                                      c=color, s=1000, marker="|", alpha=1,
-                                      linewidths=1)
+                if type(metaData_palette[metaData[j]]) == dict:
+                    axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
+                                          c=color, s=1000, marker="|", alpha=1,
+                                          linewidths=1)
+                else:
+                    axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
+                                          c=color, cmap=metaData_palette[metaData[j]].get_cmap(), s=1000, marker="|",
+                                          alpha=1,
+                                          linewidths=1)
+
                 axs[j + 1, i].axis('off')
                 axs[j + 1, i].set_xlim(0, a[i])
 
@@ -345,13 +359,21 @@ class Analysis:
 
         for j in range(len(metaData)):
             handles = []
-            for met in metaData_palette[metaData[j]].keys():
-                patch = mpatches.Patch(color=metaData_palette[metaData[j]][met], label=met)
-                handles.append(patch)
-                axs[j + 1, len(category)].legend(loc='center left',
-                                                 title=metaData[j].capitalize(),
-                                                 ncol=4,
-                                                 handles=handles)
+            if type(metaData_palette[metaData[j]]) == dict:
+                for met in metaData_palette[metaData[j]].keys():
+                    patch = mpatches.Patch(color=metaData_palette[metaData[j]][met], label=met)
+                    handles.append(patch)
+                    axs[j + 1, len(category)].legend(loc='center left',
+                                                     title=metaData[j].capitalize(),
+                                                     ncol=4,
+                                                     handles=handles)
+                    axs[j + 1, len(category)].axis('off')
+            else:
+                clb = fig.colorbar(mappable=metaData_palette[metaData[j]],
+                                   ax=axs[j + 1, len(category)],
+                                   orientation='horizontal',
+                                   fraction=0.9)
+                clb.ax.set_title(metaData[j].capitalize())
                 axs[j + 1, len(category)].axis('off')
 
         if save:

@@ -18,8 +18,96 @@ import networkx as nx
 from Topyfic.train import *
 from Topyfic.topic import *
 from Topyfic.topModel import *
+from Topyfic.analysis import *
 
 warnings.filterwarnings("ignore")
+
+
+def train_model(name,
+                data,
+                k,
+                n_runs=100,
+                random_state_range=None,
+                n_thread=5,
+                save_path=""):
+    """
+    Training model and save it
+
+    :param name: name of the Train class
+    :type name: str
+    :param k: number of topics to learn one LDA model using sklearn package (default: 50)
+    :type k: int
+    :param n_runs: number of run to define rLDA model (default: 100)
+    :type n_runs: int
+    :param random_state_range: list of random state, we used to run LDA models (default: range(n_runs))
+    :type random_state_range: list of int
+    :param data: data embedded in anndata format use to train LDA model
+    :type data: anndata
+    :param n_thread: number of threads you used to learn LDA models (default=5)
+    :type n_thread: int
+    :param save_path: directory you want to use to save pickle file (default is saving near script)
+    :type save_path: str
+
+    """
+    train = Train(name=name,
+                  k=k,
+                  n_runs=n_runs,
+                  random_state_range=random_state_range)
+    train.run_LDA_models(data, n_thread=n_thread)
+    train.save_train(save_path=save_path)
+
+
+def make_topModel(trains,
+                  data,
+                  n_top_genes=50,
+                  resolution=1,
+                  file_format="pdf",
+                  save_path=""):
+    """
+    Creating topModel base on train data and save it along with clustering information
+
+    :param trains: list of train class
+    :type trains: list of Train
+    :param data: expression data embedded in anndata format along with cells and genes/region information
+    :type data: anndata
+    :param n_top_genes: Number of highly-variable genes to keep (default: 50)
+    :type n_top_genes: int
+    :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
+    :type resolution: int
+    :param file_format: indicate the format of plot (default: pdf)
+    :type file_format: str
+    :param save_path: directory you want to use to save pickle file (default is saving near script)
+    :type save_path: str
+
+    """
+    top_model, clustering = calculate_leiden_clustering(trains=trains,
+                                                        data=data,
+                                                        n_top_genes=n_top_genes,
+                                                        resolution=resolution,
+                                                        file_format=file_format)
+    clustering.to_csv(f"{save_path}/clustering.csv")
+    top_model.save_topModel(save_path=save_path)
+
+
+def make_analysis_class(top_model,
+                        data,
+                        colors_topics=None,
+                        save_path=""):
+    """
+    Creating Analysis object
+
+    :param top_model: top model that used for analysing topics, gene weights compositions and calculate cell participation
+    :type top_model: TopModel
+    :param data: processed expression data along with cells and genes/region information
+    :type data: anndata
+    :param colors_topics: dataframe that mapped colored to topics
+    :type colors_topics: pandas dataframe
+    :param save_path: directory you want to use to save pickle file (default is saving near script)
+    :type save_path: str
+    """
+    analysis_top_model = Analysis(Top_model=top_model, colors_topics=colors_topics)
+    analysis_top_model.calculate_cell_participation(data=data)
+    analysis_top_model.save_analysis(save_path=save_path)
 
 
 def subset_data(data, keep, loc='var'):
@@ -100,7 +188,7 @@ def calculate_leiden_clustering(trains,
         adata.obs["topics"] = "Topic_" + adata.obs["topics"].astype(str)
         sc.pl.umap(adata, color=["topics"],
                    title=[f"Topic space UMAP leiden clusters (k={trains[0].k})"],
-                   save="f_leiden_clustering.{file_format}")
+                   save=f"_leiden_clustering.{file_format}")
         sc.pl.umap(adata, color=['topics'],
                    legend_loc='on data',
                    title=[f'Topic space UMAP leiden clusters'],
@@ -479,7 +567,9 @@ def compare_topModels(topModels,
         else:
             all_gene_weights = pd.concat([gene_weights, all_gene_weights], axis=1)
 
-    corrs = pd.DataFrame(index=all_gene_weights.columns, columns=all_gene_weights.columns)
+    corrs = pd.DataFrame(index=all_gene_weights.columns,
+                         columns=all_gene_weights.columns,
+                         dtype='float64')
 
     for d1 in all_gene_weights.columns.tolist():
         for d2 in all_gene_weights.columns.tolist():

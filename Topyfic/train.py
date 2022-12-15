@@ -23,7 +23,7 @@ class Train:
 
     :param name: name of the Train class
     :type name: str
-    :param k: number of topics to learn one LDA model using sklearn package (default: 50)
+    :param k: number of topics to learn one LDA model using sklearn package
     :type k: int
     :param n_runs: number of run to define rLDA model (default: 100)
     :type n_runs: int
@@ -35,7 +35,7 @@ class Train:
 
     def __init__(self,
                  name,
-                 k=50,
+                 k,
                  n_runs=100,
                  random_state_range=None):
 
@@ -56,7 +56,7 @@ class Train:
 
         :param name: name of LDA model
         :type name: str
-        :param data: processed gene count data along with cells and genes information
+        :param data: processed expression data along with cells and genes/region information
         :type data: anndata
         :param random_state: Pass an int for reproducible results across multiple function calls
         :type random_state: int
@@ -85,9 +85,9 @@ class Train:
         """
         train LDA models
 
-        :param data: data embeded in anndata format use to train LDA model
+        :param data: expression data embedded in anndata format use to train LDA model
         :type data: anndata
-        :param n_thread: number of threds you used to learn LDA models (default=1)
+        :param n_thread: number of threads you used to learn LDA models (default=1)
         :type n_thread: int
 
         :return: None

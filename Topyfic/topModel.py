@@ -8,7 +8,7 @@ from sklearn.decomposition import LatentDirichletAllocation
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sns.set_theme(style="white")
+sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
 from Topyfic.topic import *
@@ -24,6 +24,8 @@ class TopModel:
     :type N: int
     :param gene_weights: dataframe that has weights of genes for each topics; genes are indexes and topics are columns
     :type gene_weights: pandas dataframe
+    :param topics: dictionary contains all topics for the topmodel
+    :type topics: Dictionary of Topics
     :param rlda: store reproducible LDA model
     :type rlda: sklearn.decomposition.LatentDirichletAllocation
 
