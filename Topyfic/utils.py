@@ -137,6 +137,7 @@ def calculate_leiden_clustering(trains,
                                 data,
                                 n_top_genes=50,
                                 resolution=1,
+                                min_cell_participation=None,
                                 file_format="pdf"):
     """
     Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics
@@ -149,6 +150,8 @@ def calculate_leiden_clustering(trains,
     :type n_top_genes: int
     :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
     :type resolution: int
+    :param min_cell_participation: minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than number of cell / 10000.
+    :type min_cell_participation: float
     :param file_format: indicate the format of plot (default: pdf)
     :type file_format: str
 
@@ -159,6 +162,9 @@ def calculate_leiden_clustering(trains,
     all_components = None
     all_exp_dirichlet_component = None
     all_others = None
+
+    if min_cell_participation is None:
+        min_cell_participation = data.to_df().shape[0] / 10000
 
     for train in trains:
         components, exp_dirichlet_component, others = train.make_LDA_models_attributes()
@@ -231,9 +237,9 @@ def calculate_leiden_clustering(trains,
                                       columns=[f"Topic{i + 1}" for i in range(n_rtopics)],
                                       index=data.obs.index)
 
-    keep = cell_participation.sum() > data.to_df().shape[0] / 10000
+    keep = cell_participation.sum() > min_cell_participation
     print(
-        f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {data.to_df().shape[0] / 10000}")
+        f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {min_cell_participation}")
     tmp = pd.DataFrame(keep)
     tmp["cluster"] = range(tmp.shape[0])
     tmp = tmp.to_dict()

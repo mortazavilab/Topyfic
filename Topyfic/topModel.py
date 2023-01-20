@@ -186,7 +186,7 @@ class TopModel:
                 [f'{self.name}_Topic_{i + 1}' for i in range(self.rLDA.components_.shape[0])])) == set(topics):
             sys.exit("some/all of topics are not part of topModel!")
 
-        if scale not in ["log2", "log10"]:
+        if scale not in ["log2", "log10", None]:
             sys.exit("scale is not valid!")
 
         if figsize is None:
@@ -220,6 +220,8 @@ class TopModel:
             gene_weights = gene_weights.applymap(np.log2)
         if scale == "log10":
             gene_weights = gene_weights.applymap(np.log10)
+        if scale is None:
+            scale = "no"
 
         if show_rank:
             sns.heatmap(gene_weights,
@@ -228,7 +230,7 @@ class TopModel:
                         linewidths=.5,
                         fmt='',
                         ax=ax)
-            ax.set_title('gene weights with rank')
+            ax.set_title(f'gene weights with rank ({scale} scale)')
         else:
             sns.heatmap(gene_weights,
                         cmap='viridis',

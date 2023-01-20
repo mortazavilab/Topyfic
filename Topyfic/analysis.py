@@ -70,7 +70,6 @@ class Analysis:
     def pie_structure_Chart(self,
                             level,
                             category=None,
-                            topic_order=None,
                             ascending=None,
                             n=5,
                             save=True,
@@ -85,8 +84,6 @@ class Analysis:
         :type level: str
         :param category: list of items you want to plot pie charts which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
         :type category: list of str
-        :param topic_order: indicate if you want to have a specific order of topics which it should be name of topics. if None, it's gonna sort by cell participation
-        :type topic_order: list of str
         :param ascending: for each pie chart on which order you want to sort your data (default is descending for all pie charts)
         :type ascending: list of bool
         :param n: number of topics you want to annotate in pie charts (default: 5)
@@ -123,10 +120,7 @@ class Analysis:
         for i in range(len(category)):
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
-            if topic_order is None:
-                order = tmp.mean().sort_values(ascending=False).index.tolist()
-            else:
-                order = topic_order
+            order = tmp.mean().sort_values(ascending=False).index.tolist()
             index = tmp[order].sort_values(by=order, ascending=False).index.tolist()
             tmp = tmp.reindex(columns=order)
             tmp = tmp.reindex(index)
@@ -174,6 +168,7 @@ class Analysis:
     def structure_plot(self,
                        level,
                        category,
+                       topic_order=None,
                        ascending=None,
                        metaData=None,
                        metaData_palette=None,
@@ -192,6 +187,8 @@ class Analysis:
         :type level: str
         :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])
         :type category: list of str
+        :param topic_order: indicate if you want to have a specific order of topics which it should be name of topics. if None, it's gonna sort by cell participation
+        :type topic_order: list of str
         :param ascending: for each structure plot on which order you want to sort your data (default is descending for all structure plot)
         :type ascending: list of bool
         :param metaData: if you want to add annotation for each cell add column name of that information (make sure you have that inforamtion in your cell_participation.obs)
@@ -245,7 +242,10 @@ class Analysis:
         for i in range(len(category)):
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
-            order = tmp.mean().sort_values(ascending=False).index.tolist()
+            if topic_order is None:
+                order = tmp.mean().sort_values(ascending=False).index.tolist()
+            else:
+                order = topic_order
             # tmp['non_major'] = 1 - tmp.sum(axis=1)
             # tmp.non_major[tmp['non_major'] < 0] = 0
             index = tmp[order].sort_values(by=order, ascending=False).index.tolist()

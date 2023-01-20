@@ -50,7 +50,7 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
-    def make_single_LDA_model(self, data, random_state, name):
+    def make_single_LDA_model(self, data, random_state, name, n_jobs=None):
         """
         train simple LDA model using sklearn package and embed it to TopModel class
 
@@ -60,12 +60,15 @@ class Train:
         :type data: anndata
         :param random_state: Pass an int for reproducible results across multiple function calls
         :type random_state: int
+        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend <https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend>`_ context. -1 means using all processors.  See `Glossary <https://scikit-learn.org/stable/glossary.html#term-n_jobs>`_ for more details. (default = None)
+        :type n_jobs: int
 
         :return: LDA model embedded in TopModel class
         :rtype: TopModel
         """
         lda_model = LatentDirichletAllocation(n_components=self.k,
                                               learning_method="online",
+                                              n_jobs=n_jobs,
                                               random_state=random_state)
 
         lda_model.fit_transform(data.to_df().to_numpy())
@@ -81,12 +84,14 @@ class Train:
 
         return TopModel_lda_model
 
-    def run_LDA_models(self, data, n_thread=1):
+    def run_LDA_models(self, data, n_jobs=None, n_thread=1):
         """
         train LDA models
 
         :param data: expression data embedded in anndata format use to train LDA model
         :type data: anndata
+        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend <https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend>`_ context. -1 means using all processors.  See `Glossary <https://scikit-learn.org/stable/glossary.html#term-n_jobs>`_ for more details. (default = None)
+        :type n_jobs: int
         :param n_thread: number of threads you used to learn LDA models (default=1)
         :type n_thread: int
 
