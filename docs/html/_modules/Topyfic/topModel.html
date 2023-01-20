@@ -114,7 +114,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">Topyfic.topic</span> <span class="kn">import</span> <span class="o">*</span>
@@ -130,6 +130,8 @@
 <span class="sd">    :type N: int</span>
 <span class="sd">    :param gene_weights: dataframe that has weights of genes for each topics; genes are indexes and topics are columns</span>
 <span class="sd">    :type gene_weights: pandas dataframe</span>
+<span class="sd">    :param topics: dictionary contains all topics for the topmodel</span>
+<span class="sd">    :type topics: Dictionary of Topics</span>
 <span class="sd">    :param rlda: store reproducible LDA model</span>
 <span class="sd">    :type rlda: sklearn.decomposition.LatentDirichletAllocation</span>
 
@@ -290,7 +292,7 @@
                 <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rLDA</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">topics</span><span class="p">):</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;some/all of topics are not part of topModel!&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">scale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;log2&quot;</span><span class="p">,</span> <span class="s2">&quot;log10&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;log2&quot;</span><span class="p">,</span> <span class="s2">&quot;log10&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;scale is not valid!&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -324,6 +326,8 @@
             <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">scale</span> <span class="o">==</span> <span class="s2">&quot;log10&quot;</span><span class="p">:</span>
             <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span>
 
         <span class="k">if</span> <span class="n">show_rank</span><span class="p">:</span>
             <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">gene_weights</span><span class="p">,</span>
@@ -332,7 +336,7 @@
                         <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span>
                         <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
                         <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;gene weights with rank&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gene weights with rank (</span><span class="si">{</span><span class="n">scale</span><span class="si">}</span><span class="s1"> scale)&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">gene_weights</span><span class="p">,</span>
                         <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span>
@@ -377,7 +381,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
     </p>
   </div>
 </footer>

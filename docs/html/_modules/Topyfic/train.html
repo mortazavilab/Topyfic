@@ -129,7 +129,7 @@
 
 <span class="sd">    :param name: name of the Train class</span>
 <span class="sd">    :type name: str</span>
-<span class="sd">    :param k: number of topics to learn one LDA model using sklearn package (default: 50)</span>
+<span class="sd">    :param k: number of topics to learn one LDA model using sklearn package</span>
 <span class="sd">    :type k: int</span>
 <span class="sd">    :param n_runs: number of run to define rLDA model (default: 100)</span>
 <span class="sd">    :type n_runs: int</span>
@@ -141,7 +141,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">name</span><span class="p">,</span>
-                 <span class="n">k</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">k</span><span class="p">,</span>
                  <span class="n">n_runs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                  <span class="n">random_state_range</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
@@ -156,22 +156,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span> <span class="o">=</span> <span class="n">random_state_range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Train.make_single_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_single_LDA_model">[docs]</a>    <span class="k">def</span> <span class="nf">make_single_LDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Train.make_single_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_single_LDA_model">[docs]</a>    <span class="k">def</span> <span class="nf">make_single_LDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        train simple LDA model using sklearn package and embed it to TopModel class</span>
 
 <span class="sd">        :param name: name of LDA model</span>
 <span class="sd">        :type name: str</span>
-<span class="sd">        :param data: processed gene count data along with cells and genes information</span>
+<span class="sd">        :param data: processed expression data along with cells and genes/region information</span>
 <span class="sd">        :type data: anndata</span>
 <span class="sd">        :param random_state: Pass an int for reproducible results across multiple function calls</span>
 <span class="sd">        :type random_state: int</span>
+<span class="sd">        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend &lt;https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend&gt;`_ context. -1 means using all processors.  See `Glossary &lt;https://scikit-learn.org/stable/glossary.html#term-n_jobs&gt;`_ for more details. (default = None)</span>
+<span class="sd">        :type n_jobs: int</span>
 
 <span class="sd">        :return: LDA model embedded in TopModel class</span>
 <span class="sd">        :rtype: TopModel</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lda_model</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
                                               <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;online&quot;</span><span class="p">,</span>
+                                              <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
                                               <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
 
         <span class="n">lda_model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
@@ -187,13 +190,15 @@
 
         <span class="k">return</span> <span class="n">TopModel_lda_model</span></div>
 
-<div class="viewcode-block" id="Train.run_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.run_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">run_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_thread</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Train.run_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.run_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">run_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_thread</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        train LDA models</span>
 
-<span class="sd">        :param data: data embeded in anndata format use to train LDA model</span>
+<span class="sd">        :param data: expression data embedded in anndata format use to train LDA model</span>
 <span class="sd">        :type data: anndata</span>
-<span class="sd">        :param n_thread: number of threds you used to learn LDA models (default=1)</span>
+<span class="sd">        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend &lt;https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend&gt;`_ context. -1 means using all processors.  See `Glossary &lt;https://scikit-learn.org/stable/glossary.html#term-n_jobs&gt;`_ for more details. (default = None)</span>
+<span class="sd">        :type n_jobs: int</span>
+<span class="sd">        :param n_thread: number of threads you used to learn LDA models (default=1)</span>
 <span class="sd">        :type n_thread: int</span>
 
 <span class="sd">        :return: None</span>
@@ -284,7 +289,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
     </p>
   </div>
 </footer>

@@ -120,7 +120,7 @@
 
 <span class="kn">from</span> <span class="nn">Topyfic.topModel</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 
@@ -135,6 +135,7 @@
 <span class="sd">    :param cell_participation: anndata that stores cell participation along with cell information in obs</span>
 <span class="sd">    :type cell_participation: anndata</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">Top_model</span><span class="p">,</span>
                  <span class="n">colors_topics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -159,7 +160,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate cell participation for give data</span>
 
-<span class="sd">        :param data: input data</span>
+<span class="sd">        :param data: processed expression data along with cells and genes/region information</span>
 <span class="sd">        :type data: anndata</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -168,7 +169,7 @@
 
         <span class="n">lda_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">rLDA</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="n">cell_participation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lda_output</span><span class="p">,</span>
-                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span><span class="c1">#list(self.top_model.topics.keys())</span>
                                           <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span> <span class="o">=</span> <span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">(</span><span class="n">cell_participation</span><span class="p">,</span> <span class="n">obs</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="p">)</span></div>
 
@@ -225,7 +226,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)):</span>
             <span class="n">tissue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">==</span> <span class="n">category</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tissue</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">order</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="n">index</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">order</span><span class="p">)</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
@@ -273,6 +274,7 @@
 <div class="viewcode-block" id="Analysis.structure_plot"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.structure_plot">[docs]</a>    <span class="k">def</span> <span class="nf">structure_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">level</span><span class="p">,</span>
                        <span class="n">category</span><span class="p">,</span>
+                       <span class="n">topic_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">ascending</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">metaData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">metaData_palette</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -291,6 +293,8 @@
 <span class="sd">        :type level: str</span>
 <span class="sd">        :param category: list of items you want to plot which are subsets of cell_participation.obs[level](default: all the unique items in cell_participation.obs[level])</span>
 <span class="sd">        :type category: list of str</span>
+<span class="sd">        :param topic_order: indicate if you want to have a specific order of topics which it should be name of topics. if None, it&#39;s gonna sort by cell participation</span>
+<span class="sd">        :type topic_order: list of str</span>
 <span class="sd">        :param ascending: for each structure plot on which order you want to sort your data (default is descending for all structure plot)</span>
 <span class="sd">        :type ascending: list of bool</span>
 <span class="sd">        :param metaData: if you want to add annotation for each cell add column name of that information (make sure you have that inforamtion in your cell_participation.obs)</span>
@@ -344,7 +348,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)):</span>
             <span class="n">tissue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="o">==</span> <span class="n">category</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tissue</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">order</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">topic_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">topic_order</span>
             <span class="c1"># tmp[&#39;non_major&#39;] = 1 - tmp.sum(axis=1)</span>
             <span class="c1"># tmp.non_major[tmp[&#39;non_major&#39;] &lt; 0] = 0</span>
             <span class="n">index</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -417,15 +424,23 @@
             <span class="n">tissue</span> <span class="o">=</span> <span class="n">tissue</span><span class="p">[</span><span class="n">metaData</span><span class="p">]</span>
             <span class="n">tissue</span> <span class="o">=</span> <span class="n">tissue</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metaData</span><span class="p">)):</span>
-                <span class="n">tissue</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+                    <span class="n">tissue</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metaData</span><span class="p">)):</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="n">tissue</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-                <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span>
-                                      <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                      <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+                    <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span>
+                                          <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                          <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span>
+                                          <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(),</span> <span class="n">s</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">,</span>
+                                          <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                          <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
                 <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
                 <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
@@ -450,13 +465,21 @@
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metaData</span><span class="p">)):</span>
             <span class="n">handles</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">met</span> <span class="ow">in</span> <span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="n">patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="n">met</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">met</span><span class="p">)</span>
-                <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
-                <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span>
-                                                 <span class="n">title</span><span class="o">=</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
-                                                 <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                                                 <span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">met</span> <span class="ow">in</span> <span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]][</span><span class="n">met</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">met</span><span class="p">)</span>
+                    <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+                    <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span>
+                                                     <span class="n">title</span><span class="o">=</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
+                                                     <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                                     <span class="n">handles</span><span class="o">=</span><span class="n">handles</span><span class="p">)</span>
+                    <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">clb</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="o">=</span><span class="n">metaData_palette</span><span class="p">[</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]],</span>
+                                   <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)],</span>
+                                   <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span>
+                                   <span class="n">fraction</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+                <span class="n">clb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">metaData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
                 <span class="n">axs</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">category</span><span class="p">)]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
@@ -629,8 +652,10 @@
 
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">selected_cell</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;selectedCells_top</span><span class="si">{</span><span class="n">top_cells</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">min_cell_participation</span><span class="si">}</span><span class="s2">min_score_</span><span class="si">{</span><span class="n">min_cells</span><span class="si">}</span><span class="s2">min_cells.csv&quot;</span><span class="p">)</span>
-                <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cellParticipation_selectedCells_top</span><span class="si">{</span><span class="n">top_cells</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">min_cell_participation</span><span class="si">}</span><span class="s2">min_score_</span><span class="si">{</span><span class="n">min_cells</span><span class="si">}</span><span class="s2">min_cells.csv&quot;</span><span class="p">)</span>
+                <span class="n">selected_cell</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;selectedCells_top</span><span class="si">{</span><span class="n">top_cells</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">min_cell_participation</span><span class="si">}</span><span class="s2">min_score_</span><span class="si">{</span><span class="n">min_cells</span><span class="si">}</span><span class="s2">min_cells.csv&quot;</span><span class="p">)</span>
+                <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;cellParticipation_selectedCells_top</span><span class="si">{</span><span class="n">top_cells</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">min_cell_participation</span><span class="si">}</span><span class="s2">min_score_</span><span class="si">{</span><span class="n">min_cells</span><span class="si">}</span><span class="s2">min_cells.csv&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">selected_cell</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;selectedCells_</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
                 <span class="n">selected_cell_participation</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cellParticipation_selectedCells_</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
@@ -670,7 +695,7 @@
             <span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
 
@@ -686,10 +711,94 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="Analysis.average_cell_participation_line_plot"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.average_cell_participation_line_plot">[docs]</a>    <span class="k">def</span> <span class="nf">average_cell_participation_line_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                             <span class="n">topic</span><span class="p">,</span>
+                                             <span class="n">color</span><span class="p">,</span>
+                                             <span class="n">category</span><span class="p">,</span>
+                                             <span class="n">color_pallet</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                             <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                             <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                             <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                             <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                                             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;line_average_cell_participation&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        line plot showing average of cell participation in topic divided by two features of cells (i.e. cell type and time point)</span>
+
+<span class="sd">        :param topic: name of the topic</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :param color: name of the feature you want to have one line per group of that (it should be column name of cell_participation.obs)</span>
+<span class="sd">        :type color:str</span>
+<span class="sd">        :type color_pallet: color of each category of color (if it None color assign randomly)</span>
+<span class="sd">        :param color_pallet: dict</span>
+<span class="sd">        :param category: name of the feature you want to have on x axis (it should be column name of cell_participation.obs)</span>
+<span class="sd">        :type category: str</span>
+<span class="sd">        :param save: indicate if you want to save the plot or not (default: True)</span>
+<span class="sd">        :type save: bool</span>
+<span class="sd">        :param show: indicate if you want to show the plot or not (default: True)</span>
+<span class="sd">        :type show: bool</span>
+<span class="sd">        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))</span>
+<span class="sd">        :type figsize: tuple of int</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
+<span class="sd">        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)</span>
+<span class="sd">        :type file_name: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">topic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;topic is not valid!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Cell participation is not calculated yet!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">category</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;category is not valid!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;color is not valid!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color_pallet</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">color_pallet</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">color</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+                <span class="n">color_pallet</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="s1">&#39;ABCDEF0123456789&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)])</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(),</span>
+                           <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">color</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">color</span><span class="p">]</span> <span class="o">==</span> <span class="n">index</span><span class="p">,</span>
+                                                             <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">category</span><span class="p">]</span> <span class="o">==</span> <span class="n">col</span><span class="p">)]</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()[</span><span class="n">topic</span><span class="p">]</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                     <span class="s1">&#39;-o&#39;</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+                     <span class="n">color</span><span class="o">=</span><span class="n">color_pallet</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">category</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average cell participation&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Analysis.plot_topic_composition"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.plot_topic_composition">[docs]</a>    <span class="k">def</span> <span class="nf">plot_topic_composition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                <span class="n">category</span><span class="p">,</span>
                                <span class="n">level</span><span class="o">=</span><span class="s2">&quot;topic&quot;</span><span class="p">,</span>
                                <span class="n">biotype</span><span class="o">=</span><span class="s2">&quot;biotype&quot;</span><span class="p">,</span>
+                               <span class="n">label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
@@ -703,6 +812,8 @@
 <span class="sd">        :type level: str</span>
 <span class="sd">        :param biotype: name of the column in gene_weight to look for gene_biotype (default: biotype)</span>
 <span class="sd">        :type biotype: str</span>
+<span class="sd">        :param label: show label of each line within plot or not (default: False)</span>
+<span class="sd">        :type label: bool</span>
 <span class="sd">        :param save: indicate if you want to save the plot or not (default: True)</span>
 <span class="sd">        :type save: bool</span>
 <span class="sd">        :param show: indicate if you want to show the plot or not (default: True)</span>
@@ -785,12 +896,19 @@
             <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">dashes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">dashes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">colors_topics</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="s1">&#39;colors&#39;</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">basey</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">lines</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">get_ydata</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">get_xdata</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">line</span><span class="o">.</span><span class="n">get_color</span><span class="p">())</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">})</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;#genes (log2)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;gene rank&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">basey</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
@@ -830,7 +948,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
     </p>
   </div>
 </footer>
