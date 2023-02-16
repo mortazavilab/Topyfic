@@ -14,6 +14,7 @@ from sklearn.decomposition import LatentDirichletAllocation
 from scipy import stats as st
 import scanpy.external as sce
 import networkx as nx
+import math
 
 from Topyfic.train import *
 from Topyfic.topic import *
@@ -520,12 +521,12 @@ def read_analysis(file):
     picklefile = open(file, 'rb')
     analysis = pickle.load(picklefile)
 
-    print(f"Reading TopModel done!")
+    print(f"Reading Analysis done!")
     return analysis
 
 
 def compare_topModels(topModels,
-                      output_type='circular',
+                      output_type='graph',
                       threshold=0.8,
                       topModels_color=None,
                       topModels_label=None,
@@ -539,7 +540,7 @@ def compare_topModels(topModels,
 
     :param topModels: list of topModel class you want to compare to each other
     :type topModels: list of TopModel class
-    :param output_type: indicate the type of output you want. circular: plot as a circle plot, heatmap: plot as a heatmap, table: table contains correlation
+    :param output_type: indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation
     :type output_type: str
     :param threshold: only apply when you choose circular which only show correlation above that
     :type threshold: float
@@ -561,8 +562,8 @@ def compare_topModels(topModels,
     :return: table contains correlation between topics only when table is choose and save is False
     :rtype: pandas dataframe
     """
-    if output_type not in ['circular', 'heatmap', 'table']:
-        sys.exit("output_type is not valid! it should be one of 'circular', 'heatmap' or 'table'")
+    if output_type not in ['graph', 'heatmap', 'table']:
+        sys.exit("output_type is not valid! it should be one of 'graph', 'heatmap' or 'table'")
 
     all_gene_weights = None
 
@@ -606,8 +607,8 @@ def compare_topModels(topModels,
 
         return
 
-    if output_type == 'circular':
-        corrs.values[[np.arange(corrs.shape[0])] * 2] = 0
+    if output_type == 'graph':
+        np.fill_diagonal(corrs.values, 0)
         corrs[corrs < threshold] = np.nan
         res = corrs.stack()
         res = pd.DataFrame(res)
@@ -629,36 +630,50 @@ def compare_topModels(topModels,
             res['source_color'].replace(topModels_color, inplace=True)
             res['dest_color'].replace(topModels_color, inplace=True)
 
-        if figsize is None:
-            figsize = (max(10.0, res.shape[0] / 10), max(10.0, res.shape[0] / 10))
-
-        plt.figure(figsize=figsize, facecolor='white')
-
         G = nx.Graph()
         for i in range(res.shape[0]):
             G.add_node(res.source_label[i], color=res.source_color[i])
             G.add_node(res.dest_label[i], color=res.dest_color[i])
             G.add_edge(res.source_label[i], res.dest_label[i], weight=res.weight[i])
 
-        nodePos = nx.circular_layout(G)
-        nx.draw_networkx_nodes(G, nodePos, node_size=800)
+        connected_components = sorted(nx.connected_components(G), key=len, reverse=True)
 
-        edge_labels = nx.get_edge_attributes(G, "weight")
-        nx.draw_networkx_edge_labels(G, nodePos, edge_labels)
+        if figsize is None:
+            figsize = (len(connected_components) * 2, len(connected_components) * 2)
 
-        node_color = nx.get_node_attributes(G, "color").values()
-        weights = nx.get_edge_attributes(G, 'weight').values()
+        nrows = math.ceil(math.sqrt(len(connected_components)))
+        ncols = math.ceil(len(connected_components) / nrows)
+        fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=figsize, facecolor='white')
 
-        nx.draw(G,
-                pos=nodePos,
-                width=list(weights),
-                with_labels=True,
-                node_color=list(node_color),
-                node_size=1750)
+        i = 0
+        for connected_component in connected_components:
+            g_connected_component = G.subgraph(connected_component)
+            nodePos = nx.spring_layout(g_connected_component)
 
-        plt.axis('off')
+            edge_labels = nx.get_edge_attributes(g_connected_component, "weight")
+
+            node_color = nx.get_node_attributes(g_connected_component, "color").values()
+            weights = nx.get_edge_attributes(g_connected_component, 'weight').values()
+
+            nx.draw_networkx(g_connected_component,
+                             pos=nodePos,
+                             width=list(weights),
+                             with_labels=True,
+                             node_color=list(node_color),
+                             font_size=8,
+                             node_size=500,
+                             ax=axs[int(i / ncols), i % ncols])
+
+            nx.draw_networkx_edge_labels(g_connected_component,
+                                         nodePos,
+                                         edge_labels=edge_labels,
+                                         font_size=7,
+                                         ax=axs[int(i / ncols), i % ncols])
+
+            i += 1
+
+        [axi.axis('off') for axi in axs.ravel()]
         plt.tight_layout()
-
         if save:
             plt.savefig(f"{file_name}.{plot_format}")
         if plot_show:
@@ -666,4 +681,5 @@ def compare_topModels(topModels,
         else:
             plt.close()
 
-        return
+        return axs
+

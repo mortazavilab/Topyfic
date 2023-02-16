@@ -6,6 +6,7 @@ import numpy as np
 
 import gseapy as gp
 from gseapy.plot import dotplot
+from gseapy import gseaplot
 from reactome2py import analysis
 
 import matplotlib.pyplot as plt
@@ -87,29 +88,27 @@ class Topic:
         :type sets: str, list, tuple
         :param p_value: Defines the pValue threshold. (default: 0.05)
         :type p_value: float
-        :param save: indicate if you want to save the plot or not (default: True)
-        :type save: bool
-        :param show: indicate if you want to show the plot or not (default: True)
-        :type show: bool
         :param file_format: indicate the format of plot (default: pdf)
         :type file_format: str
         :param file_name: name and path of the plot use for save (default: gene_composition)
         :type file_name: str
         """
+
         if type not in ["GO", "REACTOME"]:
             sys.exit("Type is not valid! it should be one of them GO, KEGG, REACTOME")
 
         if type == "GO" and sets is None:
-            sys.exit("sets is empty! you should define it if you want to perform Gene Ontology")
+            sets = ["GO_Biological_Process_2021"]
+        elif type == "KEGG" and sets is None:
+            sets = ["KEGG_2016"]
 
-        gene_weights = self.gene_weights
+        gene_weights = self.gene_weights.copy(deep=True)
         gene_weights = gene_weights[gene_weights > gene_weights.min()]
         genes = gene_weights.dropna().index.tolist()
         if type in ["GO", "KEGG"]:
             enr = gp.enrichr(gene_list=genes,
                              gene_sets=sets,
                              organism=organism,
-                             description='',
                              outdir=f"{file_name}",
                              cutoff=p_value)
             dotplot(enr.res2d,
@@ -140,8 +139,64 @@ class Topic:
             print(f"Report was saved {file_name}!")
             print(f"For more information please visit https://reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS={token}")
 
-    def MA_plot(self, topic):
-        df = self.gene_weights.copy(deep=True)
-        df = pd.concat([df, topic.gene_weights.copy(deep=True)])
+    def GSEA(self,
+             gene_sets='GO_Biological_Process_2021',
+             p_value=0.05,
+             table=True,
+             plot=True,
+             file_format="pdf",
+             file_name="GSEA",
+             **kwargs):
+        """
+        Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.
 
+        :param gene_sets: Enrichr Library name or .gmt gene sets file or dict of gene sets. (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats)
+        :type gene_sets: str, list, tuple
+        :param p_value: Defines the pValue threshold for plotting. (default: 0.05)
+        :type p_value: float
+        :param table: indicate if you want to save all GO terms that passed the threshold as a table (default: True)
+        :type table: bool
+        :param plot: indicate if you want to plot all GO terms that passed the threshold (default: True)
+        :type plot: bool
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: gene_composition)
+        :type file_name: str
+        :param kwargs: Argument to pass to gseapy.prerank(). more info: https://gseapy.readthedocs.io/en/latest/run.html?highlight=gp.prerank#gseapy.prerank
 
+        :return: dataframe contains these columns: Term: gene set name, ES: enrichment score, NES: normalized enrichment score, NOM p-val:  Nominal p-value (from the null distribution of the gene set, FDR q-val: FDR qvalue (adjusted False Discory Rate), FWER p-val: Family wise error rate p-values, Tag %: Percent of gene set before running enrichment peak (ES), Gene %: Percent of gene list before running enrichment peak (ES), Lead_genes: leading edge genes (gene hits before running enrichment peak)
+        :rtype: pandas dataframe
+        """
+
+        gene_weights = self.gene_weights.copy(deep=True)
+        gene_weights.index = gene_weights.index.str.upper()
+        gene_weights.sort_values([self.id], ascending=False, inplace=True)
+        gene_weights = gene_weights[gene_weights > gene_weights.min()]
+        gene_weights.dropna(inplace=True)
+
+        if gene_weights.shape[0] == 1:
+            return
+
+        pre_res = gp.prerank(rnk=gene_weights,
+                             gene_sets=gene_sets,
+                             format=file_format,
+                             no_plot=~plot,
+                             **kwargs)
+
+        pre_res.res2d.sort_values(["NOM p-val"], inplace=True)
+        pre_res.res2d.drop(["Name"], axis=1, inplace=True)
+
+        if table:
+            pre_res.res2d.to_csv(f"{file_name}.csv")
+
+        if plot:
+            res = pre_res.res2d.copy(deep=True)
+            res = res[res['NOM p-val'] < p_value]
+            for term in res.Term:
+                name = term.split("(GO:")[1][:-1]
+                gseaplot(rank_metric=pre_res.ranking,
+                         term=term,
+                         **pre_res.results[term],
+                         ofname=f"{file_name}_GO_{name}.{file_format}")
+
+        return pre_res.res2d

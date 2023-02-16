@@ -790,7 +790,7 @@ class Analysis:
             sns.lineplot(data=res, dashes=False, ax=ax)
         else:
             sns.lineplot(data=res, dashes=False, ax=ax, palette=self.colors_topics.to_dict()['colors'])
-        ax.set_yscale('log', basey=2)
+        ax.set_yscale('log', base=2)
         if label:
             for line, name in zip(ax.lines, res.columns):
                 y = int(line.get_ydata()[-1])

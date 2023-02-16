@@ -1,0 +1,2702 @@
+,gene_name,display_name,biotype,cat_biotype
+0,Zfy1,Zfy1,TF,Transcription Factor
+1,Zfy2,Zfy2,TF,Transcription Factor
+2,Sry,Sry,TF,Transcription Factor
+3,Srebf2,Srebf2,TF,Transcription Factor
+4,Zfp397,Zfp397,TF,Transcription Factor
+5,Ylpm1,Ylpm1,TF,Transcription Factor
+6,Zfp35,Zfp35,TF,Transcription Factor
+7,Zfp24,Zfp24,TF,Transcription Factor
+8,Prox2,Prox2,TF,Transcription Factor
+9,Nfe2,Nfe2,TF,Transcription Factor
+10,Zhx2,Zhx2,TF,Transcription Factor
+11,Nr1i2,Nr1i2,TF,Transcription Factor
+12,Cdx1,Cdx1,TF,Transcription Factor
+13,E2f6,E2f6,TF,Transcription Factor
+14,Dach1,Dach1,TF,Transcription Factor
+15,Nkrf,Nkrf,TF,Transcription Factor
+16,Insm2,Insm2,TF,Transcription Factor
+17,Zfp275,Zfp275,TF,Transcription Factor
+18,Zfp92,Zfp92,TF,Transcription Factor
+19,Fos,Fos,TF,Transcription Factor
+20,Jdp2,Jdp2,TF,Transcription Factor
+21,Batf,Batf,TF,Transcription Factor
+22,Klf5,Klf5,TF,Transcription Factor
+23,Klf12,Klf12,TF,Transcription Factor
+24,Snai2,Snai2,TF,Transcription Factor
+25,Rhox3a,Rhox3a,TF,Transcription Factor
+26,Rhox3a2,Rhox3a2,TF,Transcription Factor
+27,Npas4,Npas4,TF,Transcription Factor
+28,Rhox3c,Rhox3c,TF,Transcription Factor
+29,Tcf20,Tcf20,TF,Transcription Factor
+30,5730507C01Rik,5730507C01Rik,TF,Transcription Factor
+31,Foxd4,Foxd4,TF,Transcription Factor
+32,Olig2,Olig2,TF,Transcription Factor
+33,Olig1,Olig1,TF,Transcription Factor
+34,Zbtb20,Zbtb20,TF,Transcription Factor
+35,Rhox3e,Rhox3e,TF,Transcription Factor
+36,Rhox3f,Rhox3f,TF,Transcription Factor
+37,Rhox3g,Rhox3g,TF,Transcription Factor
+38,Tbx22,Tbx22,TF,Transcription Factor
+39,Tfap2a,Tfap2a,TF,Transcription Factor
+40,Rhox3h,Rhox3h,TF,Transcription Factor
+41,Cebpd,Cebpd,TF,Transcription Factor
+42,Myc,Myc,TF,Transcription Factor
+43,Rhox10,Rhox10,TF,Transcription Factor
+44,Rhox11,Rhox11,TF,Transcription Factor
+45,Rhox13,Rhox13,TF,Transcription Factor
+46,Zbtb33,Zbtb33,TF,Transcription Factor
+47,Dmrt1,Dmrt1,TF,Transcription Factor
+48,Gm10139,Gm10139,TF,Transcription Factor
+49,Dmrt3,Dmrt3,TF,Transcription Factor
+50,Dmrt2,Dmrt2,TF,Transcription Factor
+51,Nkx2-1,Nkx2-1,TF,Transcription Factor
+52,Nkx2-9,Nkx2-9,TF,Transcription Factor
+53,Pax9,Pax9,TF,Transcription Factor
+54,Pou3f4,Pou3f4,TF,Transcription Factor
+55,Gcm2,Gcm2,TF,Transcription Factor
+56,Zscan12,Zscan12,TF,Transcription Factor
+57,Zfp712,Zfp712,TF,Transcription Factor
+58,Fosl1,Fosl1,TF,Transcription Factor
+59,Pou4f1,Pou4f1,TF,Transcription Factor
+60,Zfp708,Zfp708,TF,Transcription Factor
+61,Gm28557,Gm28557,TF,Transcription Factor
+62,Rslcan18,Rslcan18,TF,Transcription Factor
+63,Zfp759,Zfp759,TF,Transcription Factor
+64,Zscan26,Zscan26,TF,Transcription Factor
+65,Rsl1,Rsl1,TF,Transcription Factor
+66,Zfp455,Zfp455,TF,Transcription Factor
+67,Zfp458,Zfp458,TF,Transcription Factor
+68,Hesx1,Hesx1,TF,Transcription Factor
+69,Zfp457,Zfp457,TF,Transcription Factor
+70,Foxa1,Foxa1,TF,Transcription Factor
+71,Zfp595,Zfp595,TF,Transcription Factor
+72,Hdx,Hdx,TF,Transcription Factor
+73,Zfp953,Zfp953,TF,Transcription Factor
+74,Gm28041,Gm28041,TF,Transcription Factor
+75,Zfp456,Zfp456,TF,Transcription Factor
+76,Hivep1,Hivep1,TF,Transcription Factor
+77,Zfp429,Zfp429,TF,Transcription Factor
+78,Zfp459,Zfp459,TF,Transcription Factor
+79,Zfp874a,Zfp874a,TF,Transcription Factor
+80,Esrrb,Esrrb,TF,Transcription Factor
+81,Ovol1,Ovol1,TF,Transcription Factor
+82,Zfp184,Zfp184,TF,Transcription Factor
+83,Zfp874b,Zfp874b,TF,Transcription Factor
+84,Zfp58,Zfp58,TF,Transcription Factor
+85,Onecut2,Onecut2,TF,Transcription Factor
+86,Zfp87,Zfp87,TF,Transcription Factor
+87,Zfp748,Zfp748,TF,Transcription Factor
+88,Zfp729b,Zfp729b,TF,Transcription Factor
+89,Gm49345,Gm49345,TF,Transcription Factor
+90,Zfp729a,Zfp729a,TF,Transcription Factor
+91,Zfp738,Zfp738,TF,Transcription Factor
+92,Zfp65,Zfp65,TF,Transcription Factor
+93,Zfp85,Zfp85,TF,Transcription Factor
+94,Zfp493,Zfp493,TF,Transcription Factor
+95,Dach2,Dach2,TF,Transcription Factor
+96,Sox21,Sox21,TF,Transcription Factor
+97,Gm9376,Gm9376,TF,Transcription Factor
+98,Foxd1,Foxd1,TF,Transcription Factor
+99,Zfp273,Zfp273,TF,Transcription Factor
+100,Rela,Rela,TF,Transcription Factor
+101,Ppara,Ppara,TF,Transcription Factor
+102,Gata4,Gata4,TF,Transcription Factor
+103,Grhl1,Grhl1,TF,Transcription Factor
+104,Tgif2lx2,Tgif2lx2,TF,Transcription Factor
+105,Tgif2lx1,Tgif2lx1,TF,Transcription Factor
+106,Klf11,Klf11,TF,Transcription Factor
+107,Egr1,Egr1,TF,Transcription Factor
+108,Hic2,Hic2,TF,Transcription Factor
+109,Sox7,Sox7,TF,Transcription Factor
+110,Zfp322a,Zfp322a,TF,Transcription Factor
+111,4932411N23Rik,4932411N23Rik,TF,Transcription Factor
+112,Rfx3,Rfx3,TF,Transcription Factor
+113,Zfp366,Zfp366,TF,Transcription Factor
+114,Zfp395,Zfp395,TF,Transcription Factor
+115,Zfp983,Zfp983,TF,Transcription Factor
+116,Six2,Six2,TF,Transcription Factor
+117,Gm10226,Gm10226,TF,Transcription Factor
+118,Zfp760,Zfp760,TF,Transcription Factor
+119,Zfp229,Zfp229,TF,Transcription Factor
+120,Pura,Pura,TF,Transcription Factor
+121,Zfp820,Zfp820,TF,Transcription Factor
+122,Glis3,Glis3,TF,Transcription Factor
+123,Zfp995,Zfp995,TF,Transcription Factor
+124,Zfp942,Zfp942,TF,Transcription Factor
+125,Zfp943,Zfp943,TF,Transcription Factor
+126,Zfp947,Zfp947,TF,Transcription Factor
+127,Zfp994,Zfp994,TF,Transcription Factor
+129,Zfp944,Zfp944,TF,Transcription Factor
+130,Zfp758,Zfp758,TF,Transcription Factor
+131,Epas1,Epas1,TF,Transcription Factor
+132,Zfp946,Zfp946,TF,Transcription Factor
+133,Foxp4,Foxp4,TF,Transcription Factor
+134,Runx1,Runx1,TF,Transcription Factor
+135,Sox11,Sox11,TF,Transcription Factor
+136,Zfp945,Zfp945,TF,Transcription Factor
+137,Rfx5,Rfx5,TF,Transcription Factor
+138,Zfp40,Zfp40,TF,Transcription Factor
+139,Zfp213,Zfp213,TF,Transcription Factor
+140,Sox2,Sox2,TF,Transcription Factor
+141,Zfp13,Zfp13,TF,Transcription Factor
+142,Irx1,Irx1,TF,Transcription Factor
+143,Irx2,Irx2,TF,Transcription Factor
+144,Zscan10,Zscan10,TF,Transcription Factor
+145,Irx4,Irx4,TF,Transcription Factor
+146,Nanog,Nanog,TF,Transcription Factor
+147,Gata2,Gata2,TF,Transcription Factor
+148,Bbx,Bbx,TF,Transcription Factor
+149,Foxj2,Foxj2,TF,Transcription Factor
+150,Sim2,Sim2,TF,Transcription Factor
+151,Foxn2,Foxn2,TF,Transcription Factor
+152,Zfat,Zfat,TF,Transcription Factor
+153,Nfya,Nfya,TF,Transcription Factor
+154,Vax1,Vax1,TF,Transcription Factor
+155,Emx2,Emx2,TF,Transcription Factor
+156,Foxi3,Foxi3,TF,Transcription Factor
+157,Myt1l,Myt1l,TF,Transcription Factor
+158,Ebf2,Ebf2,TF,Transcription Factor
+159,Foxr2,Foxr2,TF,Transcription Factor
+160,Klf8,Klf8,TF,Transcription Factor
+161,Zfp169,Zfp169,TF,Transcription Factor
+162,Zbtb11,Zbtb11,TF,Transcription Factor
+163,Elf4,Elf4,TF,Transcription Factor
+164,Barx1,Barx1,TF,Transcription Factor
+165,Nobox,Nobox,TF,Transcription Factor
+166,Zfp950,Zfp950,TF,Transcription Factor
+168,Rax,Rax,TF,Transcription Factor
+169,Ctcf,Ctcf,TF,Transcription Factor
+170,Satb1,Satb1,TF,Transcription Factor
+171,Nr3c2,Nr3c2,TF,Transcription Factor
+172,Gm21060,Gm21060,TF,Transcription Factor
+173,Gsc2,Gsc2,TF,Transcription Factor
+174,Mycs,Mycs,TF,Transcription Factor
+175,Rfx4,Rfx4,TF,Transcription Factor
+176,Zfp280c,Zfp280c,TF,Transcription Factor
+177,Nkx2-6,Nkx2-6,TF,Transcription Factor
+178,Nkx3-1,Nkx3-1,TF,Transcription Factor
+179,Zfp119a,Zfp119a,TF,Transcription Factor
+180,Zfp959,Zfp959,TF,Transcription Factor
+181,Zfp119b,Zfp119b,TF,Transcription Factor
+182,Mbtps2,Mbtps2,TF,Transcription Factor
+183,Yy2,Yy2,TF,Transcription Factor
+184,Thap11,Thap11,TF,Transcription Factor
+185,Pou4f2,Pou4f2,TF,Transcription Factor
+186,Egr3,Egr3,TF,Transcription Factor
+187,Sox1,Sox1,TF,Transcription Factor
+188,Zfp386,Zfp386,TF,Transcription Factor
+189,Men1,Men1,TF,Transcription Factor
+190,Fezf2,Fezf2,TF,Transcription Factor
+191,Foxn3,Foxn3,TF,Transcription Factor
+192,E4f1,E4f1,TF,Transcription Factor
+193,Prdm4,Prdm4,TF,Transcription Factor
+194,Mecp2,Mecp2,TF,Transcription Factor
+195,Zfp786,Zfp786,TF,Transcription Factor
+196,Ascl4,Ascl4,TF,Transcription Factor
+197,Smad1,Smad1,TF,Transcription Factor
+198,Zfp398,Zfp398,TF,Transcription Factor
+199,Zfp282,Zfp282,TF,Transcription Factor
+200,Stox1,Stox1,TF,Transcription Factor
+201,Nr3c1,Nr3c1,TF,Transcription Factor
+202,Gm19965,Gm19965,TF,Transcription Factor
+203,Gm28363,Gm28363,TF,Transcription Factor
+204,B020011L13Rik,B020011L13Rik,TF,Transcription Factor
+205,Gm28360,Gm28360,TF,Transcription Factor
+206,Zfp212,Zfp212,TF,Transcription Factor
+207,Zbtb16,Zbtb16,TF,Transcription Factor
+208,Gm28168,Gm28168,TF,Transcription Factor
+209,Gm7145,Gm7145,TF,Transcription Factor
+210,Gm29106,Gm29106,TF,Transcription Factor
+211,Tbx1,Tbx1,TF,Transcription Factor
+212,Zfp956,Zfp956,TF,Transcription Factor
+213,Zfp777,Zfp777,TF,Transcription Factor
+214,Erg,Erg,TF,Transcription Factor
+215,Lhx8,Lhx8,TF,Transcription Factor
+216,Zfp72,Zfp72,TF,Transcription Factor
+217,Pou4f3,Pou4f3,TF,Transcription Factor
+218,Tcerg1,Tcerg1,TF,Transcription Factor
+219,Zfp746,Zfp746,TF,Transcription Factor
+220,Mybl1,Mybl1,TF,Transcription Factor
+221,Nfatc3,Nfatc3,TF,Transcription Factor
+222,Foxp3,Foxp3,TF,Transcription Factor
+223,Zfp825,Zfp825,TF,Transcription Factor
+224,Gm32717,Gm32717,TF,Transcription Factor
+225,Gm32802,Gm32802,TF,Transcription Factor
+226,Sox4,Sox4,TF,Transcription Factor
+227,Gm9040,Gm9040,TF,Transcription Factor
+228,Gm9044,Gm9044,TF,Transcription Factor
+229,Gm9045,Gm9045,TF,Transcription Factor
+230,Gm9046,Gm9046,TF,Transcription Factor
+231,Gm9048,Gm9048,TF,Transcription Factor
+232,Gm9049,Gm9049,TF,Transcription Factor
+233,Ets2,Ets2,TF,Transcription Factor
+234,Pbx2,Pbx2,TF,Transcription Factor
+235,Osr2,Osr2,TF,Transcription Factor
+236,E2f3,E2f3,TF,Transcription Factor
+237,Zfp90,Zfp90,TF,Transcription Factor
+238,Zfp41,Zfp41,TF,Transcription Factor
+239,Ferd3l,Ferd3l,TF,Transcription Factor
+240,Twist1,Twist1,TF,Transcription Factor
+241,Sp4,Sp4,TF,Transcription Factor
+242,Atoh8,Atoh8,TF,Transcription Factor
+243,Sp8,Sp8,TF,Transcription Factor
+244,Zfp534,Zfp534,TF,Transcription Factor
+245,Zfp984,Zfp984,TF,Transcription Factor
+246,Zfp933,Zfp933,TF,Transcription Factor
+247,Zfp654,Zfp654,TF,Transcription Factor
+248,Mafa,Mafa,TF,Transcription Factor
+249,Zbtb18,Zbtb18,TF,Transcription Factor
+250,Irf4,Irf4,TF,Transcription Factor
+251,Pou1f1,Pou1f1,TF,Transcription Factor
+252,Gcm1,Gcm1,TF,Transcription Factor
+253,Klf15,Klf15,TF,Transcription Factor
+254,Zfp467,Zfp467,TF,Transcription Factor
+255,Sox5,Sox5,TF,Transcription Factor
+256,Grhl2,Grhl2,TF,Transcription Factor
+257,Eno1b,Eno1b,TF,Transcription Factor
+258,Pax3,Pax3,TF,Transcription Factor
+259,Foxq1,Foxq1,TF,Transcription Factor
+260,Hey2,Hey2,TF,Transcription Factor
+261,Ascl1,Ascl1,TF,Transcription Factor
+262,Foxf2,Foxf2,TF,Transcription Factor
+263,Foxc1,Foxc1,TF,Transcription Factor
+264,Rfx2,Rfx2,TF,Transcription Factor
+265,Barx2,Barx2,TF,Transcription Factor
+266,Ahr,Ahr,TF,Transcription Factor
+267,Dbx2,Dbx2,TF,Transcription Factor
+268,Tcf4,Tcf4,TF,Transcription Factor
+269,Atf6b,Atf6b,TF,Transcription Factor
+270,Atoh7,Atoh7,TF,Transcription Factor
+271,Klf10,Klf10,TF,Transcription Factor
+272,Fli1,Fli1,TF,Transcription Factor
+273,Arnt,Arnt,TF,Transcription Factor
+274,Nkx6-1,Nkx6-1,TF,Transcription Factor
+275,Ets1,Ets1,TF,Transcription Factor
+276,Meox2,Meox2,TF,Transcription Factor
+277,Otx2,Otx2,TF,Transcription Factor
+278,Tfb2m,Tfb2m,TF,Transcription Factor
+279,Nfil3,Nfil3,TF,Transcription Factor
+280,Nfat5,Nfat5,TF,Transcription Factor
+281,Dlx6,Dlx6,TF,Transcription Factor
+282,Zbtb21,Zbtb21,TF,Transcription Factor
+283,Msx2,Msx2,TF,Transcription Factor
+284,Gm12258,Gm12258,TF,Transcription Factor
+285,2810021J22Rik,2810021J22Rik,TF,Transcription Factor
+286,Zfp39,Zfp39,TF,Transcription Factor
+287,A630089N07Rik,A630089N07Rik,TF,Transcription Factor
+288,Tcf24,Tcf24,TF,Transcription Factor
+289,Dlx5,Dlx5,TF,Transcription Factor
+290,Zfp775,Zfp775,TF,Transcription Factor
+291,Zfp449,Zfp449,TF,Transcription Factor
+292,AI854703,AI854703,TF,Transcription Factor
+293,Esx1,Esx1,TF,Transcription Factor
+294,Spic,Spic,TF,Transcription Factor
+295,Etv1,Etv1,TF,Transcription Factor
+296,Zfhx3,Zfhx3,TF,Transcription Factor
+297,Gabpa,Gabpa,TF,Transcription Factor
+298,Bhlhe41,Bhlhe41,TF,Transcription Factor
+299,Six6,Six6,TF,Transcription Factor
+300,Six1,Six1,TF,Transcription Factor
+301,Six4,Six4,TF,Transcription Factor
+302,Egr2,Egr2,TF,Transcription Factor
+303,Vdr,Vdr,TF,Transcription Factor
+304,Glis1,Glis1,TF,Transcription Factor
+305,Dmrtb1,Dmrtb1,TF,Transcription Factor
+306,Zfp384,Zfp384,TF,Transcription Factor
+307,Helt,Helt,TF,Transcription Factor
+308,Hif1a,Hif1a,TF,Transcription Factor
+309,Smad4,Smad4,TF,Transcription Factor
+310,Zfp518a,Zfp518a,TF,Transcription Factor
+311,Bach1,Bach1,TF,Transcription Factor
+312,Tfdp1,Tfdp1,TF,Transcription Factor
+313,Zfp641,Zfp641,TF,Transcription Factor
+314,Zbtb12,Zbtb12,TF,Transcription Factor
+315,Zfp263,Zfp263,TF,Transcription Factor
+316,Zfp174,Zfp174,TF,Transcription Factor
+317,Zfp597,Zfp597,TF,Transcription Factor
+318,Pou5f2,Pou5f2,TF,Transcription Factor
+319,Nr1h4,Nr1h4,TF,Transcription Factor
+320,Zbtb7c,Zbtb7c,TF,Transcription Factor
+321,Trps1,Trps1,TF,Transcription Factor
+322,Smad2,Smad2,TF,Transcription Factor
+323,Nr2f1,Nr2f1,TF,Transcription Factor
+324,Skor2,Skor2,TF,Transcription Factor
+325,Zfp37,Zfp37,TF,Transcription Factor
+326,Casz1,Casz1,TF,Transcription Factor
+327,Rel,Rel,TF,Transcription Factor
+328,Zfp821,Zfp821,TF,Transcription Factor
+329,AI987944,AI987944,TF,Transcription Factor
+330,Ddn,Ddn,TF,Transcription Factor
+331,AW146154,AW146154,TF,Transcription Factor
+332,Foxg1,Foxg1,TF,Transcription Factor
+333,Gm43517,Gm43517,TF,Transcription Factor
+334,Gm6871,Gm6871,TF,Transcription Factor
+335,Zfp648,Zfp648,TF,Transcription Factor
+336,Irf2,Irf2,TF,Transcription Factor
+337,Bhlha15,Bhlha15,TF,Transcription Factor
+338,2610021A01Rik,2610021A01Rik,TF,Transcription Factor
+339,Zfp788,Zfp788,TF,Transcription Factor
+340,Kmt2d,Kmt2d,TF,Transcription Factor
+341,Rpf2,Rpf2,TF,Transcription Factor
+342,Rfx1,Rfx1,TF,Transcription Factor
+343,Zbtb3,Zbtb3,TF,Transcription Factor
+344,Bcl11a,Bcl11a,TF,Transcription Factor
+345,Gsc,Gsc,TF,Transcription Factor
+346,Esr2,Esr2,TF,Transcription Factor
+347,Zfp612,Zfp612,TF,Transcription Factor
+348,Nr2c2,Nr2c2,TF,Transcription Factor
+349,Stox2,Stox2,TF,Transcription Factor
+350,Tfap4,Tfap4,TF,Transcription Factor
+351,Nkx1-1,Nkx1-1,TF,Transcription Factor
+352,Nfatc1,Nfatc1,TF,Transcription Factor
+353,Glis2,Glis2,TF,Transcription Factor
+354,Pknox2,Pknox2,TF,Transcription Factor
+355,Tfe3,Tfe3,TF,Transcription Factor
+356,Neurod2,Neurod2,TF,Transcription Factor
+357,Nfxl1,Nfxl1,TF,Transcription Factor
+358,Zbtb25,Zbtb25,TF,Transcription Factor
+359,Zbtb1,Zbtb1,TF,Transcription Factor
+360,Cc2d1a,Cc2d1a,TF,Transcription Factor
+361,Tsc22d1,Tsc22d1,TF,Transcription Factor
+362,Zfp141,Zfp141,TF,Transcription Factor
+363,Sall3,Sall3,TF,Transcription Factor
+364,Zbtb24,Zbtb24,TF,Transcription Factor
+365,Zfp867,Zfp867,TF,Transcription Factor
+366,Zfp977,Zfp977,TF,Transcription Factor
+367,Zfp976,Zfp976,TF,Transcription Factor
+368,Zfp975,Zfp975,TF,Transcription Factor
+369,Gm17067,Gm17067,TF,Transcription Factor
+370,Gm2381,Gm2381,TF,Transcription Factor
+371,Arntl2,Arntl2,TF,Transcription Factor
+372,Zic3,Zic3,TF,Transcription Factor
+373,Zfp236,Zfp236,TF,Transcription Factor
+374,Klf6,Klf6,TF,Transcription Factor
+375,Zfp516,Zfp516,TF,Transcription Factor
+376,Tshz1,Tshz1,TF,Transcription Factor
+377,Ndn,Ndn,TF,Transcription Factor
+378,Zkscan17,Zkscan17,TF,Transcription Factor
+379,Zfp715,Zfp715,TF,Transcription Factor
+380,Tfb1m,Tfb1m,TF,Transcription Factor
+381,Ikzf3,Ikzf3,TF,Transcription Factor
+382,Etv3,Etv3,TF,Transcription Factor
+383,Etv3l,Etv3l,TF,Transcription Factor
+384,Pitx2,Pitx2,TF,Transcription Factor
+385,Klf13,Klf13,TF,Transcription Factor
+386,Zfp951,Zfp951,TF,Transcription Factor
+387,Gm45871,Gm45871,TF,Transcription Factor
+388,Bnc1,Bnc1,TF,Transcription Factor
+389,Zfp219,Zfp219,TF,Transcription Factor
+390,Nkx2-3,Nkx2-3,TF,Transcription Factor
+391,Rreb1,Rreb1,TF,Transcription Factor
+392,Scx,Scx,TF,Transcription Factor
+393,Lhx4,Lhx4,TF,Transcription Factor
+394,Stat4,Stat4,TF,Transcription Factor
+395,Bcl11b,Bcl11b,TF,Transcription Factor
+396,Hsf1,Hsf1,TF,Transcription Factor
+397,Foxp2,Foxp2,TF,Transcription Factor
+398,Scrt1,Scrt1,TF,Transcription Factor
+399,Etv5,Etv5,TF,Transcription Factor
+400,Myrf,Myrf,TF,Transcription Factor
+401,Atf1,Atf1,TF,Transcription Factor
+402,Elf1,Elf1,TF,Transcription Factor
+403,Gpbp1,Gpbp1,TF,Transcription Factor
+404,Elf2,Elf2,TF,Transcription Factor
+405,Tfec,Tfec,TF,Transcription Factor
+406,Mxd3,Mxd3,TF,Transcription Factor
+407,Nacc1,Nacc1,TF,Transcription Factor
+408,Barhl2,Barhl2,TF,Transcription Factor
+409,Zfp644,Zfp644,TF,Transcription Factor
+410,Csrnp2,Csrnp2,TF,Transcription Factor
+411,Thra,Thra,TF,Transcription Factor
+412,Isl2,Isl2,TF,Transcription Factor
+413,Prdm14,Prdm14,TF,Transcription Factor
+414,Yy1,Yy1,TF,Transcription Factor
+415,Nr1d1,Nr1d1,TF,Transcription Factor
+416,Tfcp2,Tfcp2,TF,Transcription Factor
+417,Foxh1,Foxh1,TF,Transcription Factor
+418,Nfe2l3,Nfe2l3,TF,Transcription Factor
+419,Pou6f1,Pou6f1,TF,Transcription Factor
+420,Zfp658,Zfp658,TF,Transcription Factor
+421,Zfp719,Zfp719,TF,Transcription Factor
+422,Zfp819,Zfp819,TF,Transcription Factor
+423,Pax2,Pax2,TF,Transcription Factor
+424,Foxo3,Foxo3,TF,Transcription Factor
+425,Obox8,Obox8,TF,Transcription Factor
+426,Zfp251,Zfp251,TF,Transcription Factor
+427,Zfp7,Zfp7,TF,Transcription Factor
+428,Hand2,Hand2,TF,Transcription Factor
+429,Bcl6,Bcl6,TF,Transcription Factor
+430,Elk3,Elk3,TF,Transcription Factor
+431,Crem,Crem,TF,Transcription Factor
+432,Nr2e1,Nr2e1,TF,Transcription Factor
+433,Foxo1,Foxo1,TF,Transcription Factor
+434,Zfp647,Zfp647,TF,Transcription Factor
+435,Zbtb14,Zbtb14,TF,Transcription Factor
+436,Cc2d1b,Cc2d1b,TF,Transcription Factor
+437,Mef2c,Mef2c,TF,Transcription Factor
+438,Hdgf,Hdgf,TF,Transcription Factor
+439,Pou5f1,Pou5f1,TF,Transcription Factor
+440,Tlx1,Tlx1,TF,Transcription Factor
+441,Lbx1,Lbx1,TF,Transcription Factor
+442,Litaf,Litaf,TF,Transcription Factor
+443,Tbx18,Tbx18,TF,Transcription Factor
+444,Lef1,Lef1,TF,Transcription Factor
+445,Nfix,Nfix,TF,Transcription Factor
+446,Gata1,Gata1,TF,Transcription Factor
+447,Trp63,Trp63,TF,Transcription Factor
+448,Eno1,Eno1,TF,Transcription Factor
+449,Lyl1,Lyl1,TF,Transcription Factor
+450,Zkscan14,Zkscan14,TF,Transcription Factor
+451,Zkscan5,Zkscan5,TF,Transcription Factor
+452,Sall2,Sall2,TF,Transcription Factor
+453,Rara,Rara,TF,Transcription Factor
+454,Zfp655,Zfp655,TF,Transcription Factor
+455,Zscan25,Zscan25,TF,Transcription Factor
+456,Tfcp2l1,Tfcp2l1,TF,Transcription Factor
+457,Gm14444,Gm14444,TF,Transcription Factor
+458,Nr4a1,Nr4a1,TF,Transcription Factor
+459,Gm14393,Gm14393,TF,Transcription Factor
+460,Zfp438,Zfp438,TF,Transcription Factor
+461,Zeb1,Zeb1,TF,Transcription Factor
+462,Gm14399,Gm14399,TF,Transcription Factor
+463,Prdm1,Prdm1,TF,Transcription Factor
+464,Gm14443,Gm14443,TF,Transcription Factor
+465,Scrt2,Scrt2,TF,Transcription Factor
+466,Gm14391,Gm14391,TF,Transcription Factor
+467,Gli2,Gli2,TF,Transcription Factor
+468,Obox7,Obox7,TF,Transcription Factor
+469,Tcf15,Tcf15,TF,Transcription Factor
+470,Gm4631,Gm4631,TF,Transcription Factor
+471,Klf1,Klf1,TF,Transcription Factor
+472,Zfp968,Zfp968,TF,Transcription Factor
+473,Mkx,Mkx,TF,Transcription Factor
+474,Gm4724,Gm4724,TF,Transcription Factor
+475,Ddit3,Ddit3,TF,Transcription Factor
+476,Zfp965,Zfp965,TF,Transcription Factor
+477,Gm11007,Gm11007,TF,Transcription Factor
+478,Tgif1,Tgif1,TF,Transcription Factor
+479,Prrxl1,Prrxl1,TF,Transcription Factor
+480,Zfp969,Zfp969,TF,Transcription Factor
+481,Mef2d,Mef2d,TF,Transcription Factor
+482,Pgr,Pgr,TF,Transcription Factor
+483,Gm2007,Gm2007,TF,Transcription Factor
+484,Gm6710,Gm6710,TF,Transcription Factor
+485,Zfp966,Zfp966,TF,Transcription Factor
+486,Creb5,Creb5,TF,Transcription Factor
+487,Zfp202,Zfp202,TF,Transcription Factor
+488,Gm2026,Gm2026,TF,Transcription Factor
+489,Gm2004,Gm2004,TF,Transcription Factor
+490,Tead4,Tead4,TF,Transcription Factor
+491,2210418O10Rik,2210418O10Rik,TF,Transcription Factor
+492,Gm11009,Gm11009,TF,Transcription Factor
+493,Obox2,Obox2,TF,Transcription Factor
+494,Mixl1,Mixl1,TF,Transcription Factor
+495,Gm14434,Gm14434,TF,Transcription Factor
+496,Mitf,Mitf,TF,Transcription Factor
+497,Obox1,Obox1,TF,Transcription Factor
+498,Nr2c1,Nr2c1,TF,Transcription Factor
+499,Zfp967,Zfp967,TF,Transcription Factor
+500,Gli1,Gli1,TF,Transcription Factor
+501,Foxm1,Foxm1,TF,Transcription Factor
+502,Gm14308,Gm14308,TF,Transcription Factor
+503,Stat1,Stat1,TF,Transcription Factor
+504,Bhlha9,Bhlha9,TF,Transcription Factor
+505,Srebf1,Srebf1,TF,Transcription Factor
+506,Zfp973,Zfp973,TF,Transcription Factor
+507,Hes1,Hes1,TF,Transcription Factor
+508,Gm14305,Gm14305,TF,Transcription Factor
+509,Arnt2,Arnt2,TF,Transcription Factor
+510,Gm14295,Gm14295,TF,Transcription Factor
+511,Gm14408,Gm14408,TF,Transcription Factor
+512,Zfp410,Zfp410,TF,Transcription Factor
+513,Sox12,Sox12,TF,Transcription Factor
+514,Junb,Junb,TF,Transcription Factor
+515,Gm14419,Gm14419,TF,Transcription Factor
+516,Gm14401,Gm14401,TF,Transcription Factor
+517,Obox3,Obox3,TF,Transcription Factor
+518,Pitx3,Pitx3,TF,Transcription Factor
+519,Gm14410,Gm14410,TF,Transcription Factor
+520,Gm14409,Gm14409,TF,Transcription Factor
+521,Gm14412,Gm14412,TF,Transcription Factor
+522,Zfp740,Zfp740,TF,Transcription Factor
+523,Sim1,Sim1,TF,Transcription Factor
+524,Gata6,Gata6,TF,Transcription Factor
+525,Obox5,Obox5,TF,Transcription Factor
+526,Gmeb1,Gmeb1,TF,Transcription Factor
+527,Rarg,Rarg,TF,Transcription Factor
+528,Obox6,Obox6,TF,Transcription Factor
+529,Gm14418,Gm14418,TF,Transcription Factor
+530,Zfp970,Zfp970,TF,Transcription Factor
+531,Gm14403,Gm14403,TF,Transcription Factor
+532,Zbtb48,Zbtb48,TF,Transcription Factor
+533,Gfi1,Gfi1,TF,Transcription Factor
+534,Gm14406,Gm14406,TF,Transcription Factor
+535,Gm14322,Gm14322,TF,Transcription Factor
+536,Gm14325,Gm14325,TF,Transcription Factor
+537,Gm14327,Gm14327,TF,Transcription Factor
+538,Zfp972,Zfp972,TF,Transcription Factor
+539,Gm14326,Gm14326,TF,Transcription Factor
+540,Crx,Crx,TF,Transcription Factor
+541,Zfp971,Zfp971,TF,Transcription Factor
+542,Nfkb2,Nfkb2,TF,Transcription Factor
+543,Zfp949,Zfp949,TF,Transcription Factor
+544,Tle4,Tle4,TF,Transcription Factor
+545,Vax2,Vax2,TF,Transcription Factor
+546,C130026I21Rik,C130026I21Rik,TF,Transcription Factor
+547,Zfp931,Zfp931,TF,Transcription Factor
+548,Rfx6,Rfx6,TF,Transcription Factor
+549,Tbx15,Tbx15,TF,Transcription Factor
+550,Arx,Arx,TF,Transcription Factor
+551,Sp7,Sp7,TF,Transcription Factor
+552,Sp1,Sp1,TF,Transcription Factor
+553,Pitx1,Pitx1,TF,Transcription Factor
+554,Sox10,Sox10,TF,Transcription Factor
+555,A530032D15Rik,A530032D15Rik,TF,Transcription Factor
+556,Smad9,Smad9,TF,Transcription Factor
+557,Rfxap,Rfxap,TF,Transcription Factor
+558,Maf,Maf,TF,Transcription Factor
+559,Msc,Msc,TF,Transcription Factor
+560,Zfp148,Zfp148,TF,Transcription Factor
+561,Hnf4g,Hnf4g,TF,Transcription Factor
+562,Bsx,Bsx,TF,Transcription Factor
+563,Isl1,Isl1,TF,Transcription Factor
+564,Atmin,Atmin,TF,Transcription Factor
+565,Maff,Maff,TF,Transcription Factor
+566,Cebpe,Cebpe,TF,Transcription Factor
+567,Foxb2,Foxb2,TF,Transcription Factor
+568,Zfhx4,Zfhx4,TF,Transcription Factor
+569,Sp110,Sp110,TF,Transcription Factor
+570,Osr1,Osr1,TF,Transcription Factor
+571,Msgn1,Msgn1,TF,Transcription Factor
+572,Sox8,Sox8,TF,Transcription Factor
+573,Mlxip,Mlxip,TF,Transcription Factor
+574,Sohlh2,Sohlh2,TF,Transcription Factor
+575,Zfp791,Zfp791,TF,Transcription Factor
+576,Hey1,Hey1,TF,Transcription Factor
+577,Smad5,Smad5,TF,Transcription Factor
+578,Mycn,Mycn,TF,Transcription Factor
+579,Rorb,Rorb,TF,Transcription Factor
+580,En1,En1,TF,Transcription Factor
+581,Zbtb42,Zbtb42,TF,Transcription Factor
+582,Spz1,Spz1,TF,Transcription Factor
+583,Tbx6,Tbx6,TF,Transcription Factor
+584,Foxj1,Foxj1,TF,Transcription Factor
+585,Zfhx2,Zfhx2,TF,Transcription Factor
+586,Dmrta2,Dmrta2,TF,Transcription Factor
+587,Gsx2,Gsx2,TF,Transcription Factor
+588,Gm28047,Gm28047,TF,Transcription Factor
+589,Mtf2,Mtf2,TF,Transcription Factor
+590,Foxs1,Foxs1,TF,Transcription Factor
+591,Atf7,Atf7,TF,Transcription Factor
+592,Nhlh2,Nhlh2,TF,Transcription Factor
+593,Sp100,Sp100,TF,Transcription Factor
+594,Hoxc13,Hoxc13,TF,Transcription Factor
+595,Hoxc12,Hoxc12,TF,Transcription Factor
+596,Hoxc11,Hoxc11,TF,Transcription Factor
+597,Hoxc10,Hoxc10,TF,Transcription Factor
+598,Hoxc5,Hoxc5,TF,Transcription Factor
+599,Hoxc9,Hoxc9,TF,Transcription Factor
+600,Hoxc8,Hoxc8,TF,Transcription Factor
+601,Hoxc6,Hoxc6,TF,Transcription Factor
+602,Rxra,Rxra,TF,Transcription Factor
+603,Zfp704,Zfp704,TF,Transcription Factor
+604,Foxp1,Foxp1,TF,Transcription Factor
+605,Ss18l1,Ss18l1,TF,Transcription Factor
+606,Max,Max,TF,Transcription Factor
+607,Hoxc4,Hoxc4,TF,Transcription Factor
+608,Nfkb1,Nfkb1,TF,Transcription Factor
+609,A630001G21Rik,A630001G21Rik,TF,Transcription Factor
+610,Nrl,Nrl,TF,Transcription Factor
+611,Hes2,Hes2,TF,Transcription Factor
+612,Gm9833,Gm9833,TF,Transcription Factor
+613,Zic1,Zic1,TF,Transcription Factor
+614,Atf4,Atf4,TF,Transcription Factor
+615,Pou2f3,Pou2f3,TF,Transcription Factor
+616,Vsx2,Vsx2,TF,Transcription Factor
+617,Zic4,Zic4,TF,Transcription Factor
+618,Plscr1,Plscr1,TF,Transcription Factor
+619,Hes3,Hes3,TF,Transcription Factor
+620,Zfp423,Zfp423,TF,Transcription Factor
+621,Gsx1,Gsx1,TF,Transcription Factor
+622,Mrtfa,Mrtfa,TF,Transcription Factor
+623,Pdx1,Pdx1,TF,Transcription Factor
+624,Cdx2,Cdx2,TF,Transcription Factor
+625,Zfp131,Zfp131,TF,Transcription Factor
+626,Plscr2,Plscr2,TF,Transcription Factor
+627,Mga,Mga,TF,Transcription Factor
+628,Zfp930,Zfp930,TF,Transcription Factor
+629,1700057G04Rik,1700057G04Rik,TF,Transcription Factor
+630,Zfp868,Zfp868,TF,Transcription Factor
+631,Zfp964,Zfp964,TF,Transcription Factor
+632,Zfp869,Zfp869,TF,Transcription Factor
+633,Ep300,Ep300,TF,Transcription Factor
+634,Zfp963,Zfp963,TF,Transcription Factor
+635,Gm20422,Gm20422,TF,Transcription Factor
+636,Zfp866,Zfp866,TF,Transcription Factor
+637,Neurod6,Neurod6,TF,Transcription Factor
+638,Fezf1,Fezf1,TF,Transcription Factor
+639,Spib,Spib,TF,Transcription Factor
+640,Nr1h5,Nr1h5,TF,Transcription Factor
+641,Mxi1,Mxi1,TF,Transcription Factor
+642,Otp,Otp,TF,Transcription Factor
+643,Irf9,Irf9,TF,Transcription Factor
+644,Hsf3,Hsf3,TF,Transcription Factor
+645,Csrnp3,Csrnp3,TF,Transcription Factor
+646,Foxi1,Foxi1,TF,Transcription Factor
+647,Tef,Tef,TF,Transcription Factor
+648,Pbx4,Pbx4,TF,Transcription Factor
+649,Stat6,Stat6,TF,Transcription Factor
+650,Npas1,Npas1,TF,Transcription Factor
+651,Dmtf1,Dmtf1,TF,Transcription Factor
+652,Ar,Ar,TF,Transcription Factor
+653,Gata5,Gata5,TF,Transcription Factor
+654,Rfxank,Rfxank,TF,Transcription Factor
+655,Tfap2d,Tfap2d,TF,Transcription Factor
+656,Stat5b,Stat5b,TF,Transcription Factor
+657,Mef2a,Mef2a,TF,Transcription Factor
+658,Plagl2,Plagl2,TF,Transcription Factor
+659,Sall1,Sall1,TF,Transcription Factor
+660,Tfam,Tfam,TF,Transcription Factor
+661,Mef2b,Mef2b,TF,Transcription Factor
+662,Zfp558,Zfp558,TF,Transcription Factor
+663,Clock,Clock,TF,Transcription Factor
+664,Zbtb39,Zbtb39,TF,Transcription Factor
+665,Stat5a,Stat5a,TF,Transcription Factor
+666,Foxd2,Foxd2,TF,Transcription Factor
+667,Zfp623,Zfp623,TF,Transcription Factor
+668,Zfp707,Zfp707,TF,Transcription Factor
+669,Nr1h2,Nr1h2,TF,Transcription Factor
+670,E2f5,E2f5,TF,Transcription Factor
+671,Foxe3,Foxe3,TF,Transcription Factor
+672,Tfap2b,Tfap2b,TF,Transcription Factor
+673,Zfp317,Zfp317,TF,Transcription Factor
+674,Tcf7l2,Tcf7l2,TF,Transcription Factor
+675,Hsf2,Hsf2,TF,Transcription Factor
+676,Tal1,Tal1,TF,Transcription Factor
+677,Tcfl5,Tcfl5,TF,Transcription Factor
+678,Etv6,Etv6,TF,Transcription Factor
+679,Zfp560,Zfp560,TF,Transcription Factor
+680,Alx1,Alx1,TF,Transcription Factor
+681,Trp73,Trp73,TF,Transcription Factor
+682,Bhlhe22,Bhlhe22,TF,Transcription Factor
+683,Zfp426,Zfp426,TF,Transcription Factor
+684,Crebl2,Crebl2,TF,Transcription Factor
+685,Foxo4,Foxo4,TF,Transcription Factor
+686,Stat3,Stat3,TF,Transcription Factor
+687,Zfp266,Zfp266,TF,Transcription Factor
+688,AW822073,AW822073,TF,Transcription Factor
+689,Zfp846,Zfp846,TF,Transcription Factor
+690,Duxf3,Duxf3,TF,Transcription Factor
+691,Gm4981,Gm4981,TF,Transcription Factor
+692,Maz,Maz,TF,Transcription Factor
+693,Nkx6-3,Nkx6-3,TF,Transcription Factor
+694,Nfatc4,Nfatc4,TF,Transcription Factor
+695,5430403G16Rik,5430403G16Rik,TF,Transcription Factor
+696,4930522L14Rik,4930522L14Rik,TF,Transcription Factor
+697,Gfi1b,Gfi1b,TF,Transcription Factor
+698,Gm15446,Gm15446,TF,Transcription Factor
+699,Hmx1,Hmx1,TF,Transcription Factor
+700,Zfp932,Zfp932,TF,Transcription Factor
+701,Gli3,Gli3,TF,Transcription Factor
+702,Gm17655,Gm17655,TF,Transcription Factor
+703,Gm35315,Gm35315,TF,Transcription Factor
+704,Tbx10,Tbx10,TF,Transcription Factor
+705,Bhlhe23,Bhlhe23,TF,Transcription Factor
+706,Zfp605,Zfp605,TF,Transcription Factor
+707,Pou6f2,Pou6f2,TF,Transcription Factor
+708,Hinfp,Hinfp,TF,Transcription Factor
+709,Zfp607b,Zfp607b,TF,Transcription Factor
+710,Nr1d2,Nr1d2,TF,Transcription Factor
+711,Zfp626,Zfp626,TF,Transcription Factor
+712,Thrb,Thrb,TF,Transcription Factor
+713,Rarb,Rarb,TF,Transcription Factor
+714,Zfp607a,Zfp607a,TF,Transcription Factor
+715,Elk1,Elk1,TF,Transcription Factor
+716,Crebrf,Crebrf,TF,Transcription Factor
+717,Zfp974,Zfp974,TF,Transcription Factor
+718,Zfp780b,Zfp780b,TF,Transcription Factor
+719,Zfp850,Zfp850,TF,Transcription Factor
+720,Nkx2-5,Nkx2-5,TF,Transcription Factor
+721,Nr2f2,Nr2f2,TF,Transcription Factor
+722,Rest,Rest,TF,Transcription Factor
+723,Zfp300,Zfp300,TF,Transcription Factor
+724,Hif3a,Hif3a,TF,Transcription Factor
+725,Myf5,Myf5,TF,Transcription Factor
+726,Myf6,Myf6,TF,Transcription Factor
+727,Hsfy2,Hsfy2,TF,Transcription Factor
+728,Zfp553,Zfp553,TF,Transcription Factor
+729,Zfp771,Zfp771,TF,Transcription Factor
+730,Tfdp2,Tfdp2,TF,Transcription Factor
+731,Barhl1,Barhl1,TF,Transcription Factor
+732,Ebf1,Ebf1,TF,Transcription Factor
+733,Irx3,Irx3,TF,Transcription Factor
+734,Satb2,Satb2,TF,Transcription Factor
+735,Zfp683,Zfp683,TF,Transcription Factor
+736,Dmbx1,Dmbx1,TF,Transcription Factor
+737,Irx5,Irx5,TF,Transcription Factor
+738,Irx6,Irx6,TF,Transcription Factor
+739,Zhx1,Zhx1,TF,Transcription Factor
+740,Prdm16,Prdm16,TF,Transcription Factor
+741,Sox30,Sox30,TF,Transcription Factor
+742,Zfp960,Zfp960,TF,Transcription Factor
+743,Zfp97,Zfp97,TF,Transcription Factor
+744,Mlx,Mlx,TF,Transcription Factor
+745,Hlx,Hlx,TF,Transcription Factor
+746,Zfp473,Zfp473,TF,Transcription Factor
+747,Zfp808,Zfp808,TF,Transcription Factor
+748,Nfib,Nfib,TF,Transcription Factor
+749,Gm3604,Gm3604,TF,Transcription Factor
+750,Zfp935,Zfp935,TF,Transcription Factor
+751,Gm49359,Gm49359,TF,Transcription Factor
+752,Zfp934,Zfp934,TF,Transcription Factor
+753,Platr25,Platr25,TF,Transcription Factor
+754,Gm5141,Gm5141,TF,Transcription Factor
+755,E2f7,E2f7,TF,Transcription Factor
+756,Zbtb38,Zbtb38,TF,Transcription Factor
+757,Batf2,Batf2,TF,Transcription Factor
+758,Emx1,Emx1,TF,Transcription Factor
+759,P2rx2,P2rx2,TF,Transcription Factor
+760,Atf5,Atf5,TF,Transcription Factor
+761,Esrra,Esrra,TF,Transcription Factor
+762,Cdx4,Cdx4,TF,Transcription Factor
+763,Rhox5,Rhox5,TF,Transcription Factor
+764,Noto,Noto,TF,Transcription Factor
+765,Stat2,Stat2,TF,Transcription Factor
+766,Bhlhe40,Bhlhe40,TF,Transcription Factor
+767,Zfp367,Zfp367,TF,Transcription Factor
+768,Sox3,Sox3,TF,Transcription Factor
+769,Cphx1,Cphx1,TF,Transcription Factor
+770,Duxbl1,Duxbl1,TF,Transcription Factor
+771,Hes5,Hes5,TF,Transcription Factor
+772,Hhex,Hhex,TF,Transcription Factor
+773,Atoh1,Atoh1,TF,Transcription Factor
+774,Zfp768,Zfp768,TF,Transcription Factor
+775,Mypop,Mypop,TF,Transcription Factor
+776,Zbtb2,Zbtb2,TF,Transcription Factor
+777,Spi1,Spi1,TF,Transcription Factor
+778,Zfp747,Zfp747,TF,Transcription Factor
+779,Foxa3,Foxa3,TF,Transcription Factor
+780,9130019O22Rik,9130019O22Rik,TF,Transcription Factor
+781,E430018J23Rik,E430018J23Rik,TF,Transcription Factor
+782,Zfp764,Zfp764,TF,Transcription Factor
+784,Gm10772,Gm10772,TF,Transcription Factor
+785,Egr4,Egr4,TF,Transcription Factor
+787,Zfp689,Zfp689,TF,Transcription Factor
+788,Pax4,Pax4,TF,Transcription Factor
+789,Neurog1,Neurog1,TF,Transcription Factor
+790,Foxr1,Foxr1,TF,Transcription Factor
+791,Esr1,Esr1,TF,Transcription Factor
+792,Zkscan4,Zkscan4,TF,Transcription Factor
+793,Zkscan8,Zkscan8,TF,Transcription Factor
+794,Zfp160,Zfp160,TF,Transcription Factor
+795,Foxl2,Foxl2,TF,Transcription Factor
+796,Runx2,Runx2,TF,Transcription Factor
+797,Zfp677,Zfp677,TF,Transcription Factor
+798,Zfp54,Zfp54,TF,Transcription Factor
+799,Gata3,Gata3,TF,Transcription Factor
+800,Nr2e3,Nr2e3,TF,Transcription Factor
+801,Zfp51,Zfp51,TF,Transcription Factor
+802,Zfp53,Zfp53,TF,Transcription Factor
+803,Zfp52,Zfp52,TF,Transcription Factor
+804,Zfp948,Zfp948,TF,Transcription Factor
+805,Cdc5l,Cdc5l,TF,Transcription Factor
+806,Runx3,Runx3,TF,Transcription Factor
+807,Prdm5,Prdm5,TF,Transcription Factor
+808,Six5,Six5,TF,Transcription Factor
+809,Ascl3,Ascl3,TF,Transcription Factor
+810,Figla,Figla,TF,Transcription Factor
+811,Spdef,Spdef,TF,Transcription Factor
+812,Thap1,Thap1,TF,Transcription Factor
+813,Ski,Ski,TF,Transcription Factor
+814,Zfp958,Zfp958,TF,Transcription Factor
+815,Sox14,Sox14,TF,Transcription Factor
+816,Grhl3,Grhl3,TF,Transcription Factor
+817,Zfp709,Zfp709,TF,Transcription Factor
+818,Zfp882,Zfp882,TF,Transcription Factor
+819,Zfp617,Zfp617,TF,Transcription Factor
+820,Zbtb37,Zbtb37,TF,Transcription Factor
+821,Msx1,Msx1,TF,Transcription Factor
+822,Zfp961,Zfp961,TF,Transcription Factor
+823,Zfp523,Zfp523,TF,Transcription Factor
+824,Zfp62,Zfp62,TF,Transcription Factor
+825,Zfp629,Zfp629,TF,Transcription Factor
+826,Irf5,Irf5,TF,Transcription Factor
+827,E2f1,E2f1,TF,Transcription Factor
+828,Zfp341,Zfp341,TF,Transcription Factor
+829,Esrrg,Esrrg,TF,Transcription Factor
+830,Ppard,Ppard,TF,Transcription Factor
+831,Ikzf4,Ikzf4,TF,Transcription Factor
+832,Klf2,Klf2,TF,Transcription Factor
+833,E2f2,E2f2,TF,Transcription Factor
+834,Shox2,Shox2,TF,Transcription Factor
+835,Aebp2,Aebp2,TF,Transcription Factor
+836,Zfp319,Zfp319,TF,Transcription Factor
+837,Sp5,Sp5,TF,Transcription Factor
+838,Fosb,Fosb,TF,Transcription Factor
+839,Zfp46,Zfp46,TF,Transcription Factor
+840,Tead3,Tead3,TF,Transcription Factor
+841,Zbtb7b,Zbtb7b,TF,Transcription Factor
+842,Zfp143,Zfp143,TF,Transcription Factor
+843,Dmrta1,Dmrta1,TF,Transcription Factor
+844,Zfp352,Zfp352,TF,Transcription Factor
+845,Six3,Six3,TF,Transcription Factor
+846,Srf,Srf,TF,Transcription Factor
+847,Zfp668,Zfp668,TF,Transcription Factor
+848,Pbxip1,Pbxip1,TF,Transcription Factor
+849,Isx,Isx,TF,Transcription Factor
+850,Alx3,Alx3,TF,Transcription Factor
+851,Nrf1,Nrf1,TF,Transcription Factor
+852,Myrfl,Myrfl,TF,Transcription Factor
+853,Skor1,Skor1,TF,Transcription Factor
+854,Gm12845,Gm12845,TF,Transcription Factor
+855,Zbtb40,Zbtb40,TF,Transcription Factor
+856,Klf17,Klf17,TF,Transcription Factor
+857,Zfp287,Zfp287,TF,Transcription Factor
+858,Zfp286,Zfp286,TF,Transcription Factor
+859,Jun,Jun,TF,Transcription Factor
+860,Neurod4,Neurod4,TF,Transcription Factor
+861,Prox1,Prox1,TF,Transcription Factor
+862,Smad3,Smad3,TF,Transcription Factor
+863,Crebzf,Crebzf,TF,Transcription Factor
+864,Pparg,Pparg,TF,Transcription Factor
+865,Elk4,Elk4,TF,Transcription Factor
+866,Foxn1,Foxn1,TF,Transcription Factor
+867,Etv4,Etv4,TF,Transcription Factor
+868,Meox1,Meox1,TF,Transcription Factor
+869,Nkx3-2,Nkx3-2,TF,Transcription Factor
+870,Purg,Purg,TF,Transcription Factor
+871,Tfeb,Tfeb,TF,Transcription Factor
+872,Zfp296,Zfp296,TF,Transcription Factor
+873,Klf14,Klf14,TF,Transcription Factor
+874,Zfp354c,Zfp354c,TF,Transcription Factor
+875,Zfp879,Zfp879,TF,Transcription Factor
+876,Batf3,Batf3,TF,Transcription Factor
+877,Zfp454,Zfp454,TF,Transcription Factor
+878,Zfp2,Zfp2,TF,Transcription Factor
+879,Zfp354b,Zfp354b,TF,Transcription Factor
+880,Atf3,Atf3,TF,Transcription Factor
+881,Prop1,Prop1,TF,Transcription Factor
+882,Foxn4,Foxn4,TF,Transcription Factor
+883,Nfia,Nfia,TF,Transcription Factor
+884,Zfp354a,Zfp354a,TF,Transcription Factor
+885,Plagl1,Plagl1,TF,Transcription Factor
+886,2610044O15Rik8,2610044O15Rik8,TF,Transcription Factor
+887,Mecom,Mecom,TF,Transcription Factor
+888,Zscan29,Zscan29,TF,Transcription Factor
+889,Mynn,Mynn,TF,Transcription Factor
+890,Zfp422,Zfp422,TF,Transcription Factor
+891,Zfp872,Zfp872,TF,Transcription Factor
+892,Zfp809,Zfp809,TF,Transcription Factor
+893,Zfp599,Zfp599,TF,Transcription Factor
+894,Zkscan6,Zkscan6,TF,Transcription Factor
+895,Zfp810,Zfp810,TF,Transcription Factor
+896,Pknox1,Pknox1,TF,Transcription Factor
+897,Zfp637,Zfp637,TF,Transcription Factor
+898,Gmeb2,Gmeb2,TF,Transcription Factor
+899,Zfp239,Zfp239,TF,Transcription Factor
+900,Neurog3,Neurog3,TF,Transcription Factor
+901,Hivep2,Hivep2,TF,Transcription Factor
+902,Relb,Relb,TF,Transcription Factor
+903,Irf3,Irf3,TF,Transcription Factor
+904,Creb3l4,Creb3l4,TF,Transcription Factor
+905,Tchp,Tchp,TF,Transcription Factor
+906,Wiz,Wiz,TF,Transcription Factor
+907,Zfp248,Zfp248,TF,Transcription Factor
+908,Zfp9,Zfp9,TF,Transcription Factor
+909,Olig3,Olig3,TF,Transcription Factor
+910,Skil,Skil,TF,Transcription Factor
+911,Carf,Carf,TF,Transcription Factor
+912,Zfp871,Zfp871,TF,Transcription Factor
+913,Zfp811,Zfp811,TF,Transcription Factor
+914,Zfp799,Zfp799,TF,Transcription Factor
+915,Zfp870,Zfp870,TF,Transcription Factor
+916,Zfp472,Zfp472,TF,Transcription Factor
+917,Creb3l2,Creb3l2,TF,Transcription Factor
+918,Zfp952,Zfp952,TF,Transcription Factor
+919,Zfp763,Zfp763,TF,Transcription Factor
+920,Zfp563,Zfp563,TF,Transcription Factor
+921,Zfp955a,Zfp955a,TF,Transcription Factor
+922,Zfp955b,Zfp955b,TF,Transcription Factor
+923,Zfp81,Zfp81,TF,Transcription Factor
+924,Zfp101,Zfp101,TF,Transcription Factor
+926,Hsf4,Hsf4,TF,Transcription Factor
+927,Myb,Myb,TF,Transcription Factor
+928,E2f4,E2f4,TF,Transcription Factor
+929,Zfp639,Zfp639,TF,Transcription Factor
+930,Tbx20,Tbx20,TF,Transcription Factor
+931,Mesp1,Mesp1,TF,Transcription Factor
+932,Mesp2,Mesp2,TF,Transcription Factor
+933,Dlx1,Dlx1,TF,Transcription Factor
+934,Hnf1a,Hnf1a,TF,Transcription Factor
+935,Dlx2,Dlx2,TF,Transcription Factor
+936,Tcf21,Tcf21,TF,Transcription Factor
+937,Gbx1,Gbx1,TF,Transcription Factor
+938,Mafg,Mafg,TF,Transcription Factor
+939,Foxd3,Foxd3,TF,Transcription Factor
+940,Zfp57,Zfp57,TF,Transcription Factor
+941,T,T,TF,Transcription Factor
+942,Zfp710,Zfp710,TF,Transcription Factor
+943,Rorc,Rorc,TF,Transcription Factor
+944,Prrx1,Prrx1,TF,Transcription Factor
+945,Tcf7,Tcf7,TF,Transcription Factor
+946,Gbx2,Gbx2,TF,Transcription Factor
+947,Foxj3,Foxj3,TF,Transcription Factor
+948,Hivep3,Hivep3,TF,Transcription Factor
+949,Foxo6,Foxo6,TF,Transcription Factor
+950,Nr2f6,Nr2f6,TF,Transcription Factor
+951,Rxrb,Rxrb,TF,Transcription Factor
+952,Ubp1,Ubp1,TF,Transcription Factor
+953,Nfyc,Nfyc,TF,Transcription Factor
+954,Pax7,Pax7,TF,Transcription Factor
+955,Zfp69,Zfp69,TF,Transcription Factor
+956,Rlf,Rlf,TF,Transcription Factor
+957,Mycl,Mycl,TF,Transcription Factor
+958,Heyl,Heyl,TF,Transcription Factor
+959,Tead1,Tead1,TF,Transcription Factor
+960,Jund,Jund,TF,Transcription Factor
+961,Rora,Rora,TF,Transcription Factor
+962,Lrrfip1,Lrrfip1,TF,Transcription Factor
+963,Foxb1,Foxb1,TF,Transcription Factor
+964,En2,En2,TF,Transcription Factor
+965,Zfp358,Zfp358,TF,Transcription Factor
+966,Nr1h3,Nr1h3,TF,Transcription Factor
+967,Zgpat,Zgpat,TF,Transcription Factor
+968,Eomes,Eomes,TF,Transcription Factor
+969,Tead2,Tead2,TF,Transcription Factor
+970,Tbx19,Tbx19,TF,Transcription Factor
+971,Irf1,Irf1,TF,Transcription Factor
+972,Mnx1,Mnx1,TF,Transcription Factor
+973,Zbtb17,Zbtb17,TF,Transcription Factor
+974,Tlx2,Tlx2,TF,Transcription Factor
+975,Lbx2,Lbx2,TF,Transcription Factor
+976,Sp3,Sp3,TF,Transcription Factor
+977,Arntl,Arntl,TF,Transcription Factor
+978,Prdm2,Prdm2,TF,Transcription Factor
+979,Rbpj,Rbpj,TF,Transcription Factor
+980,Hoxa4,Hoxa4,TF,Transcription Factor
+981,Hoxa5,Hoxa5,TF,Transcription Factor
+982,Hoxa6,Hoxa6,TF,Transcription Factor
+983,Hoxa7,Hoxa7,TF,Transcription Factor
+984,Hoxa9,Hoxa9,TF,Transcription Factor
+985,Hoxa10,Hoxa10,TF,Transcription Factor
+986,Hoxa11,Hoxa11,TF,Transcription Factor
+987,Zfp990,Zfp990,TF,Transcription Factor
+989,Zfp980,Zfp980,TF,Transcription Factor
+990,Tcf12,Tcf12,TF,Transcription Factor
+991,Irf8,Irf8,TF,Transcription Factor
+992,Zfp986,Zfp986,TF,Transcription Factor
+993,Zfp987,Zfp987,TF,Transcription Factor
+994,Zfp600,Zfp600,TF,Transcription Factor
+995,Zfp992,Zfp992,TF,Transcription Factor
+996,Zfp981,Zfp981,TF,Transcription Factor
+997,Foxf1,Foxf1,TF,Transcription Factor
+998,Hoxa1,Hoxa1,TF,Transcription Factor
+999,Hoxa2,Hoxa2,TF,Transcription Factor
+1000,Zfp989,Zfp989,TF,Transcription Factor
+1001,Hoxa3,Hoxa3,TF,Transcription Factor
+1002,Rex2,Rex2,TF,Transcription Factor
+1003,Zfp991,Zfp991,TF,Transcription Factor
+1004,Hoxa13,Hoxa13,TF,Transcription Factor
+1005,Hes6,Hes6,TF,Transcription Factor
+1006,Evx1,Evx1,TF,Transcription Factor
+1007,Zfp988,Zfp988,TF,Transcription Factor
+1008,Zfp978,Zfp978,TF,Transcription Factor
+1009,Zfp982,Zfp982,TF,Transcription Factor
+1010,Zfp985,Zfp985,TF,Transcription Factor
+1011,Zfp979,Zfp979,TF,Transcription Factor
+1012,Foxc2,Foxc2,TF,Transcription Factor
+1013,Foxl1,Foxl1,TF,Transcription Factor
+1014,Sp9,Sp9,TF,Transcription Factor
+1015,Zfp180,Zfp180,TF,Transcription Factor
+1016,Zfp112,Zfp112,TF,Transcription Factor
+1017,Zfp235,Zfp235,TF,Transcription Factor
+1018,Zfp114,Zfp114,TF,Transcription Factor
+1019,Csrnp1,Csrnp1,TF,Transcription Factor
+1020,Zfp111,Zfp111,TF,Transcription Factor
+1021,Zfp109,Zfp109,TF,Transcription Factor
+1022,Zfp280d,Zfp280d,TF,Transcription Factor
+1023,Zfp108,Zfp108,TF,Transcription Factor
+1024,Zfp93,Zfp93,TF,Transcription Factor
+1025,Snai3,Snai3,TF,Transcription Factor
+1026,Hes7,Hes7,TF,Transcription Factor
+1027,Zfp61,Zfp61,TF,Transcription Factor
+1028,Zfp94,Zfp94,TF,Transcription Factor
+1029,Myog,Myog,TF,Transcription Factor
+1030,Rfx7,Rfx7,TF,Transcription Factor
+1031,Tbx3,Tbx3,TF,Transcription Factor
+1032,Foxk2,Foxk2,TF,Transcription Factor
+1033,Klf3,Klf3,TF,Transcription Factor
+1034,Pou3f1,Pou3f1,TF,Transcription Factor
+1035,Tbx5,Tbx5,TF,Transcription Factor
+1036,Mtf1,Mtf1,TF,Transcription Factor
+1037,Pcbp1,Pcbp1,TF,Transcription Factor
+1038,Mxd1,Mxd1,TF,Transcription Factor
+1039,Ptf1a,Ptf1a,TF,Transcription Factor
+1040,Lhx5,Lhx5,TF,Transcription Factor
+1041,Zfp628,Zfp628,TF,Transcription Factor
+1042,Zfp750,Zfp750,TF,Transcription Factor
+1043,Zfp651,Zfp651,TF,Transcription Factor
+1044,Onecut1,Onecut1,TF,Transcription Factor
+1045,Zscan2,Zscan2,TF,Transcription Factor
+1046,Zfp84,Zfp84,TF,Transcription Factor
+1047,Sox18,Sox18,TF,Transcription Factor
+1048,Zfp790,Zfp790,TF,Transcription Factor
+1049,Zfp524,Zfp524,TF,Transcription Factor
+1050,Tfap2e,Tfap2e,TF,Transcription Factor
+1051,Gm44973,Gm44973,TF,Transcription Factor
+1052,Zfp940,Zfp940,TF,Transcription Factor
+1053,Zfp865,Zfp865,TF,Transcription Factor
+1054,Zfp280b,Zfp280b,TF,Transcription Factor
+1055,Zfp420,Zfp420,TF,Transcription Factor
+1056,Zfp27,Zfp27,TF,Transcription Factor
+1057,Zfp383,Zfp383,TF,Transcription Factor
+1058,Klf7,Klf7,TF,Transcription Factor
+1059,Zfp74,Zfp74,TF,Transcription Factor
+1060,Zfp784,Zfp784,TF,Transcription Factor
+1061,Zfp580,Zfp580,TF,Transcription Factor
+1062,Zscan20,Zscan20,TF,Transcription Factor
+1063,Creb1,Creb1,TF,Transcription Factor
+1064,Zfp362,Zfp362,TF,Transcription Factor
+1065,Pou2f1,Pou2f1,TF,Transcription Factor
+1066,2010315B03Rik,2010315B03Rik,TF,Transcription Factor
+1067,Pcbp3,Pcbp3,TF,Transcription Factor
+1068,Zfp445,Zfp445,TF,Transcription Factor
+1069,Zfp568,Zfp568,TF,Transcription Factor
+1070,Zkscan7,Zkscan7,TF,Transcription Factor
+1071,Zfp105,Zfp105,TF,Transcription Factor
+1072,Zfp14,Zfp14,TF,Transcription Factor
+1073,Trp53,Trp53,TF,Transcription Factor
+1074,Dmrtc2,Dmrtc2,TF,Transcription Factor
+1075,Klf4,Klf4,TF,Transcription Factor
+1076,Zfp82,Zfp82,TF,Transcription Factor
+1077,Elf3,Elf3,TF,Transcription Factor
+1078,Zfp566,Zfp566,TF,Transcription Factor
+1079,Pou3f2,Pou3f2,TF,Transcription Factor
+1080,Zfp260,Zfp260,TF,Transcription Factor
+1081,Zfp382,Zfp382,TF,Transcription Factor
+1082,Zfp146,Zfp146,TF,Transcription Factor
+1083,Sox6,Sox6,TF,Transcription Factor
+1084,Sox15,Sox15,TF,Transcription Factor
+1085,Tgif2,Tgif2,TF,Transcription Factor
+1086,Ovol3,Ovol3,TF,Transcription Factor
+1087,Zfp787,Zfp787,TF,Transcription Factor
+1088,Zfp408,Zfp408,TF,Transcription Factor
+1089,Zfp444,Zfp444,TF,Transcription Factor
+1090,Bach2,Bach2,TF,Transcription Factor
+1091,Zscan5b,Zscan5b,TF,Transcription Factor
+1092,Zbtb4,Zbtb4,TF,Transcription Factor
+1093,Myt1,Myt1,TF,Transcription Factor
+1094,Hnf1b,Hnf1b,TF,Transcription Factor
+1095,Zfp667,Zfp667,TF,Transcription Factor
+1096,Zfp583,Zfp583,TF,Transcription Factor
+1097,Gm3854,Gm3854,TF,Transcription Factor
+1098,Zfp78,Zfp78,TF,Transcription Factor
+1099,Zkscan16,Zkscan16,TF,Transcription Factor
+1100,Zfp28,Zfp28,TF,Transcription Factor
+1101,Phox2b,Phox2b,TF,Transcription Factor
+1102,Plag1,Plag1,TF,Transcription Factor
+1103,2610008E11Rik,2610008E11Rik,TF,Transcription Factor
+1104,Rxrg,Rxrg,TF,Transcription Factor
+1105,Zim1,Zim1,TF,Transcription Factor
+1106,Zfp513,Zfp513,TF,Transcription Factor
+1107,Lmx1a,Lmx1a,TF,Transcription Factor
+1108,Cux2,Cux2,TF,Transcription Factor
+1109,Peg3,Peg3,TF,Transcription Factor
+1110,Pbx1,Pbx1,TF,Transcription Factor
+1111,Atf2,Atf2,TF,Transcription Factor
+1112,Lhx1,Lhx1,TF,Transcription Factor
+1113,Dbp,Dbp,TF,Transcription Factor
+1114,Zfp418,Zfp418,TF,Transcription Factor
+1115,Zfp772,Zfp772,TF,Transcription Factor
+1116,Fosl2,Fosl2,TF,Transcription Factor
+1117,Zfp292,Zfp292,TF,Transcription Factor
+1118,Evx2,Evx2,TF,Transcription Factor
+1119,Hoxd13,Hoxd13,TF,Transcription Factor
+1120,Hoxd12,Hoxd12,TF,Transcription Factor
+1121,Hoxd11,Hoxd11,TF,Transcription Factor
+1122,Hoxd10,Hoxd10,TF,Transcription Factor
+1123,Hoxd9,Hoxd9,TF,Transcription Factor
+1124,Hoxd8,Hoxd8,TF,Transcription Factor
+1125,Hoxd3,Hoxd3,TF,Transcription Factor
+1126,Hoxd4,Hoxd4,TF,Transcription Factor
+1127,Gm28230,Gm28230,TF,Transcription Factor
+1128,Hoxd1,Hoxd1,TF,Transcription Factor
+1129,Mlxipl,Mlxipl,TF,Transcription Factor
+1130,Nfx1,Nfx1,TF,Transcription Factor
+1131,Hand1,Hand1,TF,Transcription Factor
+1132,Nfe2l2,Nfe2l2,TF,Transcription Factor
+1133,Atf6,Atf6,TF,Transcription Factor
+1134,Aff3,Aff3,TF,Transcription Factor
+1135,Prrx2,Prrx2,TF,Transcription Factor
+1136,Cux1,Cux1,TF,Transcription Factor
+1137,Tcf3,Tcf3,TF,Transcription Factor
+1139,Patz1,Patz1,TF,Transcription Factor
+1140,Onecut3,Onecut3,TF,Transcription Factor
+1141,Zkscan1,Zkscan1,TF,Transcription Factor
+1142,Zscan21,Zscan21,TF,Transcription Factor
+1143,Zfp692,Zfp692,TF,Transcription Factor
+1144,Npas2,Npas2,TF,Transcription Factor
+1145,Zfp113,Zfp113,TF,Transcription Factor
+1146,Myef2,Myef2,TF,Transcription Factor
+1147,Zfp672,Zfp672,TF,Transcription Factor
+1148,Klf16,Klf16,TF,Transcription Factor
+1149,Ikzf2,Ikzf2,TF,Transcription Factor
+1150,Ascl5,Ascl5,TF,Transcription Factor
+1151,Creb3l1,Creb3l1,TF,Transcription Factor
+1152,Zfp157,Zfp157,TF,Transcription Factor
+1153,Zfp68,Zfp68,TF,Transcription Factor
+1154,A430033K04Rik,A430033K04Rik,TF,Transcription Factor
+1156,Zfp574,Zfp574,TF,Transcription Factor
+1157,Zik1,Zik1,TF,Transcription Factor
+1158,Rfx8,Rfx8,TF,Transcription Factor
+1159,Tbx2,Tbx2,TF,Transcription Factor
+1160,Tbx4,Tbx4,TF,Transcription Factor
+1161,Nr1i3,Nr1i3,TF,Transcription Factor
+1162,Creb3l3,Creb3l3,TF,Transcription Factor
+1163,Uncx,Uncx,TF,Transcription Factor
+1164,Zbtb7a,Zbtb7a,TF,Transcription Factor
+1165,Zscan4b,Zscan4b,TF,Transcription Factor
+1166,Mafk,Mafk,TF,Transcription Factor
+1167,Zscan4c,Zscan4c,TF,Transcription Factor
+1168,Zscan4-ps1,Zscan4-ps1,TF,Transcription Factor
+1169,Zscan4d,Zscan4d,TF,Transcription Factor
+1170,Zscan4e,Zscan4e,TF,Transcription Factor
+1171,Zscan4f,Zscan4f,TF,Transcription Factor
+1172,Zscan4-ps2,Zscan4-ps2,TF,Transcription Factor
+1173,Zscan4-ps3,Zscan4-ps3,TF,Transcription Factor
+1174,Mafb,Mafb,TF,Transcription Factor
+1175,Foxk1,Foxk1,TF,Transcription Factor
+1176,Creb3,Creb3,TF,Transcription Factor
+1177,Zbtb32,Zbtb32,TF,Transcription Factor
+1178,Zhx3,Zhx3,TF,Transcription Factor
+1179,Etv2,Etv2,TF,Transcription Factor
+1180,Zfp281,Zfp281,TF,Transcription Factor
+1181,Nr5a2,Nr5a2,TF,Transcription Factor
+1182,Nfic,Nfic,TF,Transcription Factor
+1183,Zfp551,Zfp551,TF,Transcription Factor
+1184,Zfp606,Zfp606,TF,Transcription Factor
+1185,Pax5,Pax5,TF,Transcription Factor
+1186,Zbtb5,Zbtb5,TF,Transcription Factor
+1187,Pax8,Pax8,TF,Transcription Factor
+1188,Zfp11,Zfp11,TF,Transcription Factor
+1189,Gm10778,Gm10778,TF,Transcription Factor
+1190,Zfp433,Zfp433,TF,Transcription Factor
+1191,Gm4767,Gm4767,TF,Transcription Factor
+1192,Gm32687,Gm32687,TF,Transcription Factor
+1193,Zscan18,Zscan18,TF,Transcription Factor
+1194,Zfp873,Zfp873,TF,Transcription Factor
+1195,BC024063,BC024063,TF,Transcription Factor
+1196,AU041133,AU041133,TF,Transcription Factor
+1197,Zfp329,Zfp329,TF,Transcription Factor
+1198,Zfp938,Zfp938,TF,Transcription Factor
+1199,Gm4924,Gm4924,TF,Transcription Factor
+1200,Nfyb,Nfyb,TF,Transcription Factor
+1201,Sox17,Sox17,TF,Transcription Factor
+1202,Zfp128,Zfp128,TF,Transcription Factor
+1203,Zscan22,Zscan22,TF,Transcription Factor
+1204,Zfp324,Zfp324,TF,Transcription Factor
+1205,Ikzf5,Ikzf5,TF,Transcription Factor
+1206,Foxe1,Foxe1,TF,Transcription Factor
+1207,Hmx3,Hmx3,TF,Transcription Factor
+1208,Hmx2,Hmx2,TF,Transcription Factor
+1209,Pou2f2,Pou2f2,TF,Transcription Factor
+1210,Gtf2i,Gtf2i,TF,Transcription Factor
+1211,Nr4a3,Nr4a3,TF,Transcription Factor
+1212,Zfp526,Zfp526,TF,Transcription Factor
+1213,Zfp189,Zfp189,TF,Transcription Factor
+1214,Erf,Erf,TF,Transcription Factor
+1215,Gtf2ird1,Gtf2ird1,TF,Transcription Factor
+1216,Bcl6b,Bcl6b,TF,Transcription Factor
+1217,Tal2,Tal2,TF,Transcription Factor
+1218,Nkx1-2,Nkx1-2,TF,Transcription Factor
+1219,Myod1,Myod1,TF,Transcription Factor
+1220,Mybl2,Mybl2,TF,Transcription Factor
+1221,Hsf5,Hsf5,TF,Transcription Factor
+1222,Arid3c,Arid3c,TF,Transcription Factor
+1223,Pou3f3,Pou3f3,TF,Transcription Factor
+1224,Lhx9,Lhx9,TF,Transcription Factor
+1225,Alx4,Alx4,TF,Transcription Factor
+1226,Hnf4a,Hnf4a,TF,Transcription Factor
+1227,Cic,Cic,TF,Transcription Factor
+1228,Zbtb41,Zbtb41,TF,Transcription Factor
+1229,Zbtb49,Zbtb49,TF,Transcription Factor
+1230,Nhlh1,Nhlh1,TF,Transcription Factor
+1231,Vezf1,Vezf1,TF,Transcription Factor
+1232,Neurod1,Neurod1,TF,Transcription Factor
+1233,St18,St18,TF,Transcription Factor
+1234,Rbpjl,Rbpjl,TF,Transcription Factor
+1235,Ciao1,Ciao1,TF,Transcription Factor
+1236,Usf2,Usf2,TF,Transcription Factor
+1237,Preb,Preb,TF,Transcription Factor
+1238,Tcf23,Tcf23,TF,Transcription Factor
+1239,Rbak,Rbak,TF,Transcription Factor
+1240,Zfp12,Zfp12,TF,Transcription Factor
+1241,Zfp853,Zfp853,TF,Transcription Factor
+1242,Foxi2,Foxi2,TF,Transcription Factor
+1243,Xbp1,Xbp1,TF,Transcription Factor
+1244,Hlf,Hlf,TF,Transcription Factor
+1245,Arap1,Arap1,TF,Transcription Factor
+1246,Kcnip3,Kcnip3,TF,Transcription Factor
+1247,Sox9,Sox9,TF,Transcription Factor
+1248,Ifi206,Ifi206,TF,Transcription Factor
+1249,Ifi207,Ifi207,TF,Transcription Factor
+1250,Ifi204,Ifi204,TF,Transcription Factor
+1251,E2f8,E2f8,TF,Transcription Factor
+1252,Aebp1,Aebp1,TF,Transcription Factor
+1253,Zfp661,Zfp661,TF,Transcription Factor
+1254,Dbx1,Dbx1,TF,Transcription Factor
+1255,Ebf3,Ebf3,TF,Transcription Factor
+1256,Zfp3,Zfp3,TF,Transcription Factor
+1257,Phox2a,Phox2a,TF,Transcription Factor
+1258,Zc3h8,Zc3h8,TF,Transcription Factor
+1259,Nkx6-2,Nkx6-2,TF,Transcription Factor
+1260,Ehf,Ehf,TF,Transcription Factor
+1261,Elf5,Elf5,TF,Transcription Factor
+1262,Usf1,Usf1,TF,Transcription Factor
+1263,Tstd1,Tstd1,TF,Transcription Factor
+1264,Fev,Fev,TF,Transcription Factor
+1265,Purb,Purb,TF,Transcription Factor
+1266,Cebpg,Cebpg,TF,Transcription Factor
+1267,Cebpa,Cebpa,TF,Transcription Factor
+1268,Sox13,Sox13,TF,Transcription Factor
+1269,Zfp663,Zfp663,TF,Transcription Factor
+1270,Irf6,Irf6,TF,Transcription Factor
+1271,Zfp334,Zfp334,TF,Transcription Factor
+1272,Ebf4,Ebf4,TF,Transcription Factor
+1273,Ikzf1,Ikzf1,TF,Transcription Factor
+1274,Zfp941,Zfp941,TF,Transcription Factor
+1275,Zfp507,Zfp507,TF,Transcription Factor
+1276,Zkscan2,Zkscan2,TF,Transcription Factor
+1277,Zfp536,Zfp536,TF,Transcription Factor
+1278,Wt1,Wt1,TF,Transcription Factor
+1279,Zfp735,Zfp735,TF,Transcription Factor
+1280,Zfp616,Zfp616,TF,Transcription Factor
+1281,Dlx3,Dlx3,TF,Transcription Factor
+1282,Dlx4,Dlx4,TF,Transcription Factor
+1283,Meis1,Meis1,TF,Transcription Factor
+1284,Zfp619,Zfp619,TF,Transcription Factor
+1285,Irf7,Irf7,TF,Transcription Factor
+1286,Mnt,Mnt,TF,Transcription Factor
+1287,Deaf1,Deaf1,TF,Transcription Factor
+1288,Zfp652,Zfp652,TF,Transcription Factor
+1289,Pax6,Pax6,TF,Transcription Factor
+1290,Otx1,Otx1,TF,Transcription Factor
+1291,Hoxb13,Hoxb13,TF,Transcription Factor
+1292,Hoxb9,Hoxb9,TF,Transcription Factor
+1293,Hoxb8,Hoxb8,TF,Transcription Factor
+1294,Hoxb7,Hoxb7,TF,Transcription Factor
+1295,Hoxb6,Hoxb6,TF,Transcription Factor
+1296,Hoxb5,Hoxb5,TF,Transcription Factor
+1297,Hoxb4,Hoxb4,TF,Transcription Factor
+1298,Snai1,Snai1,TF,Transcription Factor
+1299,Hoxb3,Hoxb3,TF,Transcription Factor
+1300,Hoxb2,Hoxb2,TF,Transcription Factor
+1301,Hoxb1,Hoxb1,TF,Transcription Factor
+1302,Cebpb,Cebpb,TF,Transcription Factor
+1303,Nfe2l1,Nfe2l1,TF,Transcription Factor
+1304,Sp2,Sp2,TF,Transcription Factor
+1305,Sp6,Sp6,TF,Transcription Factor
+1306,Tbx21,Tbx21,TF,Transcription Factor
+1307,Zbtb34,Zbtb34,TF,Transcription Factor
+1308,Ascl2,Ascl2,TF,Transcription Factor
+1309,Tlx3,Tlx3,TF,Transcription Factor
+1310,Hic1,Hic1,TF,Transcription Factor
+1311,Lmx1b,Lmx1b,TF,Transcription Factor
+1312,Nfatc2,Nfatc2,TF,Transcription Factor
+1313,Pbx3,Pbx3,TF,Transcription Factor
+1314,Bmyc,Bmyc,TF,Transcription Factor
+1315,Sohlh1,Sohlh1,TF,Transcription Factor
+1316,Msx3,Msx3,TF,Transcription Factor
+1317,Zfp446,Zfp446,TF,Transcription Factor
+1318,Zbtb45,Zbtb45,TF,Transcription Factor
+1319,Mzf1,Mzf1,TF,Transcription Factor
+1320,Zfp954,Zfp954,TF,Transcription Factor
+1321,Zfp773,Zfp773,TF,Transcription Factor
+1322,Meis3,Meis3,TF,Transcription Factor
+1323,Sall4,Sall4,TF,Transcription Factor
+1324,Tshz2,Tshz2,TF,Transcription Factor
+1325,Zfp217,Zfp217,TF,Transcription Factor
+1326,Tfap2c,Tfap2c,TF,Transcription Factor
+1327,Ctcfl,Ctcfl,TF,Transcription Factor
+1328,Nacc2,Nacc2,TF,Transcription Factor
+1329,Lhx3,Lhx3,TF,Transcription Factor
+1330,Zfp770,Zfp770,TF,Transcription Factor
+1331,Meis2,Meis2,TF,Transcription Factor
+1332,Ovol2,Ovol2,TF,Transcription Factor
+1333,Lhx6,Lhx6,TF,Transcription Factor
+1334,Insm1,Insm1,TF,Transcription Factor
+1335,Zbtb6,Zbtb6,TF,Transcription Factor
+1336,Zbtb26,Zbtb26,TF,Transcription Factor
+1337,Nkx2-4,Nkx2-4,TF,Transcription Factor
+1338,Nkx2-2,Nkx2-2,TF,Transcription Factor
+1339,Pax1,Pax1,TF,Transcription Factor
+1340,Foxa2,Foxa2,TF,Transcription Factor
+1341,Gzf1,Gzf1,TF,Transcription Factor
+1342,Zfp120,Zfp120,TF,Transcription Factor
+1343,Gm10770,Gm10770,TF,Transcription Factor
+1344,Gm14139,Gm14139,TF,Transcription Factor
+1345,Zfp937,Zfp937,TF,Transcription Factor
+1346,Gm21994,Gm21994,TF,Transcription Factor
+1347,Gm14124,Gm14124,TF,Transcription Factor
+1348,Zfp442,Zfp442,TF,Transcription Factor
+1349,Zfp345,Zfp345,TF,Transcription Factor
+1350,Vsx1,Vsx1,TF,Transcription Factor
+1351,Lhx2,Lhx2,TF,Transcription Factor
+1352,Nr5a1,Nr5a1,TF,Transcription Factor
+1353,Nr6a1,Nr6a1,TF,Transcription Factor
+1354,Zeb2,Zeb2,TF,Transcription Factor
+1355,Nr4a2,Nr4a2,TF,Transcription Factor
+1356,Tbr1,Tbr1,TF,Transcription Factor
+1357,Egfl7,Mir126a,MiRNA_HG,miRNA host gene
+1358,AC124108.1,Mir135b,MiRNA_HG,miRNA host gene
+1359,Gm27029,Mir6929,MiRNA_HG,miRNA host gene
+1360,Acvr1b,Mir6962,MiRNA_HG,miRNA host gene
+1361,Syne2,Mir5101,MiRNA_HG,miRNA host gene
+1362,Cep170,Mir350,MiRNA_HG,miRNA host gene
+1363,Tlcd2,Mir22,MiRNA_HG,miRNA host gene
+1364,Myh7b,Mir499,MiRNA_HG,miRNA host gene
+1365,Copz2,Mir152,MiRNA_HG,miRNA host gene
+1366,F630028O10Rik,Mir223,MiRNA_HG,miRNA host gene
+1367,Gm28119,Mir125b-1,MiRNA_HG,miRNA host gene
+1368,Itga5,Mir6963,MiRNA_HG,miRNA host gene
+1369,Fam114a1,Mir574,MiRNA_HG,miRNA host gene
+1370,Atp9a,Mir7004,MiRNA_HG,miRNA host gene
+1371,C130071C03Rik,Mir9-2,MiRNA_HG,miRNA host gene
+1372,Lpp,Mir28a,MiRNA_HG,miRNA host gene
+1374,Grtp1,Mir1968,MiRNA_HG,miRNA host gene
+1375,Myh7,Mir208b,MiRNA_HG,miRNA host gene
+1376,Ptges3l,Mir6929,MiRNA_HG,miRNA host gene
+1377,Ttc28,Mir701,MiRNA_HG,miRNA host gene
+1378,Snhg20,Mir6516,MiRNA_HG,miRNA host gene
+1379,Troap,Mir6960,MiRNA_HG,miRNA host gene
+1380,Alg10b,Mir7648,MiRNA_HG,miRNA host gene
+1381,Cfb,Mir6972,MiRNA_HG,miRNA host gene
+1382,C2cd2,Mir6964,MiRNA_HG,miRNA host gene
+1383,Chm,Mir361,MiRNA_HG,miRNA host gene
+1384,Glce,Mir5133,MiRNA_HG,miRNA host gene
+1385,Add1,Mir7036b,MiRNA_HG,miRNA host gene
+1386,Atp6v0a1,Mir6928,MiRNA_HG,miRNA host gene
+1387,Samd4b,Mir7049,MiRNA_HG,miRNA host gene
+1388,Raver1,Mir7082,MiRNA_HG,miRNA host gene
+1389,Pink1,Mir7019,MiRNA_HG,miRNA host gene
+1390,Tatdn2,Mir7042,MiRNA_HG,miRNA host gene
+1391,Ncl,mmu-mir-3535,MiRNA_HG,miRNA host gene
+1392,Dock5,Mir6539,MiRNA_HG,miRNA host gene
+1393,Pak4,Mir7049,MiRNA_HG,miRNA host gene
+1394,AL805899.1,Mir31,MiRNA_HG,miRNA host gene
+1395,Sbf1,Mir6959,MiRNA_HG,miRNA host gene
+1396,Rpl13a,Mir5121,MiRNA_HG,miRNA host gene
+1397,Itpk1,Mir1936,MiRNA_HG,miRNA host gene
+1398,B3galt1,Mir7224,MiRNA_HG,miRNA host gene
+1399,Smurf1,Mir7039,MiRNA_HG,miRNA host gene
+1400,Myh3,Mir6923,MiRNA_HG,miRNA host gene
+1401,Oaz1,Mir1982,MiRNA_HG,miRNA host gene
+1402,Adam19,Mir8100,MiRNA_HG,miRNA host gene
+1403,Scd2,Mir5114,MiRNA_HG,miRNA host gene
+1404,Trmt1l,Mir7682,MiRNA_HG,miRNA host gene
+1405,Tbkbp1,Mir7235,MiRNA_HG,miRNA host gene
+1406,Akt1,Mir6939,MiRNA_HG,miRNA host gene
+1407,Gap43,Mir6540,MiRNA_HG,miRNA host gene
+1408,P2rx7,Mir8115,MiRNA_HG,miRNA host gene
+1409,Xkr6,Mir598,MiRNA_HG,miRNA host gene
+1410,Mgat4b,Mir6919,MiRNA_HG,miRNA host gene
+1412,Cdk17,Mir1931,MiRNA_HG,miRNA host gene
+1413,Anxa5,Mir7009,MiRNA_HG,miRNA host gene
+1414,Slit2,Mir218-1,MiRNA_HG,miRNA host gene
+1415,Irak1,Mir5132,MiRNA_HG,miRNA host gene
+1416,Wdfy2,Mir8098,MiRNA_HG,miRNA host gene
+1417,Tectb,Mir6715,MiRNA_HG,miRNA host gene
+1418,Ecm1,Mir7014,MiRNA_HG,miRNA host gene
+1419,Ddhd1,Mir5131,MiRNA_HG,miRNA host gene
+1420,Plxnb2,Mir7118,MiRNA_HG,miRNA host gene
+1421,Rasa4,Mir7035,MiRNA_HG,miRNA host gene
+1422,Slc9a1,Mir5122,MiRNA_HG,miRNA host gene
+1423,Ints1,Mir7037,MiRNA_HG,miRNA host gene
+1424,Fads1,Mir6993,MiRNA_HG,miRNA host gene
+1425,Pank2,Mir103-2,MiRNA_HG,miRNA host gene
+1426,Mroh1,Mir6954,MiRNA_HG,miRNA host gene
+1427,AA467197,Mir147,MiRNA_HG,miRNA host gene
+1428,Acly,Mir7116,MiRNA_HG,miRNA host gene
+1429,Ripor1,Mir1966,MiRNA_HG,miRNA host gene
+1430,Anxa2,Mir3109,MiRNA_HG,miRNA host gene
+1431,C3,Mir6978,MiRNA_HG,miRNA host gene
+1433,Plod3,Mir702,MiRNA_HG,miRNA host gene
+1434,Patl1,Mir6994,MiRNA_HG,miRNA host gene
+1435,Pank3,Mir103-1,MiRNA_HG,miRNA host gene
+1436,Slc17a7,Mir7055,MiRNA_HG,miRNA host gene
+1437,Ugp2,Mir1933,MiRNA_HG,miRNA host gene
+1438,Gm35853,Mir1941,MiRNA_HG,miRNA host gene
+1439,Smap2,Mir7015,MiRNA_HG,miRNA host gene
+1440,Plekha1,Mir7061,MiRNA_HG,miRNA host gene
+1441,Cd74,Mir5107,MiRNA_HG,miRNA host gene
+1442,Pgs1,Mir6933,MiRNA_HG,miRNA host gene
+1443,Tmem94,Mir5621,MiRNA_HG,miRNA host gene
+1444,Tkt,Mir3076,MiRNA_HG,miRNA host gene
+1445,Rcan3,Mir700,MiRNA_HG,miRNA host gene
+1446,Gm17494,Mir760,MiRNA_HG,miRNA host gene
+1447,Pank1,Mir107,MiRNA_HG,miRNA host gene
+1448,Col27a1,Mir455,MiRNA_HG,miRNA host gene
+1449,D030055H07Rik,Mir135a-1,MiRNA_HG,miRNA host gene
+1450,Sgcz,Mir383,MiRNA_HG,miRNA host gene
+1451,Dbn1,Mir6944,MiRNA_HG,miRNA host gene
+1452,Wasf2,Mir7017,MiRNA_HG,miRNA host gene
+1453,Dennd6b,Mir6958,MiRNA_HG,miRNA host gene
+1454,Sptan1,Mir6997,MiRNA_HG,miRNA host gene
+1455,Jag2,Mir6941,MiRNA_HG,miRNA host gene
+1456,Tango2,Mir185,MiRNA_HG,miRNA host gene
+1457,Rabac1,Mir7046,MiRNA_HG,miRNA host gene
+1458,Eml2,Mir330,MiRNA_HG,miRNA host gene
+1459,2210011C24Rik,Mir1199,MiRNA_HG,miRNA host gene
+1460,Baiap3,Mir3547,MiRNA_HG,miRNA host gene
+1461,Gpc1,Mir149,MiRNA_HG,miRNA host gene
+1462,Trpm1,Mir211,MiRNA_HG,miRNA host gene
+1463,Shank2,Mir3105,MiRNA_HG,miRNA host gene
+1464,Hip1r,Mir7032,MiRNA_HG,miRNA host gene
+1465,Narfl,Mir6966,MiRNA_HG,miRNA host gene
+1466,Apba3,Mir3057,MiRNA_HG,miRNA host gene
+1467,Gm49394,Mir483,MiRNA_HG,miRNA host gene
+1468,Boc,Mir3081,MiRNA_HG,miRNA host gene
+1469,Rgs12,Mir3097,MiRNA_HG,miRNA host gene
+1470,Gm2044,Mir202,MiRNA_HG,miRNA host gene
+1471,Cnot1,Mir7073,MiRNA_HG,miRNA host gene
+1472,Dohh,Mir6913,MiRNA_HG,miRNA host gene
+1473,Ndufa10,Mir6900,MiRNA_HG,miRNA host gene
+1474,Smoc1,Mir3067,MiRNA_HG,miRNA host gene
+1475,Ryr1,Mir1963,MiRNA_HG,miRNA host gene
+1476,Vmp1,Mir21a,MiRNA_HG,miRNA host gene
+1477,Ank,Mir7117,MiRNA_HG,miRNA host gene
+1478,AC157910.3,Mir122,MiRNA_HG,miRNA host gene
+1479,Nexmif,Mir672,MiRNA_HG,miRNA host gene
+1480,Map4k2,Mir6989,MiRNA_HG,miRNA host gene
+1481,Tbc1d16,Mir6934,MiRNA_HG,miRNA host gene
+1482,Klhl3,Mir874,MiRNA_HG,miRNA host gene
+1483,Rabgap1l,Mir1927,MiRNA_HG,miRNA host gene
+1484,Chrm2,Mir490,MiRNA_HG,miRNA host gene
+1485,Fgf13,Mir504,MiRNA_HG,miRNA host gene
+1486,2010111I01Rik,Mir23b,MiRNA_HG,miRNA host gene
+1487,2610318N02Rik,Mir301b,MiRNA_HG,miRNA host gene
+1488,2700081O15Rik,Mir6991,MiRNA_HG,miRNA host gene
+1489,A330023F24Rik,Mir29c,MiRNA_HG,miRNA host gene
+1490,A430106G13Rik,Mir181b-1,MiRNA_HG,miRNA host gene
+1491,Arpp21,Mir128-2,MiRNA_HG,miRNA host gene
+1492,Astn1,Mir488,MiRNA_HG,miRNA host gene
+1493,Calcr,Mir653,MiRNA_HG,miRNA host gene
+1494,Cdc20b,Mir449b,MiRNA_HG,miRNA host gene
+1495,Clcn5,Mir188,MiRNA_HG,miRNA host gene
+1496,Dio3os,Mir1247,MiRNA_HG,miRNA host gene
+1497,Dock6,Mir7083,MiRNA_HG,miRNA host gene
+1498,Evl,Mir342,MiRNA_HG,miRNA host gene
+1499,Gabre,Mir224,MiRNA_HG,miRNA host gene
+1500,Gm16863,Mir7680,MiRNA_HG,miRNA host gene
+1501,Gm28653,Mir206,MiRNA_HG,miRNA host gene
+1502,Gm4258,Mir181a-1,MiRNA_HG,miRNA host gene
+1503,Gm49317,Mir100,MiRNA_HG,miRNA host gene
+1504,Gucy1a1,Mir7010,MiRNA_HG,miRNA host gene
+1506,Htr2c,Mir1298,MiRNA_HG,miRNA host gene
+1507,Igf2,Mir483,MiRNA_HG,miRNA host gene
+1508,Josd2,Mir7052,MiRNA_HG,miRNA host gene
+1509,Mest,Mir335,MiRNA_HG,miRNA host gene
+1510,Mir124-2hg,Mir124a-2,MiRNA_HG,miRNA host gene
+1511,Mir124a-1hg,Mir124a-1,MiRNA_HG,miRNA host gene
+1512,Mir133a-1hg,Mir133a-1,MiRNA_HG,miRNA host gene
+1513,Mir155hg,Mir155,MiRNA_HG,miRNA host gene
+1514,Mir17hg,Mir19b-1,MiRNA_HG,miRNA host gene
+1515,Mir22hg,Mir22,MiRNA_HG,miRNA host gene
+1516,Mir670hg,Mir670,MiRNA_HG,miRNA host gene
+1517,Mir9-3hg,Mir9-3,MiRNA_HG,miRNA host gene
+1518,Mir99ahg,Mir125b-2,MiRNA_HG,miRNA host gene
+1519,Mirg,Mir134,MiRNA_HG,miRNA host gene
+1520,Nanos3,Mir181d,MiRNA_HG,miRNA host gene
+1521,Nav1,Mir1231,MiRNA_HG,miRNA host gene
+1523,Pde2a,Mir139,MiRNA_HG,miRNA host gene
+1524,Pdlim7,Mir6945,MiRNA_HG,miRNA host gene
+1526,Sh2b3,Mir7031,MiRNA_HG,miRNA host gene
+1527,Tmem164,Mir652,MiRNA_HG,miRNA host gene
+1528,Trpm3,Mir204,MiRNA_HG,miRNA host gene
+1529,Ttll10,Mir429,MiRNA_HG,miRNA host gene
+1531,Brca2,Brca2,HAT,Histone Modifying Enzyme
+1532,Cdyl,Cdyl,HAT,Histone Modifying Enzyme
+1533,Crebbp,Crebbp,HAT,Histone Modifying Enzyme
+1534,Gtf2b,Gtf2b,HAT,Histone Modifying Enzyme
+1535,Gtf3c4,Gtf3c4,HAT,Histone Modifying Enzyme
+1536,Hat1,Hat1,HAT,Histone Modifying Enzyme
+1537,Kat2a,Kat2a,HAT,Histone Modifying Enzyme
+1538,Kat2b,Kat2b,HAT,Histone Modifying Enzyme
+1539,Kat5,Kat5,HAT,Histone Modifying Enzyme
+1540,Kat6a,Kat6a,HAT,Histone Modifying Enzyme
+1541,Kat6b,Kat6b,HAT,Histone Modifying Enzyme
+1542,Kat7,Kat7,HAT,Histone Modifying Enzyme
+1543,Kat8,Kat8,HAT,Histone Modifying Enzyme
+1544,Kat14,Kat14,HAT,Histone Modifying Enzyme
+1545,Mcm3ap,Mcm3ap,HAT,Histone Modifying Enzyme
+1547,Mettl8,Mettl8,HAT,Histone Modifying Enzyme
+1548,Msl3,Msl3,HAT,Histone Modifying Enzyme
+1549,Naa40,Naa40,HAT,Histone Modifying Enzyme
+1550,Naa50,Naa50,HAT,Histone Modifying Enzyme
+1551,Naa60,Naa60,HAT,Histone Modifying Enzyme
+1552,Nat8f3,Nat8f3,HAT,Histone Modifying Enzyme
+1553,Nat8f7,Nat8f7,HAT,Histone Modifying Enzyme
+1554,Ncoa1,Ncoa1,HAT,Histone Modifying Enzyme
+1555,Ncoa3,Ncoa3,HAT,Histone Modifying Enzyme
+1557,Tada2a,Tada2a,HAT,Histone Modifying Enzyme
+1558,Taf1,Taf1,HAT,Histone Modifying Enzyme
+1559,Atxn3,Atxn3,HDAC,Histone Modifying Enzyme
+1560,Hdac1,Hdac1,HDAC,Histone Modifying Enzyme
+1561,Hdac2,Hdac2,HDAC,Histone Modifying Enzyme
+1562,Hdac3,Hdac3,HDAC,Histone Modifying Enzyme
+1563,Hdac4,Hdac4,HDAC,Histone Modifying Enzyme
+1564,Hdac5,Hdac5,HDAC,Histone Modifying Enzyme
+1565,Hdac6,Hdac6,HDAC,Histone Modifying Enzyme
+1566,Hdac7,Hdac7,HDAC,Histone Modifying Enzyme
+1567,Hdac8,Hdac8,HDAC,Histone Modifying Enzyme
+1568,Hdac9,Hdac9,HDAC,Histone Modifying Enzyme
+1569,Hdac10,Hdac10,HDAC,Histone Modifying Enzyme
+1570,Hdac11,Hdac11,HDAC,Histone Modifying Enzyme
+1571,Mier1,Mier1,HDAC,Histone Modifying Enzyme
+1572,Mier2,Mier2,HDAC,Histone Modifying Enzyme
+1573,Mta2,Mta2,HDAC,Histone Modifying Enzyme
+1574,Sirt1,Sirt1,HDAC,Histone Modifying Enzyme
+1575,Sirt2,Sirt2,HDAC,Histone Modifying Enzyme
+1576,Sirt3,Sirt3,HDAC,Histone Modifying Enzyme
+1577,Sirt6,Sirt6,HDAC,Histone Modifying Enzyme
+1578,Sirt7,Sirt7,HDAC,Histone Modifying Enzyme
+1579,Suds3,Suds3,HDAC,Histone Modifying Enzyme
+1580,Ash1l,Ash1l,HMT,Histone Modifying Enzyme
+1581,Ash2l,Ash2l,HMT,Histone Modifying Enzyme
+1582,Carm1,Carm1,HMT,Histone Modifying Enzyme
+1583,Cxxc1,Cxxc1,HMT,Histone Modifying Enzyme
+1584,Dot1l,Dot1l,HMT,Histone Modifying Enzyme
+1585,Eed,Eed,HMT,Histone Modifying Enzyme
+1586,Ehmt1,Ehmt1,HMT,Histone Modifying Enzyme
+1587,Ehmt2,Ehmt2,HMT,Histone Modifying Enzyme
+1588,Ezh1,Ezh1,HMT,Histone Modifying Enzyme
+1589,Ezh2,Ezh2,HMT,Histone Modifying Enzyme
+1590,Fbl,Fbl,HMT,Histone Modifying Enzyme
+1591,Fbll1,Fbll1,HMT,Histone Modifying Enzyme
+1592,Jarid2,Jarid2,HMT,Histone Modifying Enzyme
+1593,Kmt2a,Kmt2a,HMT,Histone Modifying Enzyme
+1594,Kmt2b,Kmt2b,HMT,Histone Modifying Enzyme
+1595,Kmt2c,Kmt2c,HMT,Histone Modifying Enzyme
+1596,Kmt5a,Kmt5a,HMT,Histone Modifying Enzyme
+1597,Kmt5b,Kmt5b,HMT,Histone Modifying Enzyme
+1598,Kmt5c,Kmt5c,HMT,Histone Modifying Enzyme
+1599,Mettl23,Mettl23,HMT,Histone Modifying Enzyme
+1600,N6amt1,N6amt1,HMT,Histone Modifying Enzyme
+1601,Nsd1,Nsd1,HMT,Histone Modifying Enzyme
+1602,Nsd2,Nsd2,HMT,Histone Modifying Enzyme
+1603,Nsd3,Nsd3,HMT,Histone Modifying Enzyme
+1604,Ntmt1,Ntmt1,HMT,Histone Modifying Enzyme
+1605,Prdm6,Prdm6,HMT,Histone Modifying Enzyme
+1606,Prdm8,Prdm8,HMT,Histone Modifying Enzyme
+1607,Prdm9,Prdm9,HMT,Histone Modifying Enzyme
+1608,Prdm13,Prdm13,HMT,Histone Modifying Enzyme
+1609,Prmt1,Prmt1,HMT,Histone Modifying Enzyme
+1610,Prmt2,Prmt2,HMT,Histone Modifying Enzyme
+1611,Prmt5,Prmt5,HMT,Histone Modifying Enzyme
+1612,Prmt6,Prmt6,HMT,Histone Modifying Enzyme
+1613,Prmt7,Prmt7,HMT,Histone Modifying Enzyme
+1614,Prmt8,Prmt8,HMT,Histone Modifying Enzyme
+1615,Rbbp5,Rbbp5,HMT,Histone Modifying Enzyme
+1616,Setbp1,Setbp1,HMT,Histone Modifying Enzyme
+1617,Setd1a,Setd1a,HMT,Histone Modifying Enzyme
+1618,Setd1b,Setd1b,HMT,Histone Modifying Enzyme
+1619,Setd2,Setd2,HMT,Histone Modifying Enzyme
+1620,Setd3,Setd3,HMT,Histone Modifying Enzyme
+1621,Setd4,Setd4,HMT,Histone Modifying Enzyme
+1622,Setd5,Setd5,HMT,Histone Modifying Enzyme
+1623,Setd7,Setd7,HMT,Histone Modifying Enzyme
+1624,Setdb1,Setdb1,HMT,Histone Modifying Enzyme
+1625,Setdb2,Setdb2,HMT,Histone Modifying Enzyme
+1626,Setmar,Setmar,HMT,Histone Modifying Enzyme
+1627,Smyd1,Smyd1,HMT,Histone Modifying Enzyme
+1628,Smyd2,Smyd2,HMT,Histone Modifying Enzyme
+1629,Smyd3,Smyd3,HMT,Histone Modifying Enzyme
+1630,Smyd5,Smyd5,HMT,Histone Modifying Enzyme
+1631,Suv39h1,Suv39h1,HMT,Histone Modifying Enzyme
+1632,Suv39h2,Suv39h2,HMT,Histone Modifying Enzyme
+1633,Fbxl19,Fbxl19,HDM,Histone Modifying Enzyme
+1634,Hr,Hr,HDM,Histone Modifying Enzyme
+1636,Jmjd1c,Jmjd1c,HDM,Histone Modifying Enzyme
+1637,Jmjd6,Jmjd6,HDM,Histone Modifying Enzyme
+1638,Kdm1a,Kdm1a,HDM,Histone Modifying Enzyme
+1639,Kdm1b,Kdm1b,HDM,Histone Modifying Enzyme
+1640,Kdm2a,Kdm2a,HDM,Histone Modifying Enzyme
+1641,Kdm2b,Kdm2b,HDM,Histone Modifying Enzyme
+1642,Kdm3a,Kdm3a,HDM,Histone Modifying Enzyme
+1643,Kdm3b,Kdm3b,HDM,Histone Modifying Enzyme
+1644,Kdm4a,Kdm4a,HDM,Histone Modifying Enzyme
+1645,Kdm4b,Kdm4b,HDM,Histone Modifying Enzyme
+1646,Kdm4c,Kdm4c,HDM,Histone Modifying Enzyme
+1647,Kdm4d,Kdm4d,HDM,Histone Modifying Enzyme
+1648,Kdm4dl,Kdm4dl,HDM,Histone Modifying Enzyme
+1649,Kdm5a,Kdm5a,HDM,Histone Modifying Enzyme
+1650,Kdm5b,Kdm5b,HDM,Histone Modifying Enzyme
+1651,Kdm5c,Kdm5c,HDM,Histone Modifying Enzyme
+1652,Kdm5d,Kdm5d,HDM,Histone Modifying Enzyme
+1653,Kdm6a,Kdm6a,HDM,Histone Modifying Enzyme
+1654,Kdm6b,Kdm6b,HDM,Histone Modifying Enzyme
+1655,Kdm7a,Kdm7a,HDM,Histone Modifying Enzyme
+1656,Kdm8,Kdm8,HDM,Histone Modifying Enzyme
+1657,Phf2,Phf2,HDM,Histone Modifying Enzyme
+1658,Phf8,Phf8,HDM,Histone Modifying Enzyme
+1659,Bclaf1,Bclaf1,Mediator,TAF-Mediator
+1660,Bclaf3,Bclaf3,Mediator,TAF-Mediator
+1661,Ccnc,Ccnc,Mediator,TAF-Mediator
+1662,Cdk4,Cdk4,Mediator,TAF-Mediator
+1663,Cdk6,Cdk6,Mediator,TAF-Mediator
+1664,Cdk8,Cdk8,Mediator,TAF-Mediator
+1665,Cdk9,Cdk9,Mediator,TAF-Mediator
+1666,Cdk19,Cdk19,Mediator,TAF-Mediator
+1667,Gm20517,Gm20517,Mediator,TAF-Mediator
+1668,Med1,Med1,Mediator,TAF-Mediator
+1669,Med4,Med4,Mediator,TAF-Mediator
+1670,Med6,Med6,Mediator,TAF-Mediator
+1671,Med7,Med7,Mediator,TAF-Mediator
+1672,Med8,Med8,Mediator,TAF-Mediator
+1673,Med9,Med9,Mediator,TAF-Mediator
+1674,Med10,Med10,Mediator,TAF-Mediator
+1675,Med11,Med11,Mediator,TAF-Mediator
+1676,Med12,Med12,Mediator,TAF-Mediator
+1677,Med12l,Med12l,Mediator,TAF-Mediator
+1678,Med13,Med13,Mediator,TAF-Mediator
+1679,Med13l,Med13l,Mediator,TAF-Mediator
+1680,Med14,Med14,Mediator,TAF-Mediator
+1681,Med15,Med15,Mediator,TAF-Mediator
+1682,Med16,Med16,Mediator,TAF-Mediator
+1683,Med17,Med17,Mediator,TAF-Mediator
+1684,Med18,Med18,Mediator,TAF-Mediator
+1685,Med19,Med19,Mediator,TAF-Mediator
+1686,Med20,Med20,Mediator,TAF-Mediator
+1687,Med21,Med21,Mediator,TAF-Mediator
+1688,Med22,Med22,Mediator,TAF-Mediator
+1689,Med23,Med23,Mediator,TAF-Mediator
+1690,Med24,Med24,Mediator,TAF-Mediator
+1691,Med25,Med25,Mediator,TAF-Mediator
+1692,Med26,Med26,Mediator,TAF-Mediator
+1693,Med27,Med27,Mediator,TAF-Mediator
+1694,Med28,Med28,Mediator,TAF-Mediator
+1695,Med29,Med29,Mediator,TAF-Mediator
+1696,Med30,Med30,Mediator,TAF-Mediator
+1697,Med31,Med31,Mediator,TAF-Mediator
+1698,Ppargc1b,Ppargc1b,Mediator,TAF-Mediator
+1699,Thrap3,Thrap3,Mediator,TAF-Mediator
+1700,Atf7ip,Atf7ip,TAF,TAF-Mediator
+1702,Bdp1,Bdp1,TAF,TAF-Mediator
+1703,Brf1,Brf1,TAF,TAF-Mediator
+1704,Brf2,Brf2,TAF,TAF-Mediator
+1705,Cand1,Cand1,TAF,TAF-Mediator
+1706,Cavin1,Cavin1,TAF,TAF-Mediator
+1707,Ccnh,Ccnh,TAF,TAF-Mediator
+1708,Cdk7,Cdk7,TAF,TAF-Mediator
+1709,Crcp,Crcp,TAF,TAF-Mediator
+1710,Ctnnbip1,Ctnnbip1,TAF,TAF-Mediator
+1711,Dhx36,Dhx36,TAF,TAF-Mediator
+1712,Dr1,Dr1,TAF,TAF-Mediator
+1713,Elob,Elob,TAF,TAF-Mediator
+1714,Eloc,Eloc,TAF,TAF-Mediator
+1715,Ercc1,Ercc1,TAF,TAF-Mediator
+1716,Ercc3,Ercc3,TAF,TAF-Mediator
+1717,Ercc6,Ercc6,TAF,TAF-Mediator
+1718,Gtf2a1,Gtf2a1,TAF,TAF-Mediator
+1719,Gtf2a1l,Gtf2a1l,TAF,TAF-Mediator
+1720,Gtf2a2,Gtf2a2,TAF,TAF-Mediator
+1722,Gtf2e1,Gtf2e1,TAF,TAF-Mediator
+1723,Gtf2e2,Gtf2e2,TAF,TAF-Mediator
+1724,Gtf2f1,Gtf2f1,TAF,TAF-Mediator
+1725,Gtf2f2,Gtf2f2,TAF,TAF-Mediator
+1726,Gtf2h5,Gtf2h5,TAF,TAF-Mediator
+1727,Gtf3c1,Gtf3c1,TAF,TAF-Mediator
+1729,Gtf3c5,Gtf3c5,TAF,TAF-Mediator
+1730,Hmgb1,Hmgb1,TAF,TAF-Mediator
+1731,Lipe,Lipe,TAF,TAF-Mediator
+1760,Morc1,Morc1,TAF,TAF-Mediator
+1761,Mterf1b,Mterf1b,TAF,TAF-Mediator
+1762,Ncoa6,Ncoa6,TAF,TAF-Mediator
+1763,Paxip1,Paxip1,TAF,TAF-Mediator
+1764,Polr1e,Polr1e,TAF,TAF-Mediator
+1766,Polr2d,Polr2d,TAF,TAF-Mediator
+1767,Polr2g,Polr2g,TAF,TAF-Mediator
+1768,Polr2i,Polr2i,TAF,TAF-Mediator
+1769,Polr3h,Polr3h,TAF,TAF-Mediator
+1770,Polrmt,Polrmt,TAF,TAF-Mediator
+1771,Psmc6,Psmc6,TAF,TAF-Mediator
+1772,Pwwp2a,Pwwp2a,TAF,TAF-Mediator
+1773,Rrn3,Rrn3,TAF,TAF-Mediator
+1774,Rsf1,Rsf1,TAF,TAF-Mediator
+1775,Setx,Setx,TAF,TAF-Mediator
+1776,Smarca5,Smarca5,TAF,TAF-Mediator
+1777,Snapc5,Snapc5,TAF,TAF-Mediator
+1778,Sub1,Sub1,TAF,TAF-Mediator
+1780,Taf1b,Taf1b,TAF,TAF-Mediator
+1781,Taf2,Taf2,TAF,TAF-Mediator
+1782,Taf3,Taf3,TAF,TAF-Mediator
+1783,Taf4,Taf4,TAF,TAF-Mediator
+1784,Taf4b,Taf4b,TAF,TAF-Mediator
+1785,Taf5,Taf5,TAF,TAF-Mediator
+1786,Taf6,Taf6,TAF,TAF-Mediator
+1787,Taf6l,Taf6l,TAF,TAF-Mediator
+1788,Taf7,Taf7,TAF,TAF-Mediator
+1789,Taf7l,Taf7l,TAF,TAF-Mediator
+1791,Taf8,Taf8,TAF,TAF-Mediator
+1792,Taf9,Taf9,TAF,TAF-Mediator
+1793,Taf9b,Taf9b,TAF,TAF-Mediator
+1794,Taf10,Taf10,TAF,TAF-Mediator
+1795,Taf11,Taf11,TAF,TAF-Mediator
+1796,Taf12,Taf12,TAF,TAF-Mediator
+1797,Taf13,Taf13,TAF,TAF-Mediator
+1798,Tbp,Tbp,TAF,TAF-Mediator
+1799,Tbpl1,Tbpl1,TAF,TAF-Mediator
+1800,Tbpl2,Tbpl2,TAF,TAF-Mediator
+1801,Ttf1,Ttf1,TAF,TAF-Mediator
+1802,Ubtf,Ubtf,TAF,TAF-Mediator
+1803,Wnt10b,Wnt10b,TAF,TAF-Mediator
+1804,Xpa,Xpa,TAF,TAF-Mediator
+1805,Zfp451,Zfp451,TAF,TAF-Mediator
+1806,Actl6a,Actl6a,Chromatin_binding,Chromatin Binding
+1807,Actl6b,Actl6b,Chromatin_binding,Chromatin Binding
+1808,Actn4,Actn4,Chromatin_binding,Chromatin Binding
+1809,Actr6,Actr6,Chromatin_binding,Chromatin Binding
+1810,Actrt1,Actrt1,Chromatin_binding,Chromatin Binding
+1811,Adnp,Adnp,Chromatin_binding,Chromatin Binding
+1812,Aire,Aire,Chromatin_binding,Chromatin Binding
+1813,Ajuba,Ajuba,Chromatin_binding,Chromatin Binding
+1814,Akap8,Akap8,Chromatin_binding,Chromatin Binding
+1815,Ankrd2,Ankrd2,Chromatin_binding,Chromatin Binding
+1816,Ankrd17,Ankrd17,Chromatin_binding,Chromatin Binding
+1817,Apbb1,Apbb1,Chromatin_binding,Chromatin Binding
+1818,Apex1,Apex1,Chromatin_binding,Chromatin Binding
+1819,App,App,Chromatin_binding,Chromatin Binding
+1820,Aptx,Aptx,Chromatin_binding,Chromatin Binding
+1821,Arid1a,Arid1a,Chromatin_binding,Chromatin Binding
+1822,Arid1b,Arid1b,Chromatin_binding,Chromatin Binding
+1823,Arid3a,Arid3a,Chromatin_binding,Chromatin Binding
+1824,Arid5a,Arid5a,Chromatin_binding,Chromatin Binding
+1825,Asf1a,Asf1a,Chromatin_binding,Chromatin Binding
+1827,Asxl1,Asxl1,Chromatin_binding,Chromatin Binding
+1828,Asxl2,Asxl2,Chromatin_binding,Chromatin Binding
+1829,Asxl3,Asxl3,Chromatin_binding,Chromatin Binding
+1830,Atad2,Atad2,Chromatin_binding,Chromatin Binding
+1831,Atad2b,Atad2b,Chromatin_binding,Chromatin Binding
+1832,Atrx,Atrx,Chromatin_binding,Chromatin Binding
+1833,Atxn1,Atxn1,Chromatin_binding,Chromatin Binding
+1834,Atxn7,Atxn7,Chromatin_binding,Chromatin Binding
+1835,Auts2,Auts2,Chromatin_binding,Chromatin Binding
+1836,Bahcc1,Bahcc1,Chromatin_binding,Chromatin Binding
+1837,Bahd1,Bahd1,Chromatin_binding,Chromatin Binding
+1838,Bap1,Bap1,Chromatin_binding,Chromatin Binding
+1839,Bcas3,Bcas3,Chromatin_binding,Chromatin Binding
+1840,Bend6,Bend6,Chromatin_binding,Chromatin Binding
+1841,Bmi1,Bmi1,Chromatin_binding,Chromatin Binding
+1842,Brca1,Brca1,Chromatin_binding,Chromatin Binding
+1843,Brd2,Brd2,Chromatin_binding,Chromatin Binding
+1844,Brd3,Brd3,Chromatin_binding,Chromatin Binding
+1845,Brd4,Brd4,Chromatin_binding,Chromatin Binding
+1846,Brip1,Brip1,Chromatin_binding,Chromatin Binding
+1847,Cabin1,Cabin1,Chromatin_binding,Chromatin Binding
+1848,Calcoco1,Calcoco1,Chromatin_binding,Chromatin Binding
+1849,Camta2,Camta2,Chromatin_binding,Chromatin Binding
+1850,Cbfa2t3,Cbfa2t3,Chromatin_binding,Chromatin Binding
+1851,Cbx1,Cbx1,Chromatin_binding,Chromatin Binding
+1852,Cbx2,Cbx2,Chromatin_binding,Chromatin Binding
+1853,Cbx3,Cbx3,Chromatin_binding,Chromatin Binding
+1854,Cbx4,Cbx4,Chromatin_binding,Chromatin Binding
+1855,Cbx5,Cbx5,Chromatin_binding,Chromatin Binding
+1856,Cbx7,Cbx7,Chromatin_binding,Chromatin Binding
+1857,Cbx8,Cbx8,Chromatin_binding,Chromatin Binding
+1858,Ccnt1,Ccnt1,Chromatin_binding,Chromatin Binding
+1859,Ccnt2,Ccnt2,Chromatin_binding,Chromatin Binding
+1860,Cdc6,Cdc6,Chromatin_binding,Chromatin Binding
+1861,Cdc45,Cdc45,Chromatin_binding,Chromatin Binding
+1862,Cdk1,Cdk1,Chromatin_binding,Chromatin Binding
+1864,Cdt1,Cdt1,Chromatin_binding,Chromatin Binding
+1866,Cenpb,Cenpb,Chromatin_binding,Chromatin Binding
+1867,Cenps,Cenps,Chromatin_binding,Chromatin Binding
+1868,Cgas,Cgas,Chromatin_binding,Chromatin Binding
+1869,Chd1,Chd1,Chromatin_binding,Chromatin Binding
+1870,Chd1l,Chd1l,Chromatin_binding,Chromatin Binding
+1871,Chd2,Chd2,Chromatin_binding,Chromatin Binding
+1872,Chd3,Chd3,Chromatin_binding,Chromatin Binding
+1873,Chd4,Chd4,Chromatin_binding,Chromatin Binding
+1874,Chd5,Chd5,Chromatin_binding,Chromatin Binding
+1875,Chd6,Chd6,Chromatin_binding,Chromatin Binding
+1876,Chd7,Chd7,Chromatin_binding,Chromatin Binding
+1877,Chd8,Chd8,Chromatin_binding,Chromatin Binding
+1878,Cited1,Cited1,Chromatin_binding,Chromatin Binding
+1879,Cited2,Cited2,Chromatin_binding,Chromatin Binding
+1880,Cks2,Cks2,Chromatin_binding,Chromatin Binding
+1881,Coq7,Coq7,Chromatin_binding,Chromatin Binding
+1884,Crtc2,Crtc2,Chromatin_binding,Chromatin Binding
+1885,Csnk2b,Csnk2b,Chromatin_binding,Chromatin Binding
+1886,Ctbp1,Ctbp1,Chromatin_binding,Chromatin Binding
+1887,Ctbp2,Ctbp2,Chromatin_binding,Chromatin Binding
+1888,Ctnnb1,Ctnnb1,Chromatin_binding,Chromatin Binding
+1889,Cys1,Cys1,Chromatin_binding,Chromatin Binding
+1890,Ddx1,Ddx1,Chromatin_binding,Chromatin Binding
+1891,Ddx5,Ddx5,Chromatin_binding,Chromatin Binding
+1892,Ddx11,Ddx11,Chromatin_binding,Chromatin Binding
+1893,Ddx17,Ddx17,Chromatin_binding,Chromatin Binding
+1894,Dhx9,Dhx9,Chromatin_binding,Chromatin Binding
+1895,Dhx30,Dhx30,Chromatin_binding,Chromatin Binding
+1896,Dnajc2,Dnajc2,Chromatin_binding,Chromatin Binding
+1897,Dnmt1,Dnmt1,Chromatin_binding,Chromatin Binding
+1898,Dnmt3a,Dnmt3a,Chromatin_binding,Chromatin Binding
+1899,Dnmt3b,Dnmt3b,Chromatin_binding,Chromatin Binding
+1900,Dnttip1,Dnttip1,Chromatin_binding,Chromatin Binding
+1901,Dppa2,Dppa2,Chromatin_binding,Chromatin Binding
+1902,Dppa4,Dppa4,Chromatin_binding,Chromatin Binding
+1903,Ecsit,Ecsit,Chromatin_binding,Chromatin Binding
+1905,Egfr,Egfr,Chromatin_binding,Chromatin Binding
+1907,Eny2,Eny2,Chromatin_binding,Chromatin Binding
+1908,Ep400,Ep400,Chromatin_binding,Chromatin Binding
+1909,Epop,Epop,Chromatin_binding,Chromatin Binding
+1912,Ercc4,Ercc4,Chromatin_binding,Chromatin Binding
+1914,Evx1os,Evx1os,Chromatin_binding,Chromatin Binding
+1915,Exo1,Exo1,Chromatin_binding,Chromatin Binding
+1916,Eya3,Eya3,Chromatin_binding,Chromatin Binding
+1919,Faap24,Faap24,Chromatin_binding,Chromatin Binding
+1920,Fabp1,Fabp1,Chromatin_binding,Chromatin Binding
+1921,Fancm,Fancm,Chromatin_binding,Chromatin Binding
+1922,Fcor,Fcor,Chromatin_binding,Chromatin Binding
+1923,Fmr1,Fmr1,Chromatin_binding,Chromatin Binding
+1924,Fus,Fus,Chromatin_binding,Chromatin Binding
+1925,Gadd45a,Gadd45a,Chromatin_binding,Chromatin Binding
+1926,Glyr1,Glyr1,Chromatin_binding,Chromatin Binding
+1927,Gm20379,Gm20379,Chromatin_binding,Chromatin Binding
+1928,Gmnc,Gmnc,Chromatin_binding,Chromatin Binding
+1929,Gper1,Gper1,Chromatin_binding,Chromatin Binding
+1930,Grwd1,Grwd1,Chromatin_binding,Chromatin Binding
+1933,Gtf2h1,Gtf2h1,Chromatin_binding,Chromatin Binding
+1934,H1f0,H1f0,Chromatin_binding,Chromatin Binding
+1946,H3f3a,H3f3a,Chromatin_binding,Chromatin Binding
+1947,H3f3b,H3f3b,Chromatin_binding,Chromatin Binding
+1948,Hcfc1,Hcfc1,Chromatin_binding,Chromatin Binding
+1956,Hdgfl2,Hdgfl2,Chromatin_binding,Chromatin Binding
+1957,Hdgfl3,Hdgfl3,Chromatin_binding,Chromatin Binding
+1958,Hells,Hells,Chromatin_binding,Chromatin Binding
+1959,Hira,Hira,Chromatin_binding,Chromatin Binding
+1960,Hmga1,Hmga1,Chromatin_binding,Chromatin Binding
+1961,Hmga2,Hmga2,Chromatin_binding,Chromatin Binding
+1962,Hmgn1,Hmgn1,Chromatin_binding,Chromatin Binding
+1963,Hmgn2,Hmgn2,Chromatin_binding,Chromatin Binding
+1964,Hmgn3,Hmgn3,Chromatin_binding,Chromatin Binding
+1965,Hmgn5,Hmgn5,Chromatin_binding,Chromatin Binding
+1966,Hnrnpd,Hnrnpd,Chromatin_binding,Chromatin Binding
+1967,Hnrnpu,Hnrnpu,Chromatin_binding,Chromatin Binding
+1968,Hp1bp3,Hp1bp3,Chromatin_binding,Chromatin Binding
+1969,Hpf1,Hpf1,Chromatin_binding,Chromatin Binding
+1971,Ift74,Ift74,Chromatin_binding,Chromatin Binding
+1972,Ing2,Ing2,Chromatin_binding,Chromatin Binding
+1973,Ing5,Ing5,Chromatin_binding,Chromatin Binding
+1980,Kcnq1ot1,Kcnq1ot1,Chromatin_binding,Chromatin Binding
+1990,Klhdc3,Klhdc3,Chromatin_binding,Chromatin Binding
+1994,L3mbtl1,L3mbtl1,Chromatin_binding,Chromatin Binding
+1995,L3mbtl2,L3mbtl2,Chromatin_binding,Chromatin Binding
+1996,L3mbtl3,L3mbtl3,Chromatin_binding,Chromatin Binding
+1997,L3mbtl4,L3mbtl4,Chromatin_binding,Chromatin Binding
+1998,Lcor,Lcor,Chromatin_binding,Chromatin Binding
+1999,Ldb1,Ldb1,Chromatin_binding,Chromatin Binding
+2000,Lemd2,Lemd2,Chromatin_binding,Chromatin Binding
+2001,Lemd3,Lemd3,Chromatin_binding,Chromatin Binding
+2002,Lmo2,Lmo2,Chromatin_binding,Chromatin Binding
+2003,Lrwd1,Lrwd1,Chromatin_binding,Chromatin Binding
+2006,Mapk15,Mapk15,Chromatin_binding,Chromatin Binding
+2007,Mbd1,Mbd1,Chromatin_binding,Chromatin Binding
+2008,Mbd2,Mbd2,Chromatin_binding,Chromatin Binding
+2009,Mbd3,Mbd3,Chromatin_binding,Chromatin Binding
+2010,Mbd5,Mbd5,Chromatin_binding,Chromatin Binding
+2011,Mbd6,Mbd6,Chromatin_binding,Chromatin Binding
+2012,Mbtd1,Mbtd1,Chromatin_binding,Chromatin Binding
+2014,Mcm8,Mcm8,Chromatin_binding,Chromatin Binding
+2015,Mcm9,Mcm9,Chromatin_binding,Chromatin Binding
+2016,Mcmbp,Mcmbp,Chromatin_binding,Chromatin Binding
+2019,Meiob,Meiob,Chromatin_binding,Chromatin Binding
+2021,Mir208b,Mir208b,Chromatin_binding,Chromatin Binding
+2022,Mkrn1,Mkrn1,Chromatin_binding,Chromatin Binding
+2023,Mlh1,Mlh1,Chromatin_binding,Chromatin Binding
+2024,Mlh3,Mlh3,Chromatin_binding,Chromatin Binding
+2025,Mllt3,Mllt3,Chromatin_binding,Chromatin Binding
+2026,Mllt6,Mllt6,Chromatin_binding,Chromatin Binding
+2027,Mllt10,Mllt10,Chromatin_binding,Chromatin Binding
+2028,Morc2a,Morc2a,Chromatin_binding,Chromatin Binding
+2029,Morc2b,Morc2b,Chromatin_binding,Chromatin Binding
+2030,Morf4l1,Morf4l1,Chromatin_binding,Chromatin Binding
+2031,Mphosph8,Mphosph8,Chromatin_binding,Chromatin Binding
+2032,Mrnip,Mrnip,Chromatin_binding,Chromatin Binding
+2033,Msh2,Msh2,Chromatin_binding,Chromatin Binding
+2034,Msh6,Msh6,Chromatin_binding,Chromatin Binding
+2035,Msl1,Msl1,Chromatin_binding,Chromatin Binding
+2036,Mta1,Mta1,Chromatin_binding,Chromatin Binding
+2038,Mta3,Mta3,Chromatin_binding,Chromatin Binding
+2039,Nap1l1,Nap1l1,Chromatin_binding,Chromatin Binding
+2040,Nap1l2,Nap1l2,Chromatin_binding,Chromatin Binding
+2041,Nap1l3,Nap1l3,Chromatin_binding,Chromatin Binding
+2042,Nap1l4,Nap1l4,Chromatin_binding,Chromatin Binding
+2043,Nap1l5,Nap1l5,Chromatin_binding,Chromatin Binding
+2044,Ncaph,Ncaph,Chromatin_binding,Chromatin Binding
+2045,Ncaph2,Ncaph2,Chromatin_binding,Chromatin Binding
+2047,Ncoa2,Ncoa2,Chromatin_binding,Chromatin Binding
+2049,Ncoa5,Ncoa5,Chromatin_binding,Chromatin Binding
+2051,Ncor1,Ncor1,Chromatin_binding,Chromatin Binding
+2052,Ncor2,Ncor2,Chromatin_binding,Chromatin Binding
+2053,Nelfa,Nelfa,Chromatin_binding,Chromatin Binding
+2054,Nelfe,Nelfe,Chromatin_binding,Chromatin Binding
+2055,Nipbl,Nipbl,Chromatin_binding,Chromatin Binding
+2056,Nkap,Nkap,Chromatin_binding,Chromatin Binding
+2057,Nkapl,Nkapl,Chromatin_binding,Chromatin Binding
+2058,Noc2l,Noc2l,Chromatin_binding,Chromatin Binding
+2059,Noc3l,Noc3l,Chromatin_binding,Chromatin Binding
+2060,Nono,Nono,Chromatin_binding,Chromatin Binding
+2061,Notch1,Notch1,Chromatin_binding,Chromatin Binding
+2062,Npm1,Npm1,Chromatin_binding,Chromatin Binding
+2063,Npm2,Npm2,Chromatin_binding,Chromatin Binding
+2064,Npm3,Npm3,Chromatin_binding,Chromatin Binding
+2067,Nucks1,Nucks1,Chromatin_binding,Chromatin Binding
+2068,Nudt21,Nudt21,Chromatin_binding,Chromatin Binding
+2069,Nup98,Nup98,Chromatin_binding,Chromatin Binding
+2070,Nup153,Nup153,Chromatin_binding,Chromatin Binding
+2071,Nupr1,Nupr1,Chromatin_binding,Chromatin Binding
+2073,Ogt,Ogt,Chromatin_binding,Chromatin Binding
+2074,Orc1,Orc1,Chromatin_binding,Chromatin Binding
+2075,Paf1,Paf1,Chromatin_binding,Chromatin Binding
+2076,Parg,Parg,Chromatin_binding,Chromatin Binding
+2077,Parp1,Parp1,Chromatin_binding,Chromatin Binding
+2078,Parp2,Parp2,Chromatin_binding,Chromatin Binding
+2079,Paupar,Paupar,Chromatin_binding,Chromatin Binding
+2080,Pbrm1,Pbrm1,Chromatin_binding,Chromatin Binding
+2081,Pcgf1,Pcgf1,Chromatin_binding,Chromatin Binding
+2082,Pcgf2,Pcgf2,Chromatin_binding,Chromatin Binding
+2083,Pclaf,Pclaf,Chromatin_binding,Chromatin Binding
+2084,Pcna,Pcna,Chromatin_binding,Chromatin Binding
+2085,Pelp1,Pelp1,Chromatin_binding,Chromatin Binding
+2086,Per1,Per1,Chromatin_binding,Chromatin Binding
+2087,Phc1,Phc1,Chromatin_binding,Chromatin Binding
+2088,Phc2,Phc2,Chromatin_binding,Chromatin Binding
+2089,Phc3,Phc3,Chromatin_binding,Chromatin Binding
+2090,Phf1,Phf1,Chromatin_binding,Chromatin Binding
+2092,Phf13,Phf13,Chromatin_binding,Chromatin Binding
+2093,Phf19,Phf19,Chromatin_binding,Chromatin Binding
+2094,Phf21a,Phf21a,Chromatin_binding,Chromatin Binding
+2095,Pkn1,Pkn1,Chromatin_binding,Chromatin Binding
+2096,Plac8,Plac8,Chromatin_binding,Chromatin Binding
+2097,Pola1,Pola1,Chromatin_binding,Chromatin Binding
+2098,Pold1,Pold1,Chromatin_binding,Chromatin Binding
+2099,Pole,Pole,Chromatin_binding,Chromatin Binding
+2100,Pole3,Pole3,Chromatin_binding,Chromatin Binding
+2101,Polg,Polg,Chromatin_binding,Chromatin Binding
+2102,Polq,Polq,Chromatin_binding,Chromatin Binding
+2103,Polr1a,Polr1a,Chromatin_binding,Chromatin Binding
+2104,Polr2a,Polr2a,Chromatin_binding,Chromatin Binding
+2105,Polr2b,Polr2b,Chromatin_binding,Chromatin Binding
+2106,Polr3a,Polr3a,Chromatin_binding,Chromatin Binding
+2107,Polr3d,Polr3d,Chromatin_binding,Chromatin Binding
+2108,Polr3g,Polr3g,Chromatin_binding,Chromatin Binding
+2109,Polr3gl,Polr3gl,Chromatin_binding,Chromatin Binding
+2110,Ppargc1a,Ppargc1a,Chromatin_binding,Chromatin Binding
+2111,Ppp2r3d,Ppp2r3d,Chromatin_binding,Chromatin Binding
+2113,Prdm11,Prdm11,Chromatin_binding,Chromatin Binding
+2115,Prdm15,Prdm15,Chromatin_binding,Chromatin Binding
+2116,Primpol,Primpol,Chromatin_binding,Chromatin Binding
+2117,Prkaa1,Prkaa1,Chromatin_binding,Chromatin Binding
+2118,Prkaa2,Prkaa2,Chromatin_binding,Chromatin Binding
+2119,Prkcb,Prkcb,Chromatin_binding,Chromatin Binding
+2122,Psip1,Psip1,Chromatin_binding,Chromatin Binding
+2123,Pus1,Pus1,Chromatin_binding,Chromatin Binding
+2126,Pygo2,Pygo2,Chromatin_binding,Chromatin Binding
+2127,Rad17,Rad17,Chromatin_binding,Chromatin Binding
+2128,Rad21,Rad21,Chromatin_binding,Chromatin Binding
+2129,Rad21l,Rad21l,Chromatin_binding,Chromatin Binding
+2130,Rad51,Rad51,Chromatin_binding,Chromatin Binding
+2131,Rag2,Rag2,Chromatin_binding,Chromatin Binding
+2132,Rbl1,Rbl1,Chromatin_binding,Chromatin Binding
+2133,Rbl2,Rbl2,Chromatin_binding,Chromatin Binding
+2134,Rbmx,Rbmx,Chromatin_binding,Chromatin Binding
+2135,Rbmxl1,Rbmxl1,Chromatin_binding,Chromatin Binding
+2136,Rcc1,Rcc1,Chromatin_binding,Chromatin Binding
+2137,Rcor1,Rcor1,Chromatin_binding,Chromatin Binding
+2138,Rec8,Rec8,Chromatin_binding,Chromatin Binding
+2139,Repin1,Repin1,Chromatin_binding,Chromatin Binding
+2140,Rere,Rere,Chromatin_binding,Chromatin Binding
+2141,Rfpl4b,Rfpl4b,Chromatin_binding,Chromatin Binding
+2142,Ring1,Ring1,Chromatin_binding,Chromatin Binding
+2143,Rit2,Rit2,Chromatin_binding,Chromatin Binding
+2144,Rnf2,Rnf2,Chromatin_binding,Chromatin Binding
+2145,Rnf4,Rnf4,Chromatin_binding,Chromatin Binding
+2146,Rnf8,Rnf8,Chromatin_binding,Chromatin Binding
+2147,Rnf20,Rnf20,Chromatin_binding,Chromatin Binding
+2148,Rnf168,Rnf168,Chromatin_binding,Chromatin Binding
+2149,Rnf169,Rnf169,Chromatin_binding,Chromatin Binding
+2150,Rpa1,Rpa1,Chromatin_binding,Chromatin Binding
+2151,Ruvbl2,Ruvbl2,Chromatin_binding,Chromatin Binding
+2152,Safb,Safb,Chromatin_binding,Chromatin Binding
+2153,Samd1,Samd1,Chromatin_binding,Chromatin Binding
+2154,Samd7,Samd7,Chromatin_binding,Chromatin Binding
+2155,Samd11,Samd11,Chromatin_binding,Chromatin Binding
+2156,Samd13,Samd13,Chromatin_binding,Chromatin Binding
+2157,Sap30l,Sap30l,Chromatin_binding,Chromatin Binding
+2158,Sarnp,Sarnp,Chromatin_binding,Chromatin Binding
+2159,Sbno1,Sbno1,Chromatin_binding,Chromatin Binding
+2160,Sbno2,Sbno2,Chromatin_binding,Chromatin Binding
+2161,Scmh1,Scmh1,Chromatin_binding,Chromatin Binding
+2162,Scml2,Scml2,Chromatin_binding,Chromatin Binding
+2163,Scml4,Scml4,Chromatin_binding,Chromatin Binding
+2164,Set,Set,Chromatin_binding,Chromatin Binding
+2167,Sf3b1,Sf3b1,Chromatin_binding,Chromatin Binding
+2168,Sfmbt1,Sfmbt1,Chromatin_binding,Chromatin Binding
+2169,Sfmbt2,Sfmbt2,Chromatin_binding,Chromatin Binding
+2170,Sfpq,Sfpq,Chromatin_binding,Chromatin Binding
+2171,Shmt2,Shmt2,Chromatin_binding,Chromatin Binding
+2172,Sin3a,Sin3a,Chromatin_binding,Chromatin Binding
+2173,Sin3b,Sin3b,Chromatin_binding,Chromatin Binding
+2178,Slc30a9,Slc30a9,Chromatin_binding,Chromatin Binding
+2179,Smad6,Smad6,Chromatin_binding,Chromatin Binding
+2180,Smarca1,Smarca1,Chromatin_binding,Chromatin Binding
+2181,Smarca2,Smarca2,Chromatin_binding,Chromatin Binding
+2182,Smarca4,Smarca4,Chromatin_binding,Chromatin Binding
+2184,Smarcad1,Smarcad1,Chromatin_binding,Chromatin Binding
+2185,Smarcc1,Smarcc1,Chromatin_binding,Chromatin Binding
+2186,Smarcc2,Smarcc2,Chromatin_binding,Chromatin Binding
+2187,Smarcd1,Smarcd1,Chromatin_binding,Chromatin Binding
+2188,Smarcd3,Smarcd3,Chromatin_binding,Chromatin Binding
+2189,Smc1a,Smc1a,Chromatin_binding,Chromatin Binding
+2190,Smc2,Smc2,Chromatin_binding,Chromatin Binding
+2191,Smc3,Smc3,Chromatin_binding,Chromatin Binding
+2192,Smc4,Smc4,Chromatin_binding,Chromatin Binding
+2193,Ssbp1,Ssbp1,Chromatin_binding,Chromatin Binding
+2194,Ssrp1,Ssrp1,Chromatin_binding,Chromatin Binding
+2195,Stag1,Stag1,Chromatin_binding,Chromatin Binding
+2196,Stag2,Stag2,Chromatin_binding,Chromatin Binding
+2197,Stag3,Stag3,Chromatin_binding,Chromatin Binding
+2198,Stpg4,Stpg4,Chromatin_binding,Chromatin Binding
+2199,Supt5,Supt5,Chromatin_binding,Chromatin Binding
+2200,Supt6,Supt6,Chromatin_binding,Chromatin Binding
+2201,Supt16,Supt16,Chromatin_binding,Chromatin Binding
+2203,Suz12,Suz12,Chromatin_binding,Chromatin Binding
+2204,Svep1,Svep1,Chromatin_binding,Chromatin Binding
+2206,Tada2b,Tada2b,Chromatin_binding,Chromatin Binding
+2212,Tbl1x,Tbl1x,Chromatin_binding,Chromatin Binding
+2213,Tcf7l1,Tcf7l1,Chromatin_binding,Chromatin Binding
+2214,Tdrd3,Tdrd3,Chromatin_binding,Chromatin Binding
+2215,Ticrr,Ticrr,Chromatin_binding,Chromatin Binding
+2216,Tle1,Tle1,Chromatin_binding,Chromatin Binding
+2217,Tnrc18,Tnrc18,Chromatin_binding,Chromatin Binding
+2218,Top1,Top1,Chromatin_binding,Chromatin Binding
+2219,Top2a,Top2a,Chromatin_binding,Chromatin Binding
+2220,Top2b,Top2b,Chromatin_binding,Chromatin Binding
+2221,Tox,Tox,Chromatin_binding,Chromatin Binding
+2222,Tox2,Tox2,Chromatin_binding,Chromatin Binding
+2223,Tox3,Tox3,Chromatin_binding,Chromatin Binding
+2224,Tox4,Tox4,Chromatin_binding,Chromatin Binding
+2225,Tpr,Tpr,Chromatin_binding,Chromatin Binding
+2226,Trim24,Trim24,Chromatin_binding,Chromatin Binding
+2227,Trim28,Trim28,Chromatin_binding,Chromatin Binding
+2228,Trim33,Trim33,Chromatin_binding,Chromatin Binding
+2229,Trim37,Trim37,Chromatin_binding,Chromatin Binding
+2230,Trim66,Trim66,Chromatin_binding,Chromatin Binding
+2231,Tshz3,Tshz3,Chromatin_binding,Chromatin Binding
+2232,Tspyl1,Tspyl1,Chromatin_binding,Chromatin Binding
+2233,Tspyl2,Tspyl2,Chromatin_binding,Chromatin Binding
+2234,Tspyl3,Tspyl3,Chromatin_binding,Chromatin Binding
+2235,Tspyl4,Tspyl4,Chromatin_binding,Chromatin Binding
+2236,Tspyl5,Tspyl5,Chromatin_binding,Chromatin Binding
+2237,Ttc5,Ttc5,Chromatin_binding,Chromatin Binding
+2238,Ttc21b,Ttc21b,Chromatin_binding,Chromatin Binding
+2239,Ttc39aos1,Ttc39aos1,Chromatin_binding,Chromatin Binding
+2241,Twist2,Twist2,Chromatin_binding,Chromatin Binding
+2242,Ube2t,Ube2t,Chromatin_binding,Chromatin Binding
+2244,Upf1,Upf1,Chromatin_binding,Chromatin Binding
+2245,Uri1,Uri1,Chromatin_binding,Chromatin Binding
+2246,Usp3,Usp3,Chromatin_binding,Chromatin Binding
+2247,Usp51,Usp51,Chromatin_binding,Chromatin Binding
+2248,Uty,Uty,Chromatin_binding,Chromatin Binding
+2249,Uxt,Uxt,Chromatin_binding,Chromatin Binding
+2250,Wac,Wac,Chromatin_binding,Chromatin Binding
+2251,Wbp2,Wbp2,Chromatin_binding,Chromatin Binding
+2252,Wbp2nl,Wbp2nl,Chromatin_binding,Chromatin Binding
+2253,Wdhd1,Wdhd1,Chromatin_binding,Chromatin Binding
+2254,Wdr13,Wdr13,Chromatin_binding,Chromatin Binding
+2255,Wdr82,Wdr82,Chromatin_binding,Chromatin Binding
+2256,Wrn,Wrn,Chromatin_binding,Chromatin Binding
+2257,Yap1,Yap1,Chromatin_binding,Chromatin Binding
+2258,Ybx1,Ybx1,Chromatin_binding,Chromatin Binding
+2259,Ybx2,Ybx2,Chromatin_binding,Chromatin Binding
+2260,Zc3h4,Zc3h4,Chromatin_binding,Chromatin Binding
+2261,Zc3h12a,Zc3h12a,Chromatin_binding,Chromatin Binding
+2262,Zfp110,Zfp110,Chromatin_binding,Chromatin Binding
+2263,Zfp125,Zfp125,Chromatin_binding,Chromatin Binding
+2264,Zfp276,Zfp276,Chromatin_binding,Chromatin Binding
+2265,Zfp369,Zfp369,Chromatin_binding,Chromatin Binding
+2266,Zfp609,Zfp609,Chromatin_binding,Chromatin Binding
+2267,Zfx,Zfx,Chromatin_binding,Chromatin Binding
+2268,Zic2,Zic2,Chromatin_binding,Chromatin Binding
+2269,Zkscan3,Zkscan3,Chromatin_binding,Chromatin Binding
+2270,Znhit1,Znhit1,Chromatin_binding,Chromatin Binding
+2271,0610010K14Rik,0610010K14Rik,Chromatin_organization,Chromatin Organization
+2272,4930402K13Rik,4930402K13Rik,Chromatin_organization,Chromatin Organization
+2273,4930480E11Rik,4930480E11Rik,Chromatin_organization,Chromatin Organization
+2274,a,a,Chromatin_organization,Chromatin Organization
+2275,Abraxas1,Abraxas1,Chromatin_organization,Chromatin Organization
+2276,Actb,Actb,Chromatin_organization,Chromatin Organization
+2279,Actr5,Actr5,Chromatin_organization,Chromatin Organization
+2281,Actr8,Actr8,Chromatin_organization,Chromatin Organization
+2282,Aicda,Aicda,Chromatin_organization,Chromatin Organization
+2283,Airn,Airn,Chromatin_organization,Chromatin Organization
+2284,Alkbh4,Alkbh4,Chromatin_organization,Chromatin Organization
+2285,Anp32b,Anp32b,Chromatin_organization,Chromatin Organization
+2286,Anp32e,Anp32e,Chromatin_organization,Chromatin Organization
+2288,Aplf,Aplf,Chromatin_organization,Chromatin Organization
+2289,Apobec1,Apobec1,Chromatin_organization,Chromatin Organization
+2292,Arid2,Arid2,Chromatin_organization,Chromatin Organization
+2293,Arid4a,Arid4a,Chromatin_organization,Chromatin Organization
+2294,Arid4b,Arid4b,Chromatin_organization,Chromatin Organization
+2296,Asf1b,Asf1b,Chromatin_organization,Chromatin Organization
+2302,Atf7ip2,Atf7ip2,Chromatin_organization,Chromatin Organization
+2304,Atxn7l3,Atxn7l3,Chromatin_organization,Chromatin Organization
+2305,Axin1,Axin1,Chromatin_organization,Chromatin Organization
+2306,Babam1,Babam1,Chromatin_organization,Chromatin Organization
+2307,Babam2,Babam2,Chromatin_organization,Chromatin Organization
+2308,Bag6,Bag6,Chromatin_organization,Chromatin Organization
+2310,Banf1,Banf1,Chromatin_organization,Chromatin Organization
+2311,Banp,Banp,Chromatin_organization,Chromatin Organization
+2313,Baz1a,Baz1a,Chromatin_organization,Chromatin Organization
+2314,Baz1b,Baz1b,Chromatin_organization,Chromatin Organization
+2315,Baz2a,Baz2a,Chromatin_organization,Chromatin Organization
+2316,Bcl7a,Bcl7a,Chromatin_organization,Chromatin Organization
+2317,Bcl7b,Bcl7b,Chromatin_organization,Chromatin Organization
+2318,Bcl7c,Bcl7c,Chromatin_organization,Chromatin Organization
+2319,Bcor,Bcor,Chromatin_organization,Chromatin Organization
+2320,Bcorl1,Bcorl1,Chromatin_organization,Chromatin Organization
+2321,Bend3,Bend3,Chromatin_organization,Chromatin Organization
+2322,Bicra,Bicra,Chromatin_organization,Chromatin Organization
+2323,Bicral,Bicral,Chromatin_organization,Chromatin Organization
+2326,Bptf,Bptf,Chromatin_organization,Chromatin Organization
+2328,Brcc3,Brcc3,Chromatin_organization,Chromatin Organization
+2329,Brd1,Brd1,Chromatin_organization,Chromatin Organization
+2333,Brd7,Brd7,Chromatin_organization,Chromatin Organization
+2334,Brd8,Brd8,Chromatin_organization,Chromatin Organization
+2335,Brd9,Brd9,Chromatin_organization,Chromatin Organization
+2336,Brdt,Brdt,Chromatin_organization,Chromatin Organization
+2337,Brpf1,Brpf1,Chromatin_organization,Chromatin Organization
+2338,Brpf3,Brpf3,Chromatin_organization,Chromatin Organization
+2339,Bud23,Bud23,Chromatin_organization,Chromatin Organization
+2347,Cbx6,Cbx6,Chromatin_organization,Chromatin Organization
+2350,Cdan1,Cdan1,Chromatin_organization,Chromatin Organization
+2351,Cdk2,Cdk2,Chromatin_organization,Chromatin Organization
+2352,Cdkn1c,Cdkn1c,Chromatin_organization,Chromatin Organization
+2354,Cecr2,Cecr2,Chromatin_organization,Chromatin Organization
+2355,Cenpp,Cenpp,Chromatin_organization,Chromatin Organization
+2356,Cenpv,Cenpv,Chromatin_organization,Chromatin Organization
+2357,Cfdp1,Cfdp1,Chromatin_organization,Chromatin Organization
+2358,Cggbp1,Cggbp1,Chromatin_organization,Chromatin Organization
+2359,Chaer1,Chaer1,Chromatin_organization,Chromatin Organization
+2360,Chaf1a,Chaf1a,Chromatin_organization,Chromatin Organization
+2361,Chaf1b,Chaf1b,Chromatin_organization,Chromatin Organization
+2371,Chd9,Chd9,Chromatin_organization,Chromatin Organization
+2372,Chek1,Chek1,Chromatin_organization,Chromatin Organization
+2373,Chrac1,Chrac1,Chromatin_organization,Chromatin Organization
+2374,Coprs,Coprs,Chromatin_organization,Chromatin Organization
+2376,Ctr9,Ctr9,Chromatin_organization,Chromatin Organization
+2377,Dapk3,Dapk3,Chromatin_organization,Chromatin Organization
+2378,Daxx,Daxx,Chromatin_organization,Chromatin Organization
+2379,Dcaf1,Dcaf1,Chromatin_organization,Chromatin Organization
+2380,Ddx21,Ddx21,Chromatin_organization,Chromatin Organization
+2381,Ddx23,Ddx23,Chromatin_organization,Chromatin Organization
+2382,Dek,Dek,Chromatin_organization,Chromatin Organization
+2383,Dicer1,Dicer1,Chromatin_organization,Chromatin Organization
+2384,Dmap1,Dmap1,Chromatin_organization,Chromatin Organization
+2386,Dnajc9,Dnajc9,Chromatin_organization,Chromatin Organization
+2390,Dnmt3l,Dnmt3l,Chromatin_organization,Chromatin Organization
+2391,Dpf1,Dpf1,Chromatin_organization,Chromatin Organization
+2392,Dpf2,Dpf2,Chromatin_organization,Chromatin Organization
+2393,Dpf3,Dpf3,Chromatin_organization,Chromatin Organization
+2394,Dppa3,Dppa3,Chromatin_organization,Chromatin Organization
+2395,Dpy30,Dpy30,Chromatin_organization,Chromatin Organization
+2397,Dtx3l,Dtx3l,Chromatin_organization,Chromatin Organization
+2398,Dyrk1a,Dyrk1a,Chromatin_organization,Chromatin Organization
+2402,Eif1,Eif1,Chromatin_organization,Chromatin Organization
+2403,Emsy,Emsy,Chromatin_organization,Chromatin Organization
+2406,Epc1,Epc1,Chromatin_organization,Chromatin Organization
+2407,Epc2,Epc2,Chromatin_organization,Chromatin Organization
+2410,Exosc10,Exosc10,Chromatin_organization,Chromatin Organization
+2411,Eya1,Eya1,Chromatin_organization,Chromatin Organization
+2412,Eya2,Eya2,Chromatin_organization,Chromatin Organization
+2414,Eya4,Eya4,Chromatin_organization,Chromatin Organization
+2417,Fam47c,Fam47c,Chromatin_organization,Chromatin Organization
+2418,Fam47e,Fam47e,Chromatin_organization,Chromatin Organization
+2419,Fam50a,Fam50a,Chromatin_organization,Chromatin Organization
+2420,Fam50b,Fam50b,Chromatin_organization,Chromatin Organization
+2421,Fam172a,Fam172a,Chromatin_organization,Chromatin Organization
+2422,Flicr,Flicr,Chromatin_organization,Chromatin Organization
+2423,Fshr,Fshr,Chromatin_organization,Chromatin Organization
+2424,Ftx,Ftx,Chromatin_organization,Chromatin Organization
+2425,Gatad1,Gatad1,Chromatin_organization,Chromatin Organization
+2426,Gatad2a,Gatad2a,Chromatin_organization,Chromatin Organization
+2427,Gatad2b,Gatad2b,Chromatin_organization,Chromatin Organization
+2428,Glmn,Glmn,Chromatin_organization,Chromatin Organization
+2430,Gnas,Gnas,Chromatin_organization,Chromatin Organization
+2432,Gpx1,Gpx1,Chromatin_organization,Chromatin Organization
+2433,Gpx4,Gpx4,Chromatin_organization,Chromatin Organization
+2435,Gsk3a,Gsk3a,Chromatin_organization,Chromatin Organization
+2436,Gsk3b,Gsk3b,Chromatin_organization,Chromatin Organization
+2449,H2al2a,H2al2a,Chromatin_organization,Chromatin Organization
+2473,H3f3c,H3f3c,Chromatin_organization,Chromatin Organization
+2475,H19,H19,Chromatin_organization,Chromatin Organization
+2476,Haspin,Haspin,Chromatin_organization,Chromatin Organization
+2479,Hcfc2,Hcfc2,Chromatin_organization,Chromatin Organization
+2492,Hjurp,Hjurp,Chromatin_organization,Chromatin Organization
+2493,Hltf,Hltf,Chromatin_organization,Chromatin Organization
+2494,Hmg20a,Hmg20a,Chromatin_organization,Chromatin Organization
+2495,Hmg20b,Hmg20b,Chromatin_organization,Chromatin Organization
+2503,Hotair,Hotair,Chromatin_organization,Chromatin Organization
+2506,Ifi203,Ifi203,Chromatin_organization,Chromatin Organization
+2507,Ifi205,Ifi205,Chromatin_organization,Chromatin Organization
+2508,Ifi208,Ifi208,Chromatin_organization,Chromatin Organization
+2509,Ifi209,Ifi209,Chromatin_organization,Chromatin Organization
+2510,Ifi211,Ifi211,Chromatin_organization,Chromatin Organization
+2511,Ifi213,Ifi213,Chromatin_organization,Chromatin Organization
+2512,Ifi214,Ifi214,Chromatin_organization,Chromatin Organization
+2514,Ing3,Ing3,Chromatin_organization,Chromatin Organization
+2515,Ing4,Ing4,Chromatin_organization,Chromatin Organization
+2517,Ino80,Ino80,Chromatin_organization,Chromatin Organization
+2518,Ino80b,Ino80b,Chromatin_organization,Chromatin Organization
+2519,Ino80c,Ino80c,Chromatin_organization,Chromatin Organization
+2520,Ino80d,Ino80d,Chromatin_organization,Chromatin Organization
+2521,Ino80e,Ino80e,Chromatin_organization,Chromatin Organization
+2522,Itgb3bp,Itgb3bp,Chromatin_organization,Chromatin Organization
+2523,Jak2,Jak2,Chromatin_organization,Chromatin Organization
+2527,Jpx,Jpx,Chromatin_organization,Chromatin Organization
+2528,Kansl1,Kansl1,Chromatin_organization,Chromatin Organization
+2529,Kansl2,Kansl2,Chromatin_organization,Chromatin Organization
+2530,Kansl3,Kansl3,Chromatin_organization,Chromatin Organization
+2538,Kcnq1,Kcnq1,Chromatin_organization,Chromatin Organization
+2561,Kmt2e,Kmt2e,Chromatin_organization,Chromatin Organization
+2569,Lamc1,Lamc1,Chromatin_organization,Chromatin Organization
+2570,Lin54,Lin54,Chromatin_organization,Chromatin Organization
+2571,Lmna,Lmna,Chromatin_organization,Chromatin Organization
+2572,Lmnb1,Lmnb1,Chromatin_organization,Chromatin Organization
+2573,Lmnb2,Lmnb2,Chromatin_organization,Chromatin Organization
+2574,Lmntd2,Lmntd2,Chromatin_organization,Chromatin Organization
+2575,Loxl2,Loxl2,Chromatin_organization,Chromatin Organization
+2576,Lrif1,Lrif1,Chromatin_organization,Chromatin Organization
+2578,Lsm11,Lsm11,Chromatin_organization,Chromatin Organization
+2579,M1ap,M1ap,Chromatin_organization,Chromatin Organization
+2585,Mcm2,Mcm2,Chromatin_organization,Chromatin Organization
+2587,Mcrs1,Mcrs1,Chromatin_organization,Chromatin Organization
+2588,Meaf6,Meaf6,Chromatin_organization,Chromatin Organization
+2589,Meg3,Meg3,Chromatin_organization,Chromatin Organization
+2590,Mettl3,Mettl3,Chromatin_organization,Chromatin Organization
+2591,Mettl4,Mettl4,Chromatin_organization,Chromatin Organization
+2594,Mhrt,Mhrt,Chromatin_organization,Chromatin Organization
+2596,Mir127,Mir127,Chromatin_organization,Chromatin Organization
+2597,Mir136,Mir136,Chromatin_organization,Chromatin Organization
+2598,Mir744,Mir744,Chromatin_organization,Chromatin Organization
+2599,Mis18a,Mis18a,Chromatin_organization,Chromatin Organization
+2600,Mki67,Mki67,Chromatin_organization,Chromatin Organization
+2601,Mllt1,Mllt1,Chromatin_organization,Chromatin Organization
+2603,Mms22l,Mms22l,Chromatin_organization,Chromatin Organization
+2604,Mndal,Mndal,Chromatin_organization,Chromatin Organization
+2609,Morf4l2,Morf4l2,Chromatin_organization,Chromatin Organization
+2610,Mos,Mos,Chromatin_organization,Chromatin Organization
+2612,Mpnd,Mpnd,Chromatin_organization,Chromatin Organization
+2613,Mrgbp,Mrgbp,Chromatin_organization,Chromatin Organization
+2615,Msl2,Msl2,Chromatin_organization,Chromatin Organization
+2620,Mthfr,Mthfr,Chromatin_organization,Chromatin Organization
+2621,Mybbp1a,Mybbp1a,Chromatin_organization,Chromatin Organization
+2622,Myo1c,Myo1c,Chromatin_organization,Chromatin Organization
+2623,Mysm1,Mysm1,Chromatin_organization,Chromatin Organization
+2631,Nasp,Nasp,Chromatin_organization,Chromatin Organization
+2633,Nfrkb,Nfrkb,Chromatin_organization,Chromatin Organization
+2642,Nudt5,Nudt5,Chromatin_organization,Chromatin Organization
+2644,Oip5,Oip5,Chromatin_organization,Chromatin Organization
+2645,Pabpc1l,Pabpc1l,Chromatin_organization,Chromatin Organization
+2646,Padi2,Padi2,Chromatin_organization,Chromatin Organization
+2647,Padi4,Padi4,Chromatin_organization,Chromatin Organization
+2648,Pak1,Pak1,Chromatin_organization,Chromatin Organization
+2649,Parp10,Parp10,Chromatin_organization,Chromatin Organization
+2651,Pcgf3,Pcgf3,Chromatin_organization,Chromatin Organization
+2652,Pcgf5,Pcgf5,Chromatin_organization,Chromatin Organization
+2656,Phf10,Phf10,Chromatin_organization,Chromatin Organization
+2659,Phf20,Phf20,Chromatin_organization,Chromatin Organization
+2661,Pih1d1,Pih1d1,Chromatin_organization,Chromatin Organization
+2662,Pik3ca,Pik3ca,Chromatin_organization,Chromatin Organization
+2663,Piwil1,Piwil1,Chromatin_organization,Chromatin Organization
+2666,Pphln1,Pphln1,Chromatin_organization,Chromatin Organization
+2667,Ppm1d,Ppm1d,Chromatin_organization,Chromatin Organization
+2674,Prm1,Prm1,Chromatin_organization,Chromatin Organization
+2678,Psme4,Psme4,Chromatin_organization,Chromatin Organization
+2679,Ptma,Ptma,Chromatin_organization,Chromatin Organization
+2682,Rag1,Rag1,Chromatin_organization,Chromatin Organization
+2684,Rb1,Rb1,Chromatin_organization,Chromatin Organization
+2685,Rbbp4,Rbbp4,Chromatin_organization,Chromatin Organization
+2687,Rbbp7,Rbbp7,Chromatin_organization,Chromatin Organization
+2690,Rbm15,Rbm15,Chromatin_organization,Chromatin Organization
+2691,Rbm15b,Rbm15b,Chromatin_organization,Chromatin Organization
+2692,Rcbtb1,Rcbtb1,Chromatin_organization,Chromatin Organization
+2693,Rccd1,Rccd1,Chromatin_organization,Chromatin Organization
+2696,Resf1,Resf1,Chromatin_organization,Chromatin Organization
+2697,Rif1,Rif1,Chromatin_organization,Chromatin Organization
+2699,Riox1,Riox1,Chromatin_organization,Chromatin Organization
+2700,Rlim,Rlim,Chromatin_organization,Chromatin Organization
+2703,Rnf40,Rnf40,Chromatin_organization,Chromatin Organization
+2705,Rrp8,Rrp8,Chromatin_organization,Chromatin Organization
+2706,Rsbn1,Rsbn1,Chromatin_organization,Chromatin Organization
+2708,Ruvbl1,Ruvbl1,Chromatin_organization,Chromatin Organization
+2711,Sart3,Sart3,Chromatin_organization,Chromatin Organization
+2713,Selenof,Selenof,Chromatin_organization,Chromatin Organization
+2725,Sgf29,Sgf29,Chromatin_organization,Chromatin Organization
+2726,Shprh,Shprh,Chromatin_organization,Chromatin Organization
+2736,Smarcb1,Smarcb1,Chromatin_organization,Chromatin Organization
+2740,Smarcd2,Smarcd2,Chromatin_organization,Chromatin Organization
+2742,Smarce1,Smarce1,Chromatin_organization,Chromatin Organization
+2743,Smchd1,Smchd1,Chromatin_organization,Chromatin Organization
+2748,Sphk2,Sphk2,Chromatin_organization,Chromatin Organization
+2749,Spin1,Spin1,Chromatin_organization,Chromatin Organization
+2750,Spty2d1,Spty2d1,Chromatin_organization,Chromatin Organization
+2751,Srpk2,Srpk2,Chromatin_organization,Chromatin Organization
+2752,Ss18,Ss18,Chromatin_organization,Chromatin Organization
+2756,Supt4a,Supt4a,Chromatin_organization,Chromatin Organization
+2757,Supt4b,Supt4b,Chromatin_organization,Chromatin Organization
+2763,Sycp1,Sycp1,Chromatin_organization,Chromatin Organization
+2764,Sycp3,Sycp3,Chromatin_organization,Chromatin Organization
+2768,Tbl1xr1,Tbl1xr1,Chromatin_organization,Chromatin Organization
+2769,Tdg,Tdg,Chromatin_organization,Chromatin Organization
+2771,Tet1,Tet1,Chromatin_organization,Chromatin Organization
+2772,Tet2,Tet2,Chromatin_organization,Chromatin Organization
+2773,Tet3,Tet3,Chromatin_organization,Chromatin Organization
+2774,Tex15,Tex15,Chromatin_organization,Chromatin Organization
+2775,Tfpt,Tfpt,Chromatin_organization,Chromatin Organization
+2776,Tlk1,Tlk1,Chromatin_organization,Chromatin Organization
+2777,Tlk2,Tlk2,Chromatin_organization,Chromatin Organization
+2778,Tnp1,Tnp1,Chromatin_organization,Chromatin Organization
+2779,Tnp2,Tnp2,Chromatin_organization,Chromatin Organization
+2780,Tonsl,Tonsl,Chromatin_organization,Chromatin Organization
+2784,Trim27,Trim27,Chromatin_organization,Chromatin Organization
+2786,Trrap,Trrap,Chromatin_organization,Chromatin Organization
+2787,Tsix,Tsix,Chromatin_organization,Chromatin Organization
+2792,Tssk6,Tssk6,Chromatin_organization,Chromatin Organization
+2795,Tti1,Tti1,Chromatin_organization,Chromatin Organization
+2796,Ubn1,Ubn1,Chromatin_organization,Chromatin Organization
+2797,Ubn2,Ubn2,Chromatin_organization,Chromatin Organization
+2798,Ubr2,Ubr2,Chromatin_organization,Chromatin Organization
+2800,Uchl5,Uchl5,Chromatin_organization,Chromatin Organization
+2801,Uhrf1,Uhrf1,Chromatin_organization,Chromatin Organization
+2802,Uimc1,Uimc1,Chromatin_organization,Chromatin Organization
+2804,Usp16,Usp16,Chromatin_organization,Chromatin Organization
+2805,Usp21,Usp21,Chromatin_organization,Chromatin Organization
+2806,Usp22,Usp22,Chromatin_organization,Chromatin Organization
+2807,Usp49,Usp49,Chromatin_organization,Chromatin Organization
+2808,Utp3,Utp3,Chromatin_organization,Chromatin Organization
+2810,Vps72,Vps72,Chromatin_organization,Chromatin Organization
+2814,Wdr5,Wdr5,Chromatin_organization,Chromatin Organization
+2815,Xist,Xist,Chromatin_organization,Chromatin Organization
+2816,Yeats2,Yeats2,Chromatin_organization,Chromatin Organization
+2817,Yeats4,Yeats4,Chromatin_organization,Chromatin Organization
+2818,Ythdc1,Ythdc1,Chromatin_organization,Chromatin Organization
+2819,Zdbf2,Zdbf2,Chromatin_organization,Chromatin Organization
+2820,Zfp42,Zfp42,Chromatin_organization,Chromatin Organization
+2821,Zfp335,Zfp335,Chromatin_organization,Chromatin Organization
+2824,Cenpa,Cenpa,Chromatin_component,Chromatin Organization
+2840,H2al1a,H2al1a,Chromatin_component,Chromatin Organization
+2841,H2al1c,H2al1c,Chromatin_component,Chromatin Organization
+2842,H2al1d,H2al1d,Chromatin_component,Chromatin Organization
+2843,H2al1f,H2al1f,Chromatin_component,Chromatin Organization
+2844,H2al1g,H2al1g,Chromatin_component,Chromatin Organization
+2845,H2al1h,H2al1h,Chromatin_component,Chromatin Organization
+2846,H2al1i,H2al1i,Chromatin_component,Chromatin Organization
+2881,Actn1,Actn1,Transcription_regulator,Transcription Regulator
+2882,Actn2,Actn2,Transcription_regulator,Transcription Regulator
+2885,Aff1,Aff1,Transcription_regulator,Transcription Regulator
+2886,Ahdc1,Ahdc1,Transcription_regulator,Transcription Regulator
+2887,Ahrr,Ahrr,Transcription_regulator,Transcription Regulator
+2888,Aip,Aip,Transcription_regulator,Transcription Regulator
+2890,Akirin1,Akirin1,Transcription_regulator,Transcription Regulator
+2891,Akirin2,Akirin2,Transcription_regulator,Transcription Regulator
+2892,Ankrd1,Ankrd1,Transcription_regulator,Transcription Regulator
+2896,Arid5b,Arid5b,Transcription_regulator,Transcription Regulator
+2897,Arl2bp,Arl2bp,Transcription_regulator,Transcription Regulator
+2898,Arrb1,Arrb1,Transcription_regulator,Transcription Regulator
+2899,Asah1,Asah1,Transcription_regulator,Transcription Regulator
+2900,Ascc1,Ascc1,Transcription_regulator,Transcription Regulator
+2904,Atn1,Atn1,Transcription_regulator,Transcription Regulator
+2906,Basp1,Basp1,Transcription_regulator,Transcription Regulator
+2907,Bcl3,Bcl3,Transcription_regulator,Transcription Regulator
+2908,Bcl9,Bcl9,Transcription_regulator,Transcription Regulator
+2909,Bcl9l,Bcl9l,Transcription_regulator,Transcription Regulator
+2910,Bcl10,Bcl10,Transcription_regulator,Transcription Regulator
+2916,Birc2,Birc2,Transcription_regulator,Transcription Regulator
+2921,Btaf1,Btaf1,Transcription_regulator,Transcription Regulator
+2922,Btg2,Btg2,Transcription_regulator,Transcription Regulator
+2923,Bud31,Bud31,Transcription_regulator,Transcription Regulator
+2924,C1d,C1d,Transcription_regulator,Transcription Regulator
+2925,C1qbp,C1qbp,Transcription_regulator,Transcription Regulator
+2927,Camta1,Camta1,Transcription_regulator,Transcription Regulator
+2930,Casp8ap2,Casp8ap2,Transcription_regulator,Transcription Regulator
+2931,Cbfa2t2,Cbfa2t2,Transcription_regulator,Transcription Regulator
+2933,Cbfb,Cbfb,Transcription_regulator,Transcription Regulator
+2934,Ccar1,Ccar1,Transcription_regulator,Transcription Regulator
+2935,Ccar2,Ccar2,Transcription_regulator,Transcription Regulator
+2936,Ccdc62,Ccdc62,Transcription_regulator,Transcription Regulator
+2937,Ccdc124,Ccdc124,Transcription_regulator,Transcription Regulator
+2938,Ccnd1,Ccnd1,Transcription_regulator,Transcription Regulator
+2939,Cdca4,Cdca4,Transcription_regulator,Transcription Regulator
+2941,Cdyl2,Cdyl2,Transcription_regulator,Transcription Regulator
+2942,Cebpz,Cebpz,Transcription_regulator,Transcription Regulator
+2943,Cenpj,Cenpj,Transcription_regulator,Transcription Regulator
+2944,Cir1,Cir1,Transcription_regulator,Transcription Regulator
+2947,Cited4,Cited4,Transcription_regulator,Transcription Regulator
+2948,Cmtm2a,Cmtm2a,Transcription_regulator,Transcription Regulator
+2949,Cnot6,Cnot6,Transcription_regulator,Transcription Regulator
+2950,Cnot7,Cnot7,Transcription_regulator,Transcription Regulator
+2951,Cnot9,Cnot9,Transcription_regulator,Transcription Regulator
+2952,Cops2,Cops2,Transcription_regulator,Transcription Regulator
+2953,Cops5,Cops5,Transcription_regulator,Transcription Regulator
+2955,Crym,Crym,Transcription_regulator,Transcription Regulator
+2956,Csprs,Csprs,Transcription_regulator,Transcription Regulator
+2962,Dcaf6,Dcaf6,Transcription_regulator,Transcription Regulator
+2963,Dcc,Dcc,Transcription_regulator,Transcription Regulator
+2967,Ddx54,Ddx54,Transcription_regulator,Transcription Regulator
+2968,Dhrs7b,Dhrs7b,Transcription_regulator,Transcription Regulator
+2971,Dmrtc1a,Dmrtc1a,Transcription_regulator,Transcription Regulator
+2972,Dmrtc1b,Dmrtc1b,Transcription_regulator,Transcription Regulator
+2973,Dmrtc1c1,Dmrtc1c1,Transcription_regulator,Transcription Regulator
+2975,Dnajb1,Dnajb1,Transcription_regulator,Transcription Regulator
+2981,Drap1,Drap1,Transcription_regulator,Transcription Regulator
+2984,Dyrk1b,Dyrk1b,Transcription_regulator,Transcription Regulator
+2985,Eaf1,Eaf1,Transcription_regulator,Transcription Regulator
+2986,Eaf2,Eaf2,Transcription_regulator,Transcription Regulator
+2988,Edf1,Edf1,Transcription_regulator,Transcription Regulator
+2989,Eid1,Eid1,Transcription_regulator,Transcription Regulator
+2990,Eid2,Eid2,Transcription_regulator,Transcription Regulator
+2991,Eid2b,Eid2b,Transcription_regulator,Transcription Regulator
+2992,Elane,Elane,Transcription_regulator,Transcription Regulator
+2995,Ewsr1,Ewsr1,Transcription_regulator,Transcription Regulator
+2999,Fgf2,Fgf2,Transcription_regulator,Transcription Regulator
+3000,Fhl2,Fhl2,Transcription_regulator,Transcription Regulator
+3001,Fhl3,Fhl3,Transcription_regulator,Transcription Regulator
+3002,Fhl5,Fhl5,Transcription_regulator,Transcription Regulator
+3005,Gmnn,Gmnn,Transcription_regulator,Transcription Regulator
+3006,Gon4l,Gon4l,Transcription_regulator,Transcription Regulator
+3007,Gps2,Gps2,Transcription_regulator,Transcription Regulator
+3008,Hbp1,Hbp1,Transcription_regulator,Transcription Regulator
+3017,Hdgfl1,Hdgfl1,Transcription_regulator,Transcription Regulator
+3020,Helz2,Helz2,Transcription_regulator,Transcription Regulator
+3021,Hipk1,Hipk1,Transcription_regulator,Transcription Regulator
+3022,Hipk2,Hipk2,Transcription_regulator,Transcription Regulator
+3023,Hipk3,Hipk3,Transcription_regulator,Transcription Regulator
+3025,Hmga1b,Hmga1b,Transcription_regulator,Transcription Regulator
+3028,Hmgb2,Hmgb2,Transcription_regulator,Transcription Regulator
+3030,Homez,Homez,Transcription_regulator,Transcription Regulator
+3032,Hsbp1,Hsbp1,Transcription_regulator,Transcription Regulator
+3033,Hsbp1l1,Hsbp1l1,Transcription_regulator,Transcription Regulator
+3034,Hspa1a,Hspa1a,Transcription_regulator,Transcription Regulator
+3035,Hyal2,Hyal2,Transcription_regulator,Transcription Regulator
+3036,Id1,Id1,Transcription_regulator,Transcription Regulator
+3037,Id2,Id2,Transcription_regulator,Transcription Regulator
+3038,Id3,Id3,Transcription_regulator,Transcription Regulator
+3039,Id4,Id4,Transcription_regulator,Transcription Regulator
+3041,Irf2bp1,Irf2bp1,Transcription_regulator,Transcription Regulator
+3042,Irf2bp2,Irf2bp2,Transcription_regulator,Transcription Regulator
+3043,Irf2bpl,Irf2bpl,Transcription_regulator,Transcription Regulator
+3044,Jade1,Jade1,Transcription_regulator,Transcription Regulator
+3045,Jazf1,Jazf1,Transcription_regulator,Transcription Regulator
+3047,Jmy,Jmy,Transcription_regulator,Transcription Regulator
+3048,Jph2,Jph2,Transcription_regulator,Transcription Regulator
+3049,Jup,Jup,Transcription_regulator,Transcription Regulator
+3057,Kctd1,Kctd1,Transcription_regulator,Transcription Regulator
+3066,Klf9,Klf9,Transcription_regulator,Transcription Regulator
+3071,Ldb2,Ldb2,Transcription_regulator,Transcription Regulator
+3072,Limd1,Limd1,Transcription_regulator,Transcription Regulator
+3073,Lmcd1,Lmcd1,Transcription_regulator,Transcription Regulator
+3074,Lmo1,Lmo1,Transcription_regulator,Transcription Regulator
+3076,Lmo3,Lmo3,Transcription_regulator,Transcription Regulator
+3077,Lmo4,Lmo4,Transcription_regulator,Transcription Regulator
+3078,Lpin1,Lpin1,Transcription_regulator,Transcription Regulator
+3079,Lpin2,Lpin2,Transcription_regulator,Transcription Regulator
+3080,Lpin3,Lpin3,Transcription_regulator,Transcription Regulator
+3081,Lpxn,Lpxn,Transcription_regulator,Transcription Regulator
+3082,Maged1,Maged1,Transcription_regulator,Transcription Regulator
+3083,Mak,Mak,Transcription_regulator,Transcription Regulator
+3084,Maml1,Maml1,Transcription_regulator,Transcription Regulator
+3085,Maml2,Maml2,Transcription_regulator,Transcription Regulator
+3086,Maml3,Maml3,Transcription_regulator,Transcription Regulator
+3087,Mamstr,Mamstr,Transcription_regulator,Transcription Regulator
+3088,Map3k10,Map3k10,Transcription_regulator,Transcription Regulator
+3089,Mcidas,Mcidas,Transcription_regulator,Transcription Regulator
+3118,Mid2,Mid2,Transcription_regulator,Transcription Regulator
+3122,Mier3,Mier3,Transcription_regulator,Transcription Regulator
+3123,Mlip,Mlip,Transcription_regulator,Transcription Regulator
+3124,Mms19,Mms19,Transcription_regulator,Transcription Regulator
+3126,Mrtfb,Mrtfb,Transcription_regulator,Transcription Regulator
+3130,Mtdh,Mtdh,Transcription_regulator,Transcription Regulator
+3131,Muc1,Muc1,Transcription_regulator,Transcription Regulator
+3132,Mxd4,Mxd4,Transcription_regulator,Transcription Regulator
+3134,Mycbp,Mycbp,Transcription_regulator,Transcription Regulator
+3135,Myocd,Myocd,Transcription_regulator,Transcription Regulator
+3137,N4bp2l2,N4bp2l2,Transcription_regulator,Transcription Regulator
+3138,Nab1,Nab1,Transcription_regulator,Transcription Regulator
+3139,Nab2,Nab2,Transcription_regulator,Transcription Regulator
+3140,Naca,Naca,Transcription_regulator,Transcription Regulator
+3145,Ncoa7,Ncoa7,Transcription_regulator,Transcription Regulator
+3148,Neurog2,Neurog2,Transcription_regulator,Transcription Regulator
+3150,Nme2,Nme2,Transcription_regulator,Transcription Regulator
+3151,Nmi,Nmi,Transcription_regulator,Transcription Regulator
+3154,Npas3,Npas3,Transcription_regulator,Transcription Regulator
+3155,Npat,Npat,Transcription_regulator,Transcription Regulator
+3157,Nr0b1,Nr0b1,Transcription_regulator,Transcription Regulator
+3158,Nr0b2,Nr0b2,Transcription_regulator,Transcription Regulator
+3159,Nrbf2,Nrbf2,Transcription_regulator,Transcription Regulator
+3160,Nrg1,Nrg1,Transcription_regulator,Transcription Regulator
+3161,Nrip1,Nrip1,Transcription_regulator,Transcription Regulator
+3166,Pa2g4,Pa2g4,Transcription_regulator,Transcription Regulator
+3167,Park7,Park7,Transcription_regulator,Transcription Regulator
+3168,Parp9,Parp9,Transcription_regulator,Transcription Regulator
+3170,Parp14,Parp14,Transcription_regulator,Transcription Regulator
+3171,Pcbd1,Pcbd1,Transcription_regulator,Transcription Regulator
+3172,Pdlim1,Pdlim1,Transcription_regulator,Transcription Regulator
+3173,Per2,Per2,Transcription_regulator,Transcription Regulator
+3174,Pex14,Pex14,Transcription_regulator,Transcription Regulator
+3175,Phb,Phb,Transcription_regulator,Transcription Regulator
+3179,Phf12,Phf12,Transcription_regulator,Transcription Regulator
+3180,Pias1,Pias1,Transcription_regulator,Transcription Regulator
+3181,Pias2,Pias2,Transcription_regulator,Transcription Regulator
+3182,Pias3,Pias3,Transcription_regulator,Transcription Regulator
+3183,Pias4,Pias4,Transcription_regulator,Transcription Regulator
+3184,Pir,Pir,Transcription_regulator,Transcription Regulator
+3185,Pkm,Pkm,Transcription_regulator,Transcription Regulator
+3187,Pmf1,Pmf1,Transcription_regulator,Transcription Regulator
+3188,Pml,Pml,Transcription_regulator,Transcription Regulator
+3189,Pou2af1,Pou2af1,Transcription_regulator,Transcription Regulator
+3194,Pprc1,Pprc1,Transcription_regulator,Transcription Regulator
+3197,Prkn,Prkn,Transcription_regulator,Transcription Regulator
+3200,Prpf6,Prpf6,Transcription_regulator,Transcription Regulator
+3202,Psmc3ip,Psmc3ip,Transcription_regulator,Transcription Regulator
+3203,Psmd9,Psmd9,Transcription_regulator,Transcription Regulator
+3204,Ptpn14,Ptpn14,Transcription_regulator,Transcription Regulator
+3206,Pxn,Pxn,Transcription_regulator,Transcription Regulator
+3207,Rad54l2,Rad54l2,Transcription_regulator,Transcription Regulator
+3208,Raly,Raly,Transcription_regulator,Transcription Regulator
+3209,Rap2c,Rap2c,Transcription_regulator,Transcription Regulator
+3210,Rbbp8,Rbbp8,Transcription_regulator,Transcription Regulator
+3211,Rbck1,Rbck1,Transcription_regulator,Transcription Regulator
+3212,Rbfox2,Rbfox2,Transcription_regulator,Transcription Regulator
+3213,Rbm14,Rbm14,Transcription_regulator,Transcription Regulator
+3214,Rbm39,Rbm39,Transcription_regulator,Transcription Regulator
+3215,Rbpms,Rbpms,Transcription_regulator,Transcription Regulator
+3217,Rcor2,Rcor2,Transcription_regulator,Transcription Regulator
+3218,Rcor3,Rcor3,Transcription_regulator,Transcription Regulator
+3221,Riox2,Riox2,Transcription_regulator,Transcription Regulator
+3223,Rrp1b,Rrp1b,Transcription_regulator,Transcription Regulator
+3225,Runx1t1,Runx1t1,Transcription_regulator,Transcription Regulator
+3228,Rybp,Rybp,Transcription_regulator,Transcription Regulator
+3229,Sap18,Sap18,Transcription_regulator,Transcription Regulator
+3230,Sap30,Sap30,Transcription_regulator,Transcription Regulator
+3232,Scai,Scai,Transcription_regulator,Transcription Regulator
+3233,Sdr16c5,Sdr16c5,Transcription_regulator,Transcription Regulator
+3234,Sertad1,Sertad1,Transcription_regulator,Transcription Regulator
+3235,Sertad2,Sertad2,Transcription_regulator,Transcription Regulator
+3239,Sfr1,Sfr1,Transcription_regulator,Transcription Regulator
+3253,Snw1,Snw1,Transcription_regulator,Transcription Regulator
+3255,Spen,Spen,Transcription_regulator,Transcription Regulator
+3256,Sqstm1,Sqstm1,Transcription_regulator,Transcription Regulator
+3257,Sra1,Sra1,Transcription_regulator,Transcription Regulator
+3259,Ss18l2,Ss18l2,Transcription_regulator,Transcription Regulator
+3260,Ssbp3,Ssbp3,Transcription_regulator,Transcription Regulator
+3261,Ssx9,Ssx9,Transcription_regulator,Transcription Regulator
+3262,Ssxa1,Ssxa1,Transcription_regulator,Transcription Regulator
+3263,Ssxb1,Ssxb1,Transcription_regulator,Transcription Regulator
+3264,Ssxb3,Ssxb3,Transcription_regulator,Transcription Regulator
+3265,Ssxb5,Ssxb5,Transcription_regulator,Transcription Regulator
+3266,Ssxb6,Ssxb6,Transcription_regulator,Transcription Regulator
+3267,Ssxb8,Ssxb8,Transcription_regulator,Transcription Regulator
+3268,Ssxb10,Ssxb10,Transcription_regulator,Transcription Regulator
+3271,Supt3,Supt3,Transcription_regulator,Transcription Regulator
+3272,Supt7l,Supt7l,Transcription_regulator,Transcription Regulator
+3273,Supt20,Supt20,Transcription_regulator,Transcription Regulator
+3274,Tacc1,Tacc1,Transcription_regulator,Transcription Regulator
+3275,Tada1,Tada1,Transcription_regulator,Transcription Regulator
+3278,Tada3,Tada3,Transcription_regulator,Transcription Regulator
+3279,Taf5l,Taf5l,Transcription_regulator,Transcription Regulator
+3285,Taf15,Taf15,Transcription_regulator,Transcription Regulator
+3288,Tcerg1l,Tcerg1l,Transcription_regulator,Transcription Regulator
+3290,Tcf25,Tcf25,Transcription_regulator,Transcription Regulator
+3291,Tcp10a,Tcp10a,Transcription_regulator,Transcription Regulator
+3292,Tcp10b,Tcp10b,Transcription_regulator,Transcription Regulator
+3293,Tcp10c,Tcp10c,Transcription_regulator,Transcription Regulator
+3296,Tgfb1i1,Tgfb1i1,Transcription_regulator,Transcription Regulator
+3299,Tle2,Tle2,Transcription_regulator,Transcription Regulator
+3300,Tle3,Tle3,Transcription_regulator,Transcription Regulator
+3302,Tle6,Tle6,Transcription_regulator,Transcription Regulator
+3304,Tmf1,Tmf1,Transcription_regulator,Transcription Regulator
+3305,Tob1,Tob1,Transcription_regulator,Transcription Regulator
+3306,Tob2,Tob2,Transcription_regulator,Transcription Regulator
+3309,Trerf1,Trerf1,Transcription_regulator,Transcription Regulator
+3310,Trib3,Trib3,Transcription_regulator,Transcription Regulator
+3311,Trim5,Trim5,Transcription_regulator,Transcription Regulator
+3312,Trim8,Trim8,Transcription_regulator,Transcription Regulator
+3313,Trim12a,Trim12a,Transcription_regulator,Transcription Regulator
+3314,Trim12c,Trim12c,Transcription_regulator,Transcription Regulator
+3315,Trim13,Trim13,Transcription_regulator,Transcription Regulator
+3316,Trim14,Trim14,Transcription_regulator,Transcription Regulator
+3317,Trim15,Trim15,Transcription_regulator,Transcription Regulator
+3318,Trim21,Trim21,Transcription_regulator,Transcription Regulator
+3320,Trim25,Trim25,Transcription_regulator,Transcription Regulator
+3323,Trim30a,Trim30a,Transcription_regulator,Transcription Regulator
+3324,Trim30b,Trim30b,Transcription_regulator,Transcription Regulator
+3325,Trim30c,Trim30c,Transcription_regulator,Transcription Regulator
+3326,Trim30d,Trim30d,Transcription_regulator,Transcription Regulator
+3327,Trim31,Trim31,Transcription_regulator,Transcription Regulator
+3328,Trim32,Trim32,Transcription_regulator,Transcription Regulator
+3330,Trim38,Trim38,Transcription_regulator,Transcription Regulator
+3331,Trim52,Trim52,Transcription_regulator,Transcription Regulator
+3332,Trim62,Trim62,Transcription_regulator,Transcription Regulator
+3333,Trip4,Trip4,Transcription_regulator,Transcription Regulator
+3334,Trp53bp1,Trp53bp1,Transcription_regulator,Transcription Regulator
+3336,Tsg101,Tsg101,Transcription_regulator,Transcription Regulator
+3339,Ube2l3,Ube2l3,Transcription_regulator,Transcription Regulator
+3340,Ube3a,Ube3a,Transcription_regulator,Transcription Regulator
+3342,Usf3,Usf3,Transcription_regulator,Transcription Regulator
+3346,Utf1,Utf1,Transcription_regulator,Transcription Regulator
+3348,Vgll2,Vgll2,Transcription_regulator,Transcription Regulator
+3349,Vhl,Vhl,Transcription_regulator,Transcription Regulator
+3352,Wdr43,Wdr43,Transcription_regulator,Transcription Regulator
+3353,Wdr77,Wdr77,Transcription_regulator,Transcription Regulator
+3354,Wnt3a,Wnt3a,Transcription_regulator,Transcription Regulator
+3355,Wnt4,Wnt4,Transcription_regulator,Transcription Regulator
+3356,Wtip,Wtip,Transcription_regulator,Transcription Regulator
+3357,Wwc1,Wwc1,Transcription_regulator,Transcription Regulator
+3358,Wwox,Wwox,Transcription_regulator,Transcription Regulator
+3359,Wwtr1,Wwtr1,Transcription_regulator,Transcription Regulator
+3360,Xpc,Xpc,Transcription_regulator,Transcription Regulator
+3361,Yaf2,Yaf2,Transcription_regulator,Transcription Regulator
+3363,Zbed4,Zbed4,Transcription_regulator,Transcription Regulator
+3364,Zbed6,Zbed6,Transcription_regulator,Transcription Regulator
+3365,Zbtb8a,Zbtb8a,Transcription_regulator,Transcription Regulator
+3366,Zbtb10,Zbtb10,Transcription_regulator,Transcription Regulator
+3367,Zbtb46,Zbtb46,Transcription_regulator,Transcription Regulator
+3368,Zcchc12,Zcchc12,Transcription_regulator,Transcription Regulator
+3369,Zfp1,Zfp1,Transcription_regulator,Transcription Regulator
+3370,Zfp26,Zfp26,Transcription_regulator,Transcription Regulator
+3371,Zfp30,Zfp30,Transcription_regulator,Transcription Regulator
+3373,Zfp59,Zfp59,Transcription_regulator,Transcription Regulator
+3374,Zfp60,Zfp60,Transcription_regulator,Transcription Regulator
+3377,Zfp182,Zfp182,Transcription_regulator,Transcription Regulator
+3378,Zfp316,Zfp316,Transcription_regulator,Transcription Regulator
+3381,Zfp512b,Zfp512b,Transcription_regulator,Transcription Regulator
+3382,Zfp518b,Zfp518b,Transcription_regulator,Transcription Regulator
+3383,Zfp541,Zfp541,Transcription_regulator,Transcription Regulator
+3384,Zfp579,Zfp579,Transcription_regulator,Transcription Regulator
+3385,Zfp653,Zfp653,Transcription_regulator,Transcription Regulator
+3386,Zfp664,Zfp664,Transcription_regulator,Transcription Regulator
+3387,Zfp691,Zfp691,Transcription_regulator,Transcription Regulator
+3388,Zfp697,Zfp697,Transcription_regulator,Transcription Regulator
+3389,Zfp711,Zfp711,Transcription_regulator,Transcription Regulator
+3390,Zfpm1,Zfpm1,Transcription_regulator,Transcription Regulator
+3391,Zfpm2,Zfpm2,Transcription_regulator,Transcription Regulator
+3393,Zglp1,Zglp1,Transcription_regulator,Transcription Regulator
+3395,Zic5,Zic5,Transcription_regulator,Transcription Regulator
+3397,Zmiz1,Zmiz1,Transcription_regulator,Transcription Regulator
+3398,Zmiz2,Zmiz2,Transcription_regulator,Transcription Regulator
+3399,Zmynd8,Zmynd8,Transcription_regulator,Transcription Regulator
+3400,Zmynd11,Zmynd11,Transcription_regulator,Transcription Regulator
+3401,Zxdb,Zxdb,Transcription_regulator,Transcription Regulator
+3402,Zxdc,Zxdc,Transcription_regulator,Transcription Regulator
