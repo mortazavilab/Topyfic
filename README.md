@@ -33,9 +33,10 @@ In general, you need to make three objects (Train, TopModel and Analysis).
 
 The Train object can be initialized either from (a) single cell RNA-seq dataset or (b) single cell ATAC-seq or (c) bulk RNA-seq.
 
-Here We prepare toturials on verious datasets along with how we analysed their resutls:
+For guidance on using Topyfic to analyze your data look at our more depth-in tutorials:
 
 - [Analysing single cell C2C12 data only using regulatory elements](tutorials/C2C12__TFs_mirhgs_chromreg/C2C12.ipynb): Analysing single cell and single nucleus using C2C12 ENCODE datasets using regulatory elements instead of all genes.
+- [Analysing single cell microglia data](tutorials/microglia_all_genes/microglia.ipynb): Analysing single cell microglia data from [Model-AD portal](https://www.model-ad.org/).
 
 ## Cite
 
