@@ -50,9 +50,10 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
-    def make_single_LDA_model(self, data, random_state, name, n_jobs=None):
+    def make_single_LDA_model(self, data, random_state, name, **kwargs):
         """
         train simple LDA model using sklearn package and embed it to TopModel class
+
 
         :param name: name of LDA model
         :type name: str
@@ -60,16 +61,13 @@ class Train:
         :type data: anndata
         :param random_state: Pass an int for reproducible results across multiple function calls
         :type random_state: int
-        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend <https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend>`_ context. -1 means using all processors.  See `Glossary <https://scikit-learn.org/stable/glossary.html#term-n_jobs>`_ for more details. (default = None)
-        :type n_jobs: int
 
         :return: LDA model embedded in TopModel class
         :rtype: TopModel
         """
         lda_model = LatentDirichletAllocation(n_components=self.k,
-                                              learning_method="online",
-                                              n_jobs=n_jobs,
-                                              random_state=random_state)
+                                              random_state=random_state,
+                                              **kwargs)
 
         lda_model.fit_transform(data.to_df().to_numpy())
 
@@ -84,16 +82,24 @@ class Train:
 
         return TopModel_lda_model
 
-    def run_LDA_models(self, data, n_jobs=None, n_thread=1):
+    def run_LDA_models(self, data, learning_method="online", batch_size=1000, max_iter=10, n_jobs=None, n_thread=1, **kwargs):
         """
         train LDA models
 
+        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)
+        :type max_iter: int
+        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)
+        :type batch_size: int
+        :param learning_method: Method used to update _component. {‘batch’, ‘online’} (default=’online’)
+        :type learning_method: str
         :param data: expression data embedded in anndata format use to train LDA model
         :type data: anndata
         :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend <https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend>`_ context. -1 means using all processors.  See `Glossary <https://scikit-learn.org/stable/glossary.html#term-n_jobs>`_ for more details. (default = None)
         :type n_jobs: int
         :param n_thread: number of threads you used to learn LDA models (default=1)
         :type n_thread: int
+        :param **kwargs: other parameter in sklearn.decomposition.LatentDirichletAllocation function (more info: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html)
+        :type **kwargs: dict
 
         :return: None
         :rtype: None
@@ -102,7 +108,9 @@ class Train:
             n_thread = self.n_runs
 
         self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
-                                                           zip(repeat(data), self.random_state_range, repeat(self.name)))
+                                                           zip(repeat(data), self.random_state_range, repeat(self.name),
+                                                               repeat(learning_method), repeat(batch_size),
+                                                               repeat(max_iter), repeat(n_jobs), repeat(**kwargs)))
         print(f"{self.n_runs} LDA models with {self.k} topics learned\n")
 
     def make_LDA_models_attributes(self):
