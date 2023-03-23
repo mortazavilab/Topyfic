@@ -50,7 +50,7 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
-    def make_single_LDA_model(self, data, random_state, name, **kwargs):
+    def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, **kwargs):
         """
         train simple LDA model using sklearn package and embed it to TopModel class
 
@@ -61,12 +61,24 @@ class Train:
         :type data: anndata
         :param random_state: Pass an int for reproducible results across multiple function calls
         :type random_state: int
+        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)
+        :type max_iter: int
+        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)
+        :type batch_size: int
+        :param learning_method: Method used to update _component. {‘batch’, ‘online’} (default=’online’)
+        :type learning_method: str
+        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend <https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend>`_ context. -1 means using all processors.  See `Glossary <https://scikit-learn.org/stable/glossary.html#term-n_jobs>`_ for more details. (default = None)
+        :type n_jobs: int
 
         :return: LDA model embedded in TopModel class
         :rtype: TopModel
         """
         lda_model = LatentDirichletAllocation(n_components=self.k,
                                               random_state=random_state,
+                                              learning_method=learning_method,
+                                              batch_size=batch_size,
+                                              max_iter=max_iter,
+                                              n_jobs=n_jobs,
                                               **kwargs)
 
         lda_model.fit_transform(data.to_df().to_numpy())
