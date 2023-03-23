@@ -110,7 +110,7 @@ class Train:
         self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
                                                            zip(repeat(data), self.random_state_range, repeat(self.name),
                                                                repeat(learning_method), repeat(batch_size),
-                                                               repeat(max_iter), repeat(n_jobs), repeat(**kwargs)))
+                                                               repeat(max_iter), repeat(n_jobs), repeat(kwargs)))
         print(f"{self.n_runs} LDA models with {self.k} topics learned\n")
 
     def make_LDA_models_attributes(self):
