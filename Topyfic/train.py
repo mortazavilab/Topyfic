@@ -50,7 +50,7 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
-    def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, **kwargs):
+    def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, kwargs):
         """
         train simple LDA model using sklearn package and embed it to TopModel class
 
