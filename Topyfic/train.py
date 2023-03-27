@@ -50,6 +50,17 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
+    def combine_LDA_models(self, data, LDA_models=[]):
+        for i in range(len(LDA_models)):
+            gene_weights = pd.DataFrame(np.transpose(LDA_models[i].components_),
+                                        columns=[f'Topic{i + 1}_R{self.random_state_range[i]}' for i in range(self.k)],
+                                        index=data.var.index.tolist())
+            TopModel_lda_model = TopModel(name=f"{self.name}_{self.random_state_range[i]}",
+                                          N=gene_weights.shape[1],
+                                          gene_weights=gene_weights,
+                                          rlda=LDA_models[i])
+            self.top_models.append(TopModel_lda_model)
+
     def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, kwargs):
         """
         train simple LDA model using sklearn package and embed it to TopModel class
@@ -116,8 +127,10 @@ class Train:
         :return: None
         :rtype: None
         """
-        if n_thread is None:
-            n_thread = self.n_runs
+        if n_thread == 1:
+            self.top_models = []
+            for random_state in self.random_state_range:
+                self.top_models.append(self.make_single_LDA_model(data, random_state, self.name, learning_method, batch_size, max_iter, n_jobs, kwargs))
 
         self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
                                                            zip(repeat(data), self.random_state_range, repeat(self.name),
