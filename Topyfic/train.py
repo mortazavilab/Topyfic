@@ -50,15 +50,23 @@ class Train:
         self.random_state_range = random_state_range
         self.top_models = []
 
-    def combine_LDA_models(self, data, LDA_models=[]):
-        for i in range(len(LDA_models)):
-            gene_weights = pd.DataFrame(np.transpose(LDA_models[i].components_),
+    def combine_LDA_models(self, data, single_trains=[]):
+        """
+        combine single top_model
+
+        :param data: data you used to learn model
+        :type data: anndata
+        :param single_trains: list of single train object
+        :type single_trains: list
+        """
+        for i in range(len(single_trains)):
+            gene_weights = pd.DataFrame(np.transpose(single_trains[i].top_models[0].rLDA.components_),
                                         columns=[f'Topic{i + 1}_R{self.random_state_range[i]}' for i in range(self.k)],
                                         index=data.var.index.tolist())
             TopModel_lda_model = TopModel(name=f"{self.name}_{self.random_state_range[i]}",
                                           N=gene_weights.shape[1],
                                           gene_weights=gene_weights,
-                                          rlda=LDA_models[i])
+                                          rlda=single_trains[i].top_models[0].rLDA)
             self.top_models.append(TopModel_lda_model)
 
     def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, kwargs):
