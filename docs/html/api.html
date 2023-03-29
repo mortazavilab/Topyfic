@@ -134,6 +134,20 @@
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="Topyfic.train.Train.combine_LDA_models">
+<span class="sig-name descname"><span class="pre">combine_LDA_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_trains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.combine_LDA_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.combine_LDA_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>combine single top_model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>anndata</em>) – data you used to learn model</p></li>
+<li><p><strong>single_trains</strong> (<em>list</em>) – list of single train object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.make_LDA_models_attributes">
 <span class="sig-name descname"><span class="pre">make_LDA_models_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_LDA_models_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_LDA_models_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)</p>
@@ -149,7 +163,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.make_single_LDA_model">
-<span class="sig-name descname"><span class="pre">make_single_LDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_single_LDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_single_LDA_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">make_single_LDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.make_single_LDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.make_single_LDA_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>train simple LDA model using sklearn package and embed it to TopModel class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -157,6 +171,9 @@ the last one is combining the rest of LDA attributes which put them to gather as
 <li><p><strong>name</strong> (<em>str</em>) – name of LDA model</p></li>
 <li><p><strong>data</strong> (<em>anndata</em>) – processed expression data along with cells and genes/region information</p></li>
 <li><p><strong>random_state</strong> (<em>int</em>) – Pass an int for reproducible results across multiple function calls</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em>) – The maximum number of passes over the training data (aka epochs) (default = 10)</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</p></li>
+<li><p><strong>learning_method</strong> (<em>str</em>) – Method used to update _component. {‘batch’, ‘online’} (default=’online’)</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em>) – The number of jobs to use in the E-step. None means 1 unless in a <a class="reference external" href="https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend">joblib.parallel_backend</a> context. -1 means using all processors.  See <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-n_jobs">Glossary</a> for more details. (default = None)</p></li>
 </ul>
 </dd>
@@ -171,15 +188,20 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.train.Train.run_LDA_models">
-<span class="sig-name descname"><span class="pre">run_LDA_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.run_LDA_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.run_LDA_models" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_LDA_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'online'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/train.html#Train.run_LDA_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.train.Train.run_LDA_models" title="Permalink to this definition">¶</a></dt>
 <dd><p>train LDA models</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>max_iter</strong> (<em>int</em>) – The maximum number of passes over the training data (aka epochs) (default = 10)</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</p></li>
+<li><p><strong>learning_method</strong> (<em>str</em>) – Method used to update _component. {‘batch’, ‘online’} (default=’online’)</p></li>
 <li><p><strong>data</strong> (<em>anndata</em>) – expression data embedded in anndata format use to train LDA model</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em>) – <p>The number of jobs to use in the E-step. None means 1 unless in a <a class="reference external" href="https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend">joblib.parallel_backend</a> context. -1 means using all processors.  See <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-n_jobs">Glossary</a> for more details. (default = None)</p>
 </p></li>
 <li><p><strong>n_thread</strong> (<em>int</em>) – number of threads you used to learn LDA models (default=1)</p></li>
+<li><p><strong>**kwargs</strong> – <p>other parameter in sklearn.decomposition.LatentDirichletAllocation function (more info: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html">https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html</a>)</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

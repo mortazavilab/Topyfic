@@ -156,9 +156,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span> <span class="o">=</span> <span class="n">random_state_range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Train.make_single_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_single_LDA_model">[docs]</a>    <span class="k">def</span> <span class="nf">make_single_LDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Train.combine_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.combine_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">combine_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">single_trains</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        combine single top_model</span>
+
+<span class="sd">        :param data: data you used to learn model</span>
+<span class="sd">        :type data: anndata</span>
+<span class="sd">        :param single_trains: list of single train object</span>
+<span class="sd">        :type single_trains: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">single_trains</span><span class="p">)):</span>
+            <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">single_trains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rLDA</span><span class="o">.</span><span class="n">components_</span><span class="p">),</span>
+                                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">_R</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span>
+                                        <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="n">TopModel_lda_model</span> <span class="o">=</span> <span class="n">TopModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                          <span class="n">N</span><span class="o">=</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                          <span class="n">gene_weights</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
+                                          <span class="n">rlda</span><span class="o">=</span><span class="n">single_trains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rLDA</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TopModel_lda_model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Train.make_single_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_single_LDA_model">[docs]</a>    <span class="k">def</span> <span class="nf">make_single_LDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">learning_method</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        train simple LDA model using sklearn package and embed it to TopModel class</span>
+
 
 <span class="sd">        :param name: name of LDA model</span>
 <span class="sd">        :type name: str</span>
@@ -166,6 +186,12 @@
 <span class="sd">        :type data: anndata</span>
 <span class="sd">        :param random_state: Pass an int for reproducible results across multiple function calls</span>
 <span class="sd">        :type random_state: int</span>
+<span class="sd">        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)</span>
+<span class="sd">        :type max_iter: int</span>
+<span class="sd">        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</span>
+<span class="sd">        :type batch_size: int</span>
+<span class="sd">        :param learning_method: Method used to update _component. {‘batch’, ‘online’} (default=’online’)</span>
+<span class="sd">        :type learning_method: str</span>
 <span class="sd">        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend &lt;https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend&gt;`_ context. -1 means using all processors.  See `Glossary &lt;https://scikit-learn.org/stable/glossary.html#term-n_jobs&gt;`_ for more details. (default = None)</span>
 <span class="sd">        :type n_jobs: int</span>
 
@@ -173,9 +199,12 @@
 <span class="sd">        :rtype: TopModel</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lda_model</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
-                                              <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;online&quot;</span><span class="p">,</span>
+                                              <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+                                              <span class="n">learning_method</span><span class="o">=</span><span class="n">learning_method</span><span class="p">,</span>
+                                              <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                                              <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
                                               <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
-                                              <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+                                              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">lda_model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 
@@ -190,25 +219,37 @@
 
         <span class="k">return</span> <span class="n">TopModel_lda_model</span></div>
 
-<div class="viewcode-block" id="Train.run_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.run_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">run_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_thread</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Train.run_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.run_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">run_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;online&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_thread</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        train LDA models</span>
 
+<span class="sd">        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)</span>
+<span class="sd">        :type max_iter: int</span>
+<span class="sd">        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</span>
+<span class="sd">        :type batch_size: int</span>
+<span class="sd">        :param learning_method: Method used to update _component. {‘batch’, ‘online’} (default=’online’)</span>
+<span class="sd">        :type learning_method: str</span>
 <span class="sd">        :param data: expression data embedded in anndata format use to train LDA model</span>
 <span class="sd">        :type data: anndata</span>
 <span class="sd">        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend &lt;https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend&gt;`_ context. -1 means using all processors.  See `Glossary &lt;https://scikit-learn.org/stable/glossary.html#term-n_jobs&gt;`_ for more details. (default = None)</span>
 <span class="sd">        :type n_jobs: int</span>
 <span class="sd">        :param n_thread: number of threads you used to learn LDA models (default=1)</span>
 <span class="sd">        :type n_thread: int</span>
+<span class="sd">        :param **kwargs: other parameter in sklearn.decomposition.LatentDirichletAllocation function (more info: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html)</span>
+<span class="sd">        :type **kwargs: dict</span>
 
 <span class="sd">        :return: None</span>
 <span class="sd">        :rtype: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">n_thread</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">n_thread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_runs</span>
+        <span class="k">if</span> <span class="n">n_thread</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">random_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_single_LDA_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">learning_method</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">n_thread</span><span class="p">)</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_single_LDA_model</span><span class="p">,</span>
-                                                           <span class="nb">zip</span><span class="p">(</span><span class="n">repeat</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)))</span>
+                                                           <span class="nb">zip</span><span class="p">(</span><span class="n">repeat</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                                                               <span class="n">repeat</span><span class="p">(</span><span class="n">learning_method</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">batch_size</span><span class="p">),</span>
+                                                               <span class="n">repeat</span><span class="p">(</span><span class="n">max_iter</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)))</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_runs</span><span class="si">}</span><span class="s2"> LDA models with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> topics learned</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Train.make_LDA_models_attributes"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_LDA_models_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">make_LDA_models_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
