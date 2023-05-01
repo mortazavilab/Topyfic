@@ -63,7 +63,8 @@ class Analysis:
 
         lda_output = self.top_model.rLDA.transform(data.X)
         cell_participation = pd.DataFrame(lda_output,
-                                          columns=[f"Topic_{i + 1}" for i in range(self.top_model.N)],#list(self.top_model.topics.keys())
+                                          columns=[f"Topic_{i + 1}" for i in range(self.top_model.N)],
+                                          # list(self.top_model.topics.keys())
                                           index=data.obs.index)
         self.cell_participation = anndata.AnnData(cell_participation, obs=data.obs)
 
@@ -596,6 +597,7 @@ class Analysis:
         plt.bar(df['index'], df[0], color=color, width=0.5)
 
         plt.xlabel(self.top_model.name)
+        plt.title(f"Distribution of Cell-Topic participation of {self.top_model.name}")
         plt.ylabel("Average cell participation")
 
         if save:
@@ -683,6 +685,72 @@ class Analysis:
 
         if save:
             fig.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
+        if show:
+            plt.show()
+        else:
+            plt.close()
+
+    def cell_participation_distribution(self,
+                                        plot_type="violin",
+                                        threshold=0.05,
+                                        max_topic=True,
+                                        label=None,
+                                        color="blue",
+                                        save=True,
+                                        show=True,
+                                        figsize=None,
+                                        file_format="pdf",
+                                        file_name="dist_cell_participation"):
+        """
+        plot showing distribution of max/all topics in cell participation for each topic
+
+        :param plot_type: type of the plot which can be "violin" or "bax"
+        :type plot_type: str
+        :param threshold: indicate the threshold to filter out cells with low participation in each topics (default: 0.05)
+        :type threshold: float
+        :param max_topic: indicate if you want to consider all topics for each cells (False) or only the topic with highest pariticipation (max topic) for each cells (True)
+        :type max_topic: bool
+        :param label: fill with dictionary contain mapping new name for each topics to name you want to show if you want to change default topic name
+        :type label: dict
+        :param color: color of bar plot (default: blue)
+        :type color: str
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
+
+        if plot_type != "violin" and plot_type != "box":
+            sys.exit(f"plot_type is not correct! It should be violin or box")
+
+        df = self.cell_participation.to_df().copy(deep=True)
+        if max_topic:
+            max_topic_index = df.values.argmax(1)
+            for i in range(df.shape[1]):
+                index = np.where(max_topic_index == i)[0].tolist()
+                df[df.columns[i]][~df.index.isin(df.index[index])] = np.nan
+        df[df <= threshold] = np.nan
+        if label is not None:
+            df.rename(columns=label, inplace=True)
+        if figsize is None:
+            figsize = (df.shape[1] / 1.5, 5)
+        fig, ax = plt.subplots(figsize=figsize, facecolor='white')
+        if plot_type == "violin":
+            sns.violinplot(data=df, color=color, ax=ax)
+        else:
+            sns.boxplot(data=df, color=color, ax=ax)
+
+        plt.ylabel("cell participation")
+        plt.title(f"Distribution of Cell-Topic participation of {self.top_model.name}")
+
+        if save:
+            plt.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
         if show:
             plt.show()
         else:
@@ -807,6 +875,68 @@ class Analysis:
 
         if save:
             fig.savefig(f"{file_name}.{file_format}")
+        if show:
+            plt.show()
+        else:
+            plt.close()
+
+    def max_topic_cell_participation(self,
+                                     cutoff=10,
+                                     color="blue",
+                                     title="Maximum cell topic participation for each cells",
+                                     save=True,
+                                     show=True,
+                                     figsize=None,
+                                     file_format="pdf",
+                                     file_name="max_topic_cell_participation"):
+        """
+        step plot showing maximum cell participation
+
+        :param cutoff: indicate if you want to eliminate any cells with maximum participation less than this
+        :type cutoff: float
+        :param color: color of bar plot (default: blue)
+        :type color: str
+        :param title: indicate if you want to all title into plot (default: Maximum cell topic participation for each cells)
+        :type title: str
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param figsize: indicate the size of plot (default: (10 * (len(category) + 1), 10))
+        :type figsize: tuple of int
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+        :type file_name: str
+        """
+        df = self.cell_participation.to_df().copy(deep=True)
+        df = df.apply(np.sort, axis=1)
+
+        max_topic = pd.DataFrame(index=df.index, columns=['Max_topic'])
+        for i in range(max_topic.shape[0]):
+            max_topic.iloc[i, 0] = df[i][-1] * 100
+        max_topic.sort_values(['Max_topic'], ascending=False, inplace=True)
+        max_topic['step'] = 100 * np.divide(range(1, max_topic.shape[0] + 1), max_topic.shape[0])
+        max_topic['Max_topic'] = max_topic['Max_topic'] * -1
+
+        if figsize is None:
+            figsize = (5, 5)
+
+        fig, ax = plt.figure(figsize=figsize, facecolor='white')
+
+        ax.step(max_topic['Max_topic'], max_topic['step'], color=color)
+
+        ax.set_xticks(range(-100, -cutoff + 1, 10))
+        ax.set_xticklabels(range(100, cutoff - 1, -10))
+        ax.set_ylim(0, 110)
+        ax.set_xlim(-100, -cutoff)
+
+        plt.title(title)
+        plt.xlabel('Maximum cell topic participation')
+        plt.ylabel("percentage of cells")
+
+        if save:
+            fig.savefig(f"{file_name}.{file_format}", bbox_inches='tight')
         if show:
             plt.show()
         else:

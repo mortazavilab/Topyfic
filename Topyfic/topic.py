@@ -3,6 +3,8 @@ import warnings
 import joblib
 import pandas as pd
 import numpy as np
+import yaml
+from yaml.loader import SafeLoader
 
 import gseapy as gp
 from gseapy.plot import dotplot
@@ -200,3 +202,60 @@ class Topic:
                          ofname=f"{file_name}_GO_{name}.{file_format}")
 
         return pre_res.res2d
+
+    def gene_weight_variance(self, save=True):
+        """
+        calculate the gene weight variance
+
+        :param save: added as an information to the Topic (default: True)
+        :type save: bool
+
+        :return: Gene weight variance for given topic
+        :rtype: float
+        """
+        variance = self.gene_weights.var().tolist()[0]
+
+        if save:
+            self.topic_information['variance'] = self.gene_weights.var().tolist()[0]
+
+        return print(f"Gene weight variance for given topic is {variance}")
+
+    def write_topic_yaml(self, topic_id=None, model_yaml_path="model.yaml", topic_yaml_path="topic.yaml", save=True):
+        """
+        write topic in YAML format
+
+        :param topic_id: unique topic ID (default is topic ID)
+        :type topic_id: str
+        :param model_yaml_path: model yaml path that has information about the dataset you use
+        :type model_yaml_path: str
+        :param topic_yaml_path: path that you use to save topic
+        :type topic_yaml_path: str
+        :param save: indicate if you want to save yaml file (True) or just show them (Fasle) (default: True)
+        :type save: bool
+        """
+
+        # check require columns
+        cols = self.gene_information.reset_index().columns
+        if not {'gene_name', 'gene_id'}.issubset(cols):
+            sys.exit(f"Gene information doesn't contain gene_name and gene_id columns!")
+
+        # Open the file and load the file
+        with open(model_yaml_path) as f:
+            model_yaml = yaml.load(f, Loader=SafeLoader)
+
+        if topic_id not in model_yaml['Topic IDs']:
+            sys.exit("Topic_id is not in model YAML file!")
+
+        topic_yaml = {'Topic ID': topic_id,
+                      'Gene weights': self.gene_weights.to_dict()[self.id],
+                      'Gene information': self.gene_information.to_dict(),
+                      'Topic information': self.topic_information.T.to_dict()[self.id]}
+
+        if save:
+            file = open(topic_yaml_path, "w")
+            yaml.dump(topic_yaml, file, default_flow_style=False)
+            file.close()
+        else:
+            yaml_string = yaml.dump(topic_yaml)
+            print("The Topic YAML is:")
+            print(yaml_string)
