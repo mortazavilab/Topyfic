@@ -269,7 +269,7 @@ def calculate_leiden_clustering(trains,
                              gene_weights=gene_weights,
                              rlda=rlda)
 
-    return top_model, clustering
+    return top_model, clustering, adata
 
 
 def plot_cluster_contribution(clustering,
@@ -655,6 +655,11 @@ def compare_topModels(topModels,
             node_color = nx.get_node_attributes(g_connected_component, "color").values()
             weights = nx.get_edge_attributes(g_connected_component, 'weight').values()
 
+            if len(connected_components) == 1:
+                ax = axs
+            else:
+                ax = axs[int(i / ncols), i % ncols]
+
             nx.draw_networkx(g_connected_component,
                              pos=nodePos,
                              width=list(weights),
@@ -662,13 +667,13 @@ def compare_topModels(topModels,
                              node_color=list(node_color),
                              font_size=8,
                              node_size=500,
-                             ax=axs[int(i / ncols), i % ncols])
+                             ax=ax)
 
             nx.draw_networkx_edge_labels(g_connected_component,
                                          nodePos,
                                          edge_labels=edge_labels,
                                          font_size=7,
-                                         ax=axs[int(i / ncols), i % ncols])
+                                         ax=ax)
 
             i += 1
 
