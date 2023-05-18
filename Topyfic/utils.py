@@ -362,7 +362,7 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
     exp_dirichlet_component = np.zeros((n_rtopics, all_exp_dirichlet_component.shape[1]), dtype=float)
 
     topic = 0
-    for cluster in np.unique(clusters[f"leiden"]):
+    for cluster in range(n_rtopics):
         tmp = clusters[clusters["leiden"] == cluster]
 
         tmp_components = all_components.loc[tmp.index, :]
