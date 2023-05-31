@@ -688,7 +688,8 @@ def compare_topModels(topModels,
 
         return axs
 
-    def MA_plot(topic1,
+
+def MA_plot(topic1,
                 topic2,
                 pseudocount=1,
                 threshold=1,
@@ -778,91 +779,95 @@ def compare_topModels(topModels,
 
         return gene_zscore
 
-    def modified_zscore(data, consistency_correction=1.4826):
-        """
-        Returns the modified z score and Median Absolute Deviation (MAD) from the scores in data.
-        The consistency_correction factor converts the MAD to the standard deviation for a given
-        distribution. The default value (1.4826) is the conversion factor if the underlying data
-        is normally distributed
-        """
-        median = np.median(data)
 
-        deviation_from_med = np.array(data) - median
+def modified_zscore(data, consistency_correction=1.4826):
+    """
+    Returns the modified z score and Median Absolute Deviation (MAD) from the scores in data.
+    The consistency_correction factor converts the MAD to the standard deviation for a given
+    distribution. The default value (1.4826) is the conversion factor if the underlying data
+    is normally distributed
+    """
 
-        mad = np.median(np.abs(deviation_from_med))
-        mod_zscore = deviation_from_med / (consistency_correction * mad)
+    median = np.median(data)
 
-        return mod_zscore, mad
+    deviation_from_med = np.array(data) - median
 
-    def functional_enrichment_analysis(gene_list,
+    mad = np.median(np.abs(deviation_from_med))
+    mod_zscore = deviation_from_med / (consistency_correction * mad)
+
+    return mod_zscore, mad
+
+
+def functional_enrichment_analysis(gene_list,
                                        type,
                                        organism,
                                        sets=None,
                                        p_value=0.05,
                                        file_format="pdf",
                                        file_name="functional_enrichment_analysis"):
-        """
-        Doing functional enrichment analysis including GO, KEGG and REACTOME
+    """
+    Doing functional enrichment analysis including GO, KEGG and REACTOME
 
-        :param gene_list: list of gene name
-        :type gene_list:list
-        :param type: indicate the type of databases which it should be one of "GO", "REACTOME"
-        :type type: str
-        :param organism: name of the organ you want to do functional enrichment analysis
-        :type organism: str
-        :param sets: str, list, tuple of Enrichr Library name(s). (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats) only need to fill if the type is GO
-        :type sets: str, list, tuple
-        :param p_value: Defines the pValue threshold. (default: 0.05)
-        :type p_value: float
-        :param file_format: indicate the format of plot (default: pdf)
-        :type file_format: str
-        :param file_name: name and path of the plot use for save (default: gene_composition)
-        :type file_name: str
-        """
+    :param gene_list: list of gene name
+    :type gene_list:list
+    :param type: indicate the type of databases which it should be one of "GO", "REACTOME"
+    :type type: str
+    :param organism: name of the organ you want to do functional enrichment analysis
+    :type organism: str
+    :param sets: str, list, tuple of Enrichr Library name(s). (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats) only need to fill if the type is GO
+    :type sets: str, list, tuple
+    :param p_value: Defines the pValue threshold. (default: 0.05)
+    :type p_value: float
+    :param file_format: indicate the format of plot (default: pdf)
+    :type file_format: str
+    :param file_name: name and path of the plot use for save (default: gene_composition)
+    :type file_name: str
+    """
 
-        if type not in ["GO", "REACTOME"]:
-            sys.exit("Type is not valid! it should be one of them GO, KEGG, REACTOME")
+    if type not in ["GO", "REACTOME"]:
+        sys.exit("Type is not valid! it should be one of them GO, KEGG, REACTOME")
 
-        if type == "GO" and sets is None:
-            sets = ["GO_Biological_Process_2021"]
-        elif type == "KEGG" and sets is None:
-            sets = ["KEGG_2016"]
+    if type == "GO" and sets is None:
+        sets = ["GO_Biological_Process_2021"]
+    elif type == "KEGG" and sets is None:
+        sets = ["KEGG_2016"]
 
-        if type in ["GO", "KEGG"]:
-            enr = gp.enrichr(gene_list=gene_list,
-                             gene_sets=sets,
-                             organism=organism,
-                             outdir=f"{file_name}",
-                             cutoff=p_value)
-            dotplot(enr.res2d,
-                    title=f"Gene ontology",
-                    cmap='viridis_r',
-                    cutoff=p_value,
-                    ofname=f"{file_name}.{file_format}")
-        else:
-            numGeneModule = len(gene_list)
-            genes = ",".join(gene_list)
-            result = analysis.identifiers(ids=genes,
-                                          species=organism,
-                                          p_value=str(p_value))
-            token = result['summary']['token']
-            analysis.report(token,
-                            path=f"{file_name}/",
-                            file=f"{file_name}.{file_format}",
-                            number='50',
-                            species=organism)
-            token_result = analysis.token(token,
-                                          species=organism,
-                                          p_value=str(p_value))
+    if type in ["GO", "KEGG"]:
+        enr = gp.enrichr(gene_list=gene_list,
+                         gene_sets=sets,
+                         organism=organism,
+                         outdir=f"{file_name}",
+                         cutoff=p_value)
+        dotplot(enr.res2d,
+                title=f"Gene ontology",
+                cmap='viridis_r',
+                cutoff=p_value,
+                ofname=f"{file_name}.{file_format}")
+    else:
+        numGeneModule = len(gene_list)
+        genes = ",".join(gene_list)
+        result = analysis.identifiers(ids=genes,
+                                      species=organism,
+                                      p_value=str(p_value))
+        token = result['summary']['token']
+        analysis.report(token,
+                        path=f"{file_name}/",
+                        file=f"{file_name}.{file_format}",
+                        number='50',
+                        species=organism)
+        token_result = analysis.token(token,
+                                      species=organism,
+                                      p_value=str(p_value))
 
-            print(
-                f"{numGeneModule - token_result['identifiersNotFound']} out of {numGeneModule} identifiers in the sample were found in Reactome.")
-            print(
-                f"{token_result['resourceSummary'][0]['pathways']} pathways were hit by at least one of them, which {len(token_result['pathways'])} of them have p-value more than {p_value}.")
-            print(f"Report was saved {file_name}!")
-            print(f"For more information please visit https://reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS={token}")
+        print(
+            f"{numGeneModule - token_result['identifiersNotFound']} out of {numGeneModule} identifiers in the sample were found in Reactome.")
+        print(
+            f"{token_result['resourceSummary'][0]['pathways']} pathways were hit by at least one of them, which {len(token_result['pathways'])} of them have p-value more than {p_value}.")
+        print(f"Report was saved {file_name}!")
+        print(f"For more information please visit https://reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS={token}")
 
-    def GSEA(gene_list,
+
+def GSEA(gene_list,
              gene_sets='GO_Biological_Process_2021',
              p_value=0.05,
              table=True,
@@ -870,50 +875,51 @@ def compare_topModels(topModels,
              file_format="pdf",
              file_name="GSEA",
              **kwargs):
-        """
-        Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.
+    """
+    Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.
 
-        :param gene_list: pandas series with index as a gene names and their ranks/weights as value
-        :type gene_list: pandas series
-        :param gene_sets: Enrichr Library name or .gmt gene sets file or dict of gene sets. (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats)
-        :type gene_sets: str, list, tuple
-        :param p_value: Defines the pValue threshold for plotting. (default: 0.05)
-        :type p_value: float
-        :param table: indicate if you want to save all GO terms that passed the threshold as a table (default: True)
-        :type table: bool
-        :param plot: indicate if you want to plot all GO terms that passed the threshold (default: True)
-        :type plot: bool
-        :param file_format: indicate the format of plot (default: pdf)
-        :type file_format: str
-        :param file_name: name and path of the plot use for save (default: gene_composition)
-        :type file_name: str
-        :param kwargs: Argument to pass to gseapy.prerank(). more info: https://gseapy.readthedocs.io/en/latest/run.html?highlight=gp.prerank#gseapy.prerank
+    :param gene_list: pandas series with index as a gene names and their ranks/weights as value
+    :type gene_list: pandas series
+    :param gene_sets: Enrichr Library name or .gmt gene sets file or dict of gene sets. (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats)
+    :type gene_sets: str, list, tuple
+    :param p_value: Defines the pValue threshold for plotting. (default: 0.05)
+    :type p_value: float
+    :param table: indicate if you want to save all GO terms that passed the threshold as a table (default: True)
+    :type table: bool
+    :param plot: indicate if you want to plot all GO terms that passed the threshold (default: True)
+    :type plot: bool
+    :param file_format: indicate the format of plot (default: pdf)
+    :type file_format: str
+    :param file_name: name and path of the plot use for save (default: gene_composition)
+    :type file_name: str
+    :param kwargs: Argument to pass to gseapy.prerank(). more info: https://gseapy.readthedocs.io/en/latest/run.html?highlight=gp.prerank#gseapy.prerank
 
-        :return: dataframe contains these columns: Term: gene set name, ES: enrichment score, NES: normalized enrichment score, NOM p-val:  Nominal p-value (from the null distribution of the gene set, FDR q-val: FDR qvalue (adjusted False Discory Rate), FWER p-val: Family wise error rate p-values, Tag %: Percent of gene set before running enrichment peak (ES), Gene %: Percent of gene list before running enrichment peak (ES), Lead_genes: leading edge genes (gene hits before running enrichment peak)
-        :rtype: pandas dataframe
-        """
-        gene_list.index = gene_list.index.str.upper()
+    :return: dataframe contains these columns: Term: gene set name, ES: enrichment score, NES: normalized enrichment score, NOM p-val:  Nominal p-value (from the null distribution of the gene set, FDR q-val: FDR qvalue (adjusted False Discory Rate), FWER p-val: Family wise error rate p-values, Tag %: Percent of gene set before running enrichment peak (ES), Gene %: Percent of gene list before running enrichment peak (ES), Lead_genes: leading edge genes (gene hits before running enrichment peak)
+    :rtype: pandas dataframe
+    """
 
-        pre_res = gp.prerank(rnk=gene_list,
-                             gene_sets=gene_sets,
-                             format=file_format,
-                             no_plot=~plot,
-                             **kwargs)
+    gene_list.index = gene_list.index.str.upper()
 
-        pre_res.res2d.sort_values(["NOM p-val"], inplace=True)
-        pre_res.res2d.drop(["Name"], axis=1, inplace=True)
+    pre_res = gp.prerank(rnk=gene_list,
+                         gene_sets=gene_sets,
+                         format=file_format,
+                         no_plot=~plot,
+                         **kwargs)
 
-        if table:
-            pre_res.res2d.to_csv(f"{file_name}.csv")
+    pre_res.res2d.sort_values(["NOM p-val"], inplace=True)
+    pre_res.res2d.drop(["Name"], axis=1, inplace=True)
 
-        if plot:
-            res = pre_res.res2d.copy(deep=True)
-            res = res[res['NOM p-val'] < p_value]
-            for term in res.Term:
-                name = term.split("(GO:")[1][:-1]
-                gseaplot(rank_metric=pre_res.ranking,
-                         term=term,
-                         **pre_res.results[term],
-                         ofname=f"{file_name}_GO_{name}.{file_format}")
+    if table:
+        pre_res.res2d.to_csv(f"{file_name}.csv")
 
-        return pre_res.res2d
+    if plot:
+        res = pre_res.res2d.copy(deep=True)
+        res = res[res['NOM p-val'] < p_value]
+        for term in res.Term:
+            name = term.split("(GO:")[1][:-1]
+            gseaplot(rank_metric=pre_res.ranking,
+                     term=term,
+                     **pre_res.results[term],
+                     ofname=f"{file_name}_GO_{name}.{file_format}")
+
+    return pre_res.res2d
