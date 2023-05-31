@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='Topyfic',  # the name of your package
     packages=['Topyfic'],  # same as above
-    version='v0.2.1',  # version number
+    version='v0.2.2',  # version number
     license='MIT',  # license type
     description='Topyfic is a Python package designed to identify reproducible latent dirichlet allocation (LDA) '
                 'using leiden clustering and harmony for single cell epigenomics data',
@@ -11,9 +11,9 @@ setup(
     author='Narges Rezaie',  # your name
     author_email='nargesrezaie80@gmail.com',  # your email
     url='https://github.com/mortazavilab/Topyfic',  # url to your git repo
-    download_url='https://github.com/mortazavilab/Topyfic/archive/refs/tags/V0.2.1.tar.gz',  # link to the tar.gz file associated with this release
+    download_url='https://github.com/mortazavilab/Topyfic/archive/refs/tags/V0.2.2.tar.gz',  # link to the tar.gz file associated with this release
     keywords=['Cellular Programs', 'Latent Dirichlet allocation', 'single-cell multiome', 'single-cell RNA-seq',
-              'gene regulatory network'],  #
+              'gene regulatory network', 'Topic Modeling', 'single-nucleus RNA-seq'],  #
     python_requires='>=3.8',
     install_requires=[  # these can also include >, <, == to enforce version compatibility
         'pandas>=1.4.4',  # make sure the packages you put here are those NOT included in the base python distribution
@@ -33,7 +33,8 @@ setup(
         'scikit_learn>=1.2.2',
         'scipy>=1.9.1',
         'seaborn>=0.11.2',
-        'statsmodels>=0.13.5'
+        'statsmodels>=0.13.5',
+        'harmonypy'
 
     ],
     classifiers=[  # choose from here: https://pypi.org/classifiers/

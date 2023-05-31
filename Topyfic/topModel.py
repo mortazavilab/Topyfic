@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.decomposition import LatentDirichletAllocation
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy import stats
 
 sns.set_context('paper')
 warnings.filterwarnings('ignore')
@@ -244,6 +245,117 @@ class TopModel:
             plt.show()
         else:
             plt.close()
+
+    def MA_plot(self,
+                topic1,
+                topic2,
+                pseudocount=1,
+                threshold=1,
+                cutoff=2,
+                consistency_correction=1.4826,
+                labels=None,
+                save=True,
+                show=True,
+                file_format="pdf",
+                file_name="MA_plot"):
+        """
+        plot MA based on the gene weights on given topics
+
+        :param topic1: first topic to be compared
+        :type topic1: str
+        :param topic2: second topic to be compared
+        :type topic2: str
+        :param pseudocount: pseudocount that you want to add (default: 1)
+        :type pseudocount: float
+        :param threshold: threshold to filter genes based on A values (default: 1)
+        :type threshold: float
+        :param cutoff: cutoff for categorized genes by modified z-score (default: 2)
+        :type cutoff: float
+        :param consistency_correction: the factor converts the MAD to the standard deviation for a given distribution. The default value (1.4826) is the conversion factor if the underlying data is normally distributed
+        :type consistency_correction: float
+        :param labels: list of gene names wish to show in MA-plot
+        :type labels: list
+        :param save: indicate if you want to save the plot or not (default: True)
+        :type save: bool
+        :param show: indicate if you want to show the plot or not (default: True)
+        :type show: bool
+        :param file_format: indicate the format of plot (default: pdf)
+        :type file_format: str
+        :param file_name: name and path of the plot use for save (default: MA_plot)
+        :type file_name: str
+
+        :return: return M and A values
+        """
+        gene_weights = self.get_gene_weights()
+        topic1 = gene_weights[topic1]
+        topic2 = gene_weights[topic2]
+
+        topic1 += pseudocount
+        topic2 += pseudocount
+
+        A = (np.log2(topic1) + np.log2(topic2)) / 2
+        M = np.log2(topic1) - np.log2(topic2)
+
+        gene_zscore = pd.concat([A, M], axis=1)
+        gene_zscore.columns = ["A", "M"]
+        gene_zscore = gene_zscore[gene_zscore.A > threshold]
+
+        gene_zscore['mod_zscore'], mad = TopModel.modified_zscore(gene_zscore['M'], consistency_correction=consistency_correction)
+
+        plot_df = gene_zscore.copy(deep=True)
+        plot_df.mod_zscore = plot_df.mod_zscore.abs()
+        plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
+        plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
+        plot_df.mod_zscore.fillna(0, inplace=True)
+        plot_df.mod_zscore = plot_df.mod_zscore.astype(int)
+        if labels is not None:
+            plot_df['label'] = plot_df.index.tolist()
+            plot_df.label[~plot_df.label.isin(labels)] = ""
+
+        y = plot_df.M.median()
+        ymin = y - consistency_correction * mad * 2
+        ymax = y + consistency_correction * mad * 2
+        xmin = round(gene_zscore.A.min()) - 1
+        xmax = round(gene_zscore.A.max())
+
+        sns.scatterplot(data=plot_df, x="A", y="M", hue="mod_zscore",
+                        palette=["orchid", "royalblue"])
+
+        if labels is not None:
+            for label in labels:
+                plt.text(plot_df.A[label] - 0.2, plot_df.M[label] + 0.2, label)
+
+        plt.legend(title='abs(Z-score)', loc='upper right', labels=[f'> {cutoff}', f'< {cutoff}'])
+
+        plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
+        plt.hlines(y=ymin, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
+        plt.hlines(y=ymax, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
+
+        if save:
+            plt.savefig(f"{file_name}.{file_format}")
+        if show:
+            plt.show()
+        else:
+            plt.close()
+
+        return gene_zscore
+
+    @staticmethod
+    def modified_zscore(data, consistency_correction=1.4826):
+        """
+        Returns the modified z score and Median Absolute Deviation (MAD) from the scores in data.
+        The consistency_correction factor converts the MAD to the standard deviation for a given
+        distribution. The default value (1.4826) is the conversion factor if the underlying data
+        is normally distributed
+        """
+        median = np.median(data)
+
+        deviation_from_med = np.array(data) - median
+
+        mad = np.median(np.abs(deviation_from_med))
+        mod_zscore = deviation_from_med / (consistency_correction * mad)
+
+        return mod_zscore, mad
 
     def save_topModel(self, name=None, save_path=""):
         """

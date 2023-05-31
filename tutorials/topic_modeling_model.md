@@ -90,3 +90,35 @@ Topic information:
   variance: 512971.1430917481
 ```
 
+## Write Topyfic results in this format
+
+you can use `write_model_yaml()` and `write_topic_yaml()` functions to embedded your results in this format.
+
+```python 
+import Topyfic
+
+# Read analysis object
+analysis = Topyfic.read_analysis("analysis.p")
+
+# information about model and datasets
+model_info = {
+    'Experiment ID': 'IGVF_000001',
+    'Assay': 'single nucleus RNA-seq',
+    'Technology': ['Parse', '10x'],
+    'level': 'tissue',
+    'Name of method': 'Topyfic',
+    'Number of topics': 22,
+}
+
+
+write_model_yaml(model_info, analysis.cell_participation)
+
+for topic in analysis.top_model.topics:
+    print(topic)
+    write_topic_yaml(topic_id=f"IGVF_000001_{topic}",
+                     topic_info=analysis.top_model.topics[topic], 
+                     model_yaml_path="model.yaml", 
+                     topic_yaml_path=f"{topic}.yaml", 
+                     save=True)
+```
+
