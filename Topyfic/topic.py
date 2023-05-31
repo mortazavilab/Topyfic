@@ -1,24 +1,16 @@
 import sys
 import warnings
-import joblib
 import pandas as pd
-import numpy as np
 import yaml
 from yaml.loader import SafeLoader
 
-import gseapy as gp
-from gseapy.plot import dotplot
-from gseapy import gseaplot
-from reactome2py import analysis
-
-import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set_context('paper')
 
 warnings.filterwarnings('ignore')
 
-from utils import GSEA, functional_enrichment_analysis
+from Topyfic.utils.analyseModel import GSEA, functional_enrichment_analysis
 
 
 class Topic:

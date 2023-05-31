@@ -5,14 +5,14 @@ import sys
 from scipy import stats
 import warnings
 import random
-from statsmodels.stats.multitest import fdrcorrection
+import pickle
 from scipy.cluster.hierarchy import ward, dendrogram, leaves_list
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
 
-from Topyfic.topModel import *
+from Topyfic.topModel import TopModel
 
 sns.set_context('paper')
 warnings.filterwarnings('ignore')

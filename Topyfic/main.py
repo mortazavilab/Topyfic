@@ -1,5 +1,5 @@
 import click
-from Topyfic.utils import *
+from Topyfic.utils.analyseModel import *
 
 
 @click.group()

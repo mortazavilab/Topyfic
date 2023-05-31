@@ -4,16 +4,14 @@ import joblib
 import pickle
 import numpy as np
 import pandas as pd
-from sklearn.decomposition import LatentDirichletAllocation
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy import stats
 
 sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
-from Topyfic.topic import *
-from utils import MA_plot
+from Topyfic.topic import Topic
+from Topyfic.utils.analyseModel import MA_plot
 
 
 class TopModel:
