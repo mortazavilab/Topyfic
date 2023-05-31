@@ -17,8 +17,6 @@ import networkx as nx
 import math
 
 from Topyfic.train import *
-from Topyfic.topic import *
-from Topyfic.topModel import *
 from Topyfic.analysis import *
 
 warnings.filterwarnings("ignore")
@@ -690,17 +688,17 @@ def compare_topModels(topModels,
 
 
 def MA_plot(topic1,
-                topic2,
-                pseudocount=1,
-                threshold=1,
-                cutoff=2,
-                consistency_correction=1.4826,
-                labels=None,
-                save=True,
-                show=True,
-                file_format="pdf",
-                file_name="MA_plot"):
-        """
+            topic2,
+            pseudocount=1,
+            threshold=1,
+            cutoff=2,
+            consistency_correction=1.4826,
+            labels=None,
+            save=True,
+            show=True,
+            file_format="pdf",
+            file_name="MA_plot"):
+    """
         plot MA based on the gene weights on given topics
 
         :param topic1: first topic to be compared
@@ -728,56 +726,59 @@ def MA_plot(topic1,
 
         :return: return M and A values
         """
-        topic1 += pseudocount
-        topic2 += pseudocount
+    topic1 += pseudocount
+    topic2 += pseudocount
 
-        A = (np.log2(topic1) + np.log2(topic2)) / 2
-        M = np.log2(topic1) - np.log2(topic2)
+    A = (np.log2(topic1) + np.log2(topic2)) / 2
+    M = np.log2(topic1) - np.log2(topic2)
 
-        gene_zscore = pd.concat([A, M], axis=1)
-        gene_zscore.columns = ["A", "M"]
-        gene_zscore = gene_zscore[gene_zscore.A > threshold]
+    gene_zscore = pd.concat([A, M], axis=1)
+    gene_zscore.columns = ["A", "M"]
+    gene_zscore = gene_zscore[gene_zscore.A > threshold]
 
-        gene_zscore['mod_zscore'], mad = modified_zscore(gene_zscore['M'],
-                                                         consistency_correction=consistency_correction)
+    gene_zscore['mod_zscore'], mad = modified_zscore(gene_zscore['M'],
+                                                     consistency_correction=consistency_correction)
 
-        plot_df = gene_zscore.copy(deep=True)
-        plot_df.mod_zscore = plot_df.mod_zscore.abs()
-        plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
-        plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
-        plot_df.mod_zscore.fillna(0, inplace=True)
-        plot_df.mod_zscore = plot_df.mod_zscore.astype(int)
-        if labels is not None:
-            plot_df['label'] = plot_df.index.tolist()
-            plot_df.label[~plot_df.label.isin(labels)] = ""
+    plot_df = gene_zscore.copy(deep=True)
+    plot_df.mod_zscore = plot_df.mod_zscore.abs()
+    plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
+    plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
+    plot_df.mod_zscore.fillna(0, inplace=True)
+    plot_df.mod_zscore = plot_df.mod_zscore.astype(int)
+    if labels is not None:
+        plot_df['label'] = plot_df.index.tolist()
+        plot_df.label[~plot_df.label.isin(labels)] = ""
 
-        y = plot_df.M.median()
-        ymin = y - consistency_correction * mad * 2
-        ymax = y + consistency_correction * mad * 2
-        xmin = round(gene_zscore.A.min()) - 1
-        xmax = round(gene_zscore.A.max())
+    y = plot_df.M.median()
+    ymin = y - consistency_correction * mad * 2
+    ymax = y + consistency_correction * mad * 2
+    xmin = round(gene_zscore.A.min()) - 1
+    xmax = round(gene_zscore.A.max())
 
-        sns.scatterplot(data=plot_df, x="A", y="M", hue="mod_zscore",
-                        palette=["orchid", "royalblue"])
+    color_palette = {cutoff: "orchid",
+                     0: "royalblue"}
 
-        if labels is not None:
-            for label in labels:
-                plt.text(plot_df.A[label] - 0.2, plot_df.M[label] + 0.2, label)
+    sns.scatterplot(data=plot_df, x="A", y="M", hue="mod_zscore",
+                    palette=color_palette)
 
-        plt.legend(title='abs(Z-score)', loc='upper right', labels=[f'> {cutoff}', f'< {cutoff}'])
+    if labels is not None:
+        for label in labels:
+            plt.text(plot_df.A[label] - 0.2, plot_df.M[label] + 0.2, label)
 
-        plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
-        plt.hlines(y=ymin, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
-        plt.hlines(y=ymax, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
+    plt.legend(title='abs(Z-score)', loc='upper right', labels=[f'> {cutoff}', f'< {cutoff}'])
 
-        if save:
-            plt.savefig(f"{file_name}.{file_format}")
-        if show:
-            plt.show()
-        else:
-            plt.close()
+    plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
+    plt.hlines(y=ymin, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
+    plt.hlines(y=ymax, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
 
-        return gene_zscore
+    if save:
+        plt.savefig(f"{file_name}.{file_format}")
+    if show:
+        plt.show()
+    else:
+        plt.close()
+
+    return gene_zscore
 
 
 def modified_zscore(data, consistency_correction=1.4826):
@@ -799,12 +800,12 @@ def modified_zscore(data, consistency_correction=1.4826):
 
 
 def functional_enrichment_analysis(gene_list,
-                                       type,
-                                       organism,
-                                       sets=None,
-                                       p_value=0.05,
-                                       file_format="pdf",
-                                       file_name="functional_enrichment_analysis"):
+                                   type,
+                                   organism,
+                                   sets=None,
+                                   p_value=0.05,
+                                   file_format="pdf",
+                                   file_name="functional_enrichment_analysis"):
     """
     Doing functional enrichment analysis including GO, KEGG and REACTOME
 
@@ -868,13 +869,13 @@ def functional_enrichment_analysis(gene_list,
 
 
 def GSEA(gene_list,
-             gene_sets='GO_Biological_Process_2021',
-             p_value=0.05,
-             table=True,
-             plot=True,
-             file_format="pdf",
-             file_name="GSEA",
-             **kwargs):
+         gene_sets='GO_Biological_Process_2021',
+         p_value=0.05,
+         table=True,
+         plot=True,
+         file_format="pdf",
+         file_name="GSEA",
+         **kwargs):
     """
     Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.
 

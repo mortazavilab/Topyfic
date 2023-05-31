@@ -18,6 +18,8 @@ sns.set_context('paper')
 
 warnings.filterwarnings('ignore')
 
+from utils import GSEA, functional_enrichment_analysis
+
 
 class Topic:
     """
@@ -95,51 +97,17 @@ class Topic:
         :param file_name: name and path of the plot use for save (default: gene_composition)
         :type file_name: str
         """
-
-        if type not in ["GO", "REACTOME"]:
-            sys.exit("Type is not valid! it should be one of them GO, KEGG, REACTOME")
-
-        if type == "GO" and sets is None:
-            sets = ["GO_Biological_Process_2021"]
-        elif type == "KEGG" and sets is None:
-            sets = ["KEGG_2016"]
-
         gene_weights = self.gene_weights.copy(deep=True)
         gene_weights = gene_weights[gene_weights > gene_weights.min()]
         genes = gene_weights.dropna().index.tolist()
-        if type in ["GO", "KEGG"]:
-            enr = gp.enrichr(gene_list=genes,
-                             gene_sets=sets,
-                             organism=organism,
-                             outdir=f"{file_name}",
-                             cutoff=p_value)
-            dotplot(enr.res2d,
-                    title=f"Gene ontology in Topic {self.name}",
-                    cmap='viridis_r',
-                    cutoff=p_value,
-                    ofname=f"{file_name}.{file_format}")
-        else:
-            numGeneModule = len(genes)
-            genes = ",".join(genes)
-            result = analysis.identifiers(ids=genes,
-                                          species=organism,
-                                          p_value=str(p_value))
-            token = result['summary']['token']
-            analysis.report(token,
-                            path=f"{file_name}/",
-                            file=f"{file_name}.{file_format}",
-                            number='50',
-                            species=organism)
-            token_result = analysis.token(token,
-                                          species=organism,
-                                          p_value=str(p_value))
 
-            print(
-                f"{numGeneModule - token_result['identifiersNotFound']} out of {numGeneModule} identifiers in the sample were found in Reactome.")
-            print(
-                f"{token_result['resourceSummary'][0]['pathways']} pathways were hit by at least one of them, which {len(token_result['pathways'])} of them have p-value more than {p_value}.")
-            print(f"Report was saved {file_name}!")
-            print(f"For more information please visit https://reactome.org/PathwayBrowser/#/DTAB=AN&ANALYSIS={token}")
+        functional_enrichment_analysis(gene_list=genes,
+                                       type=type,
+                                       organism=organism,
+                                       sets=sets,
+                                       p_value=p_value,
+                                       file_format=file_format,
+                                       file_name=file_name)
 
     def GSEA(self,
              gene_sets='GO_Biological_Process_2021',
@@ -179,29 +147,16 @@ class Topic:
         if gene_weights.shape[0] == 1:
             return
 
-        pre_res = gp.prerank(rnk=gene_weights,
-                             gene_sets=gene_sets,
-                             format=file_format,
-                             no_plot=~plot,
-                             **kwargs)
+        GSEA_df = GSEA(gene_list=gene_weights,
+                       gene_sets=gene_sets,
+                       p_value=p_value,
+                       table=table,
+                       plot=plot,
+                       file_format=file_format,
+                       file_name=file_name,
+                       **kwargs)
 
-        pre_res.res2d.sort_values(["NOM p-val"], inplace=True)
-        pre_res.res2d.drop(["Name"], axis=1, inplace=True)
-
-        if table:
-            pre_res.res2d.to_csv(f"{file_name}.csv")
-
-        if plot:
-            res = pre_res.res2d.copy(deep=True)
-            res = res[res['NOM p-val'] < p_value]
-            for term in res.Term:
-                name = term.split("(GO:")[1][:-1]
-                gseaplot(rank_metric=pre_res.ranking,
-                         term=term,
-                         **pre_res.results[term],
-                         ofname=f"{file_name}_GO_{name}.{file_format}")
-
-        return pre_res.res2d
+        return GSEA_df
 
     def gene_weight_variance(self, save=True):
         """

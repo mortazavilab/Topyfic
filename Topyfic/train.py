@@ -11,7 +11,6 @@ from itertools import repeat
 import pickle
 from sklearn.decomposition import LatentDirichletAllocation
 
-from Topyfic.topic import *
 from Topyfic.topModel import *
 
 warnings.filterwarnings("ignore")

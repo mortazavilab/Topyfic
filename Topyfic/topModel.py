@@ -13,6 +13,7 @@ sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
 from Topyfic.topic import *
+from utils import MA_plot
 
 
 class TopModel:
@@ -290,72 +291,19 @@ class TopModel:
         topic1 = gene_weights[topic1]
         topic2 = gene_weights[topic2]
 
-        topic1 += pseudocount
-        topic2 += pseudocount
-
-        A = (np.log2(topic1) + np.log2(topic2)) / 2
-        M = np.log2(topic1) - np.log2(topic2)
-
-        gene_zscore = pd.concat([A, M], axis=1)
-        gene_zscore.columns = ["A", "M"]
-        gene_zscore = gene_zscore[gene_zscore.A > threshold]
-
-        gene_zscore['mod_zscore'], mad = TopModel.modified_zscore(gene_zscore['M'], consistency_correction=consistency_correction)
-
-        plot_df = gene_zscore.copy(deep=True)
-        plot_df.mod_zscore = plot_df.mod_zscore.abs()
-        plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
-        plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
-        plot_df.mod_zscore.fillna(0, inplace=True)
-        plot_df.mod_zscore = plot_df.mod_zscore.astype(int)
-        if labels is not None:
-            plot_df['label'] = plot_df.index.tolist()
-            plot_df.label[~plot_df.label.isin(labels)] = ""
-
-        y = plot_df.M.median()
-        ymin = y - consistency_correction * mad * 2
-        ymax = y + consistency_correction * mad * 2
-        xmin = round(gene_zscore.A.min()) - 1
-        xmax = round(gene_zscore.A.max())
-
-        sns.scatterplot(data=plot_df, x="A", y="M", hue="mod_zscore",
-                        palette=["orchid", "royalblue"])
-
-        if labels is not None:
-            for label in labels:
-                plt.text(plot_df.A[label] - 0.2, plot_df.M[label] + 0.2, label)
-
-        plt.legend(title='abs(Z-score)', loc='upper right', labels=[f'> {cutoff}', f'< {cutoff}'])
-
-        plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
-        plt.hlines(y=ymin, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
-        plt.hlines(y=ymax, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
-
-        if save:
-            plt.savefig(f"{file_name}.{file_format}")
-        if show:
-            plt.show()
-        else:
-            plt.close()
+        gene_zscore = MA_plot(topic1,
+                              topic2,
+                              pseudocount=pseudocount,
+                              threshold=threshold,
+                              cutoff=cutoff,
+                              consistency_correction=consistency_correction,
+                              labels=labels,
+                              save=save,
+                              show=show,
+                              file_format=file_format,
+                              file_name=file_name)
 
         return gene_zscore
-
-    @staticmethod
-    def modified_zscore(data, consistency_correction=1.4826):
-        """
-        Returns the modified z score and Median Absolute Deviation (MAD) from the scores in data.
-        The consistency_correction factor converts the MAD to the standard deviation for a given
-        distribution. The default value (1.4826) is the conversion factor if the underlying data
-        is normally distributed
-        """
-        median = np.median(data)
-
-        deviation_from_med = np.array(data) - median
-
-        mad = np.median(np.abs(deviation_from_med))
-        mod_zscore = deviation_from_med / (consistency_correction * mad)
-
-        return mod_zscore, mad
 
     def save_topModel(self, name=None, save_path=""):
         """
