@@ -24,6 +24,7 @@ from reactome2py import analysis
 
 warnings.filterwarnings("ignore")
 
+
 def compare_topModels(topModels,
                       output_type='graph',
                       threshold=0.8,
@@ -192,8 +193,9 @@ def MA_plot(topic1,
             topic2,
             pseudocount=1,
             threshold=1,
-            cutoff=2,
+            cutoff=2.0,
             consistency_correction=1.4826,
+            topN=None,
             labels=None,
             save=True,
             show=True,
@@ -214,6 +216,8 @@ def MA_plot(topic1,
         :type cutoff: float
         :param consistency_correction: the factor converts the MAD to the standard deviation for a given distribution. The default value (1.4826) is the conversion factor if the underlying data is normally distributed
         :type consistency_correction: float
+        :param topN: number of genes to be consider for calculating z-score based on the A value (if it's none is gonna be avarage of # genes in both topics with weights above threshold
+        :type topN: int
         :param labels: list of gene names wish to show in MA-plot
         :type labels: list
         :param save: indicate if you want to save the plot or not (default: True)
@@ -233,9 +237,16 @@ def MA_plot(topic1,
     A = (np.log2(topic1) + np.log2(topic2)) / 2
     M = np.log2(topic1) - np.log2(topic2)
 
+    len_topic1 = sum(topic1 > threshold)
+    len_topic2 = sum(topic2 > threshold)
+    topN = round((len_topic1 + len_topic2) / 2)
+
     gene_zscore = pd.concat([A, M], axis=1)
     gene_zscore.columns = ["A", "M"]
     gene_zscore = gene_zscore[gene_zscore.A > threshold]
+
+    gene_zscore.sort_values('A', ascending=False, inplace=True)
+    gene_zscore = gene_zscore.iloc[:topN, :]
 
     gene_zscore['mod_zscore'], mad = modified_zscore(gene_zscore['M'],
                                                      consistency_correction=consistency_correction)
@@ -245,7 +256,9 @@ def MA_plot(topic1,
     plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
     plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
     plot_df.mod_zscore.fillna(0, inplace=True)
-    plot_df.mod_zscore = plot_df.mod_zscore.astype(int)
+    plot_df.mod_zscore = plot_df.mod_zscore.astype(str)
+    plot_df.mod_zscore[plot_df.mod_zscore == str(cutoff)] = f'> {cutoff}'
+    plot_df.mod_zscore[plot_df.mod_zscore == '0.0'] = f'< {cutoff}'
     if labels is not None:
         plot_df['label'] = plot_df.index.tolist()
         plot_df.label[~plot_df.label.isin(labels)] = ""
@@ -256,17 +269,15 @@ def MA_plot(topic1,
     xmin = round(gene_zscore.A.min()) - 1
     xmax = round(gene_zscore.A.max())
 
-    color_palette = {cutoff: "orchid",
-                     0: "royalblue"}
+    color_palette = {f'> {cutoff}': "orchid",
+                     f'< {cutoff}': "royalblue"}
 
     sns.scatterplot(data=plot_df, x="A", y="M", hue="mod_zscore",
-                    palette=color_palette)
+                    palette=color_palette, linewidth=0.1)
 
     if labels is not None:
         for label in labels:
             plt.text(plot_df.A[label] - 0.2, plot_df.M[label] + 0.2, label)
-
-    plt.legend(title='abs(Z-score)', loc='upper right', labels=[f'> {cutoff}', f'< {cutoff}'])
 
     plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
     plt.hlines(y=ymin, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
