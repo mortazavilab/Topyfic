@@ -10,7 +10,7 @@ sns.set_context('paper')
 
 warnings.filterwarnings('ignore')
 
-from Topyfic.utils.analyseModel import GSEA, functional_enrichment_analysis
+from Topyfic.utilsAnalyseModel import GSEA, functional_enrichment_analysis
 
 
 class Topic:

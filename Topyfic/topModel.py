@@ -11,7 +11,7 @@ sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
 from Topyfic.topic import Topic
-from Topyfic.utils.analyseModel import MA_plot
+from Topyfic.utilsAnalyseModel import MA_plot
 
 
 class TopModel:
