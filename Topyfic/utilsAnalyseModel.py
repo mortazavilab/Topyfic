@@ -191,6 +191,7 @@ def compare_topModels(topModels,
 
 def MA_plot(topic1,
             topic2,
+            size=None,
             pseudocount=1,
             threshold=1,
             cutoff=2.0,
@@ -208,6 +209,8 @@ def MA_plot(topic1,
         :type topic1: str
         :param topic2: second topic to be compared
         :type topic2: str
+        :param size: table contains size of dot for each genes (genes are index)
+        :type size: pandas dataframe
         :param pseudocount: pseudocount that you want to add (default: 1)
         :type pseudocount: float
         :param threshold: threshold to filter genes based on A values (default: 1)
@@ -237,13 +240,19 @@ def MA_plot(topic1,
     A = (np.log2(topic1) + np.log2(topic2)) / 2
     M = np.log2(topic1) - np.log2(topic2)
 
-    len_topic1 = sum(topic1 > threshold)
-    len_topic2 = sum(topic2 > threshold)
-    topN = round((len_topic1 + len_topic2) / 2)
+    if topN is None:
+        len_topic1 = sum(topic1 > threshold)
+        len_topic2 = sum(topic2 > threshold)
+        topN = round((len_topic1 + len_topic2) / 2)
 
     gene_zscore = pd.concat([A, M], axis=1)
     gene_zscore.columns = ["A", "M"]
     gene_zscore = gene_zscore[gene_zscore.A > threshold]
+
+    if size is not None:
+        size = size.loc[gene_zscore.index, :]
+        gene_zscore = pd.concat([gene_zscore, size], axis=1)
+        gene_zscore.columns = ["A", "M", "size"]
 
     gene_zscore.sort_values('A', ascending=False, inplace=True)
     gene_zscore = gene_zscore.iloc[:topN, :]
@@ -251,34 +260,53 @@ def MA_plot(topic1,
     gene_zscore['mod_zscore'], mad = modified_zscore(gene_zscore['M'],
                                                      consistency_correction=consistency_correction)
 
+    if gene_zscore.shape[0] == 0:
+        print("there is no genes that pass the threshold!")
+        return gene_zscore
     plot_df = gene_zscore.copy(deep=True)
     plot_df.mod_zscore = plot_df.mod_zscore.abs()
     plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
     plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
+    plot_df.mod_zscore.replace(float('-inf'), -2.0)
+    plot_df.mod_zscore.replace(float('inf'), 2.0)
     plot_df.mod_zscore.fillna(0, inplace=True)
     plot_df.mod_zscore = plot_df.mod_zscore.astype(str)
     plot_df.mod_zscore[plot_df.mod_zscore == str(cutoff)] = f'> {cutoff}'
     plot_df.mod_zscore[plot_df.mod_zscore == '0.0'] = f'< {cutoff}'
-    if labels is not None:
+
+    if labels is None:
+        plot_df['label'] = ""
+    else:
         plot_df['label'] = plot_df.index.tolist()
         plot_df.label[~plot_df.label.isin(labels)] = ""
 
     y = plot_df.M.median()
-    ymin = y - consistency_correction * mad * 2
-    ymax = y + consistency_correction * mad * 2
-    xmin = round(gene_zscore.A.min()) - 1
-    xmax = round(gene_zscore.A.max())
+    ymin = y - consistency_correction * mad * cutoff
+    ymax = y + consistency_correction * mad * cutoff
+    xmin = round(plot_df.A.min()) - 1
+    xmax = round(plot_df.A.max())
+    if size is None:
+        plot_df.columns = ["A", "M", "abs(mod_Zscore)", "label"]
+    else:
+        plot_df.columns = ["A", "M", "#topics GW >= 1", "abs(mod_Zscore)", "label"]
 
     color_palette = {f'> {cutoff}': "orchid",
                      f'< {cutoff}': "royalblue"}
+    markers = {f'> {cutoff}': "o",
+               f'< {cutoff}': "s"}
 
-    sns.scatterplot(data=plot_df, x="A", y="M", hue="mod_zscore",
-                    palette=color_palette, linewidth=0.1)
+    if size is None:
+        sns.scatterplot(data=plot_df, x="A", y="M", style="abs(mod_Zscore)", hue="abs(mod_Zscore)",
+                        markers=markers, palette=color_palette, linewidth=0.1)
+    else:
+        sns.scatterplot(data=plot_df, x="A", y="M", style="abs(mod_Zscore)", hue="#topics GW >= 1",
+                        linewidth=0.1, markers=markers)
 
-    if labels is not None:
-        for label in labels:
-            plt.text(plot_df.A[label] - 0.2, plot_df.M[label] + 0.2, label)
+    for label in plot_df.label.unique():
+        if label != "":
+            plt.text(0.99*plot_df.A[label], plot_df.M[label], label, horizontalalignment='left')
 
+    plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
     plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
     plt.hlines(y=ymin, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')
     plt.hlines(y=ymax, xmin=xmin, xmax=xmax, colors="orange", linestyles='--')

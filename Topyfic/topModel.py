@@ -248,10 +248,12 @@ class TopModel:
     def MA_plot(self,
                 topic1,
                 topic2,
+                size=None,
                 pseudocount=1,
                 threshold=1,
                 cutoff=2,
                 consistency_correction=1.4826,
+                topN=None,
                 labels=None,
                 save=True,
                 show=True,
@@ -264,6 +266,8 @@ class TopModel:
         :type topic1: str
         :param topic2: second topic to be compared
         :type topic2: str
+        :param size: table contains size of dot for each genes (genes are index)
+        :type size: pandas dataframe
         :param pseudocount: pseudocount that you want to add (default: 1)
         :type pseudocount: float
         :param threshold: threshold to filter genes based on A values (default: 1)
@@ -272,6 +276,8 @@ class TopModel:
         :type cutoff: float
         :param consistency_correction: the factor converts the MAD to the standard deviation for a given distribution. The default value (1.4826) is the conversion factor if the underlying data is normally distributed
         :type consistency_correction: float
+        :param topN: number of genes to be consider for calculating z-score based on the A value (if it's none is gonna be avarage of # genes in both topics with weights above threshold
+        :type topN: int
         :param labels: list of gene names wish to show in MA-plot
         :type labels: list
         :param save: indicate if you want to save the plot or not (default: True)
@@ -285,16 +291,18 @@ class TopModel:
 
         :return: return M and A values
         """
-        gene_weights = self.get_gene_weights()
+        gene_weights = self.get_gene_weights().copy(deep=True)
         topic1 = gene_weights[topic1]
         topic2 = gene_weights[topic2]
 
         gene_zscore = MA_plot(topic1,
                               topic2,
+                              size=size,
                               pseudocount=pseudocount,
                               threshold=threshold,
                               cutoff=cutoff,
                               consistency_correction=consistency_correction,
+                              topN=topN,
                               labels=labels,
                               save=save,
                               show=show,
