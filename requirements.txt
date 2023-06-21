@@ -12,3 +12,4 @@ scikit_learn==1.2.2
 scipy==1.9.1
 seaborn==0.11.2
 statsmodels==0.13.5
+adjustText==0.7.3

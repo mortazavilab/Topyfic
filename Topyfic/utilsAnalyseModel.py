@@ -21,6 +21,7 @@ import gseapy as gp
 from gseapy.plot import dotplot
 from gseapy import gseaplot
 from reactome2py import analysis
+from adjustText import adjust_text
 
 warnings.filterwarnings("ignore")
 
@@ -302,9 +303,12 @@ def MA_plot(topic1,
         sns.scatterplot(data=plot_df, x="A", y="M", style="abs(mod_Zscore)", hue="#topics GW >= 1",
                         linewidth=0.1, markers=markers)
 
+    texts = []
     for label in plot_df.label.unique():
         if label != "":
-            plt.text(0.99*plot_df.A[label], plot_df.M[label], label, horizontalalignment='left')
+            texts.append(plt.text(plot_df.A[label], plot_df.M[label], label, horizontalalignment='left'))
+
+    adjust_text(texts, arrowprops=dict(arrowstyle="-", color='black', lw=0.5))
 
     plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
     plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
