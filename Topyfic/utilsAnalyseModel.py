@@ -66,6 +66,10 @@ def compare_topModels(topModels,
     if output_type not in ['graph', 'heatmap', 'table']:
         sys.exit("output_type is not valid! it should be one of 'graph', 'heatmap' or 'table'")
 
+    names = [topModel.name for topModel in topModels]
+    if len(names) != len(set(names)):
+        sys.exit("Name of the TopModels should be unique!")
+
     all_gene_weights = None
 
     for topModel in topModels:
@@ -206,10 +210,10 @@ def MA_plot(topic1,
     """
         plot MA based on the gene weights on given topics
 
-        :param topic1: first topic to be compared
-        :type topic1: str
-        :param topic2: second topic to be compared
-        :type topic2: str
+        :param topic1: gene weight of first topic to be compared
+        :type topic1: pandas.series
+        :param topic2: gene weight of second topic to be compared
+        :type topic2: pandas.series
         :param size: table contains size of dot for each genes (genes are index)
         :type size: pandas dataframe
         :param pseudocount: pseudocount that you want to add (default: 1)

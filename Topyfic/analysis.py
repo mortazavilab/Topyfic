@@ -198,7 +198,7 @@ class Analysis:
         :type metaData_palette: dict
         :param width: width ratios of each category (default is based on the number of the cells we have in each category)
         :type width: list of int
-        :param n: number of topics you want to annotate in pie charts (default: 5)
+        :param n: number of topics you want to sum if you used order_cell == 'sum' (default: 2)
         :type n: int
         :param order_cells: determine which kind of sorting options you want to use ('sum', 'hierarchy', sort by metaData); sum: sort cells by sum of top n topics; hierarchy: sort data by doing hierarchical clustring; metaData sort by metaData (default: ['hierarchy'])
         :type order_cells: list
@@ -216,7 +216,9 @@ class Analysis:
         if figsize is None:
             figsize = (10 * (len(category) + 1), 10)
 
-        check = ["hierarchy", "sum"] + metaData
+        check = ["hierarchy", "sum"]
+        if metaData is not None:
+            check = check + metaData
         for order_cell in order_cells:
             if order_cell not in check:
                 return "order cell was not valid"
