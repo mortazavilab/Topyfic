@@ -229,13 +229,20 @@ class Analysis:
         a.append(min(a) / 2)
         if width is None:
             width = a
-        b = [8] + [1] * len(metaData)
-        fig, axs = plt.subplots(nrows=len(metaData) + 1,
-                                ncols=len(category) + 1,
-                                figsize=figsize,
-                                gridspec_kw={'width_ratios': width,
-                                             'height_ratios': b},
-                                facecolor='white')
+        if metaData is None:
+            fig, axs = plt.subplots(nrows=1,
+                                    ncols=len(category) + 1,
+                                    figsize=figsize,
+                                    gridspec_kw={'width_ratios': width},
+                                    facecolor='white')
+        else:
+            b = [8] + [1] * len(metaData)
+            fig, axs = plt.subplots(nrows=len(metaData) + 1,
+                                    ncols=len(category) + 1,
+                                    figsize=figsize,
+                                    gridspec_kw={'width_ratios': width,
+                                                 'height_ratios': b},
+                                    facecolor='white')
 
         colors = self.colors_topics
 
@@ -318,28 +325,28 @@ class Analysis:
                 axs[0, i].set_xlim(0, a[i])
                 axs[0, 0].set_ylabel("Topic proportion", fontsize=25)
 
-            tissue = tissue[metaData]
-            tissue = tissue.reindex(tmp.index.tolist())
-            for j in range(len(metaData)):
-                if type(metaData_palette[metaData[j]]) == dict:
-                    tissue.replace(metaData_palette[metaData[j]], inplace=True)
+                tissue = tissue[metaData]
+                tissue = tissue.reindex(tmp.index.tolist())
+                for j in range(len(metaData)):
+                    if type(metaData_palette[metaData[j]]) == dict:
+                        tissue.replace(metaData_palette[metaData[j]], inplace=True)
 
-            x = [i for i in range(tmp.shape[0])]
-            y = np.repeat(3000, len(x))
-            for j in range(len(metaData)):
-                color = tissue[metaData[j]].values
-                if type(metaData_palette[metaData[j]]) == dict:
-                    axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
-                                          c=color, s=1000, marker="|", alpha=1,
-                                          linewidths=1)
-                else:
-                    axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
-                                          c=color, cmap=metaData_palette[metaData[j]].get_cmap(), s=1000, marker="|",
-                                          alpha=1,
-                                          linewidths=1)
+                x = [i for i in range(tmp.shape[0])]
+                y = np.repeat(3000, len(x))
+                for j in range(len(metaData)):
+                    color = tissue[metaData[j]].values
+                    if type(metaData_palette[metaData[j]]) == dict:
+                        axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
+                                              c=color, s=1000, marker="|", alpha=1,
+                                              linewidths=1)
+                    else:
+                        axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
+                                              c=color, cmap=metaData_palette[metaData[j]].get_cmap(), s=1000, marker="|",
+                                              alpha=1,
+                                              linewidths=1)
 
-                axs[j + 1, i].axis('off')
-                axs[j + 1, i].set_xlim(0, a[i])
+                    axs[j + 1, i].axis('off')
+                    axs[j + 1, i].set_xlim(0, a[i])
 
         colors = self.colors_topics
 
@@ -360,24 +367,25 @@ class Analysis:
                                              handles=handles)
                 axs[0, len(category)].axis('off')
 
-        for j in range(len(metaData)):
-            handles = []
-            if type(metaData_palette[metaData[j]]) == dict:
-                for met in metaData_palette[metaData[j]].keys():
-                    patch = mpatches.Patch(color=metaData_palette[metaData[j]][met], label=met)
-                    handles.append(patch)
-                    axs[j + 1, len(category)].legend(loc='center left',
-                                                     title=metaData[j].capitalize(),
-                                                     ncol=4,
-                                                     handles=handles)
+        if metaData is not None:
+            for j in range(len(metaData)):
+                handles = []
+                if type(metaData_palette[metaData[j]]) == dict:
+                    for met in metaData_palette[metaData[j]].keys():
+                        patch = mpatches.Patch(color=metaData_palette[metaData[j]][met], label=met)
+                        handles.append(patch)
+                        axs[j + 1, len(category)].legend(loc='center left',
+                                                         title=metaData[j].capitalize(),
+                                                         ncol=4,
+                                                         handles=handles)
+                        axs[j + 1, len(category)].axis('off')
+                else:
+                    clb = fig.colorbar(mappable=metaData_palette[metaData[j]],
+                                       ax=axs[j + 1, len(category)],
+                                       orientation='horizontal',
+                                       fraction=0.9)
+                    clb.ax.set_title(metaData[j].capitalize())
                     axs[j + 1, len(category)].axis('off')
-            else:
-                clb = fig.colorbar(mappable=metaData_palette[metaData[j]],
-                                   ax=axs[j + 1, len(category)],
-                                   orientation='horizontal',
-                                   fraction=0.9)
-                clb.ax.set_title(metaData[j].capitalize())
-                axs[j + 1, len(category)].axis('off')
 
         if save:
             fig.savefig(f"{file_name}.{file_format}")
