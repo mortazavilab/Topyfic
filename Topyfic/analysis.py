@@ -109,6 +109,9 @@ class Analysis:
         if figsize is None:
             figsize = (10 * (len(category) + 1), 10)
 
+        if self.top_model.N <= n:
+            n = max(0, self.top_model.N-2)
+
         fig, axs = plt.subplots(ncols=len(category) + 1,
                                 figsize=figsize,
                                 facecolor='white')
@@ -119,15 +122,16 @@ class Analysis:
             ascending = [False] * len(category)
 
         for i in range(len(category)):
+            print(i, category[i])
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
-            order = tmp.mean().sort_values(ascending=False).index.tolist()
-            index = tmp[order].sort_values(by=order, ascending=False).index.tolist()
+            order = tmp.mean().sort_values(ascending=ascending[i]).index.tolist()
+            index = tmp[order].sort_values(by=order, ascending=ascending[i]).index.tolist()
             tmp = tmp.reindex(columns=order)
             tmp = tmp.reindex(index)
             colors = colors.reindex(order)
             labels = tmp.columns.tolist()
-            labels[n:] = ['' for i in range(len(labels) - 5)]
+            labels[n:] = ['' for i in range(len(labels) - n)]
 
             def make_autopct(values):
                 def my_autopct(pct):
@@ -138,6 +142,8 @@ class Analysis:
 
                 return my_autopct
 
+            print(tmp.mean())
+            print(labels)
             axs[i].pie(tmp.mean(),
                        labels=labels,
                        colors=colors.colors.tolist(),

@@ -308,30 +308,37 @@ def plot_cluster_contribution(clustering,
     if feature not in clustering.columns:
         sys.exit(f"{feature} is not valid! should be a columns names of clustering")
 
-    if not show_all:
-        clustering = clustering[clustering["keep"]]
-
-    options = np.unique(clustering[feature]).tolist()
-    res = pd.DataFrame(columns=options,
+    options = np.unique(clustering['assays']).tolist()
+    res = pd.DataFrame(columns=options + ['Topic', 'keep'],
                        index=range(len(clustering['leiden'].unique())))
 
-    for i in range(res.shape[0]):
+    for i in clustering['leiden'].unique():
         for opt in options:
             tmp = clustering[np.logical_and(clustering['leiden'] == i,
-                                            clustering[feature] == opt)]
+                                            clustering['assays'] == opt)]
             res.loc[i, opt] = tmp.shape[0]
+
+        tmp = clustering[clustering['leiden'] == i]
+        res.loc[i, 'Topic'] = f"Topic_{i + 1}"
+        res.loc[i, 'keep'] = tmp.keep.unique()[0]
+
+    if not show_all:
+        res = res[res["keep"]]
+    res.index = res.Topic.values
+
     if not portion:
         plot = res.plot.bar(stacked=True,
                             xlabel='leiden',
                             ylabel='number of topics',
                             figsize=(max(res.shape[0] / 2, 5), 7))
     else:
-        sum_feature = res.sum(axis=1)
-        for i in range(res.shape[0]):
+        res['sum'] = res[options].sum(axis=1)
+        for i in res.index.values:
             for opt in options:
-                res.loc[i, opt] = res.loc[i, opt] / sum_feature[i] * 100
-        res.index = res.index + 1
-        res.index = "Topics_" + res.index.astype(str)
+                res.loc[i, opt] = float(res.loc[i, opt]) / res.loc[i, 'sum'] * 100
+
+        res.drop(['Topic', 'keep', 'sum'], axis=1, inplace=True)
+
         plot = res.plot.bar(stacked=True,
                             xlabel='leiden',
                             ylabel='percentage(%) of topics',
