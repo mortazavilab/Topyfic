@@ -122,7 +122,6 @@ class Analysis:
             ascending = [False] * len(category)
 
         for i in range(len(category)):
-            print(i, category[i])
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
             order = tmp.mean().sort_values(ascending=ascending[i]).index.tolist()
@@ -142,8 +141,6 @@ class Analysis:
 
                 return my_autopct
 
-            print(tmp.mean())
-            print(labels)
             axs[i].pie(tmp.mean(),
                        labels=labels,
                        colors=colors.colors.tolist(),
