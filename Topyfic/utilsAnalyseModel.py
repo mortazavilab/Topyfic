@@ -182,7 +182,10 @@ def compare_topModels(topModels,
 
             i += 1
 
-        [axi.axis('off') for axi in axs.ravel()]
+        if len(connected_components) == 1:
+            ax.axis('off')
+        else:
+            [axi.axis('off') for axi in axs.ravel()]
         plt.tight_layout()
         if save:
             plt.savefig(f"{file_name}.{plot_format}")

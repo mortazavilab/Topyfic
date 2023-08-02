@@ -143,6 +143,7 @@ def calculate_leiden_clustering(trains,
                                 data,
                                 n_top_genes=50,
                                 resolution=1,
+                                max_iter_harmony=10,
                                 min_cell_participation=None,
                                 file_format="pdf"):
     """
@@ -212,7 +213,7 @@ def calculate_leiden_clustering(trains,
         sc.pp.log1p(adata)
         sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
         sc.pp.neighbors(adata)
-        sce.pp.harmony_integrate(adata, 'assays')
+        sce.pp.harmony_integrate(adata, 'assays', max_iter_harmony=max_iter_harmony)
         adata.obsm['X_pca'] = adata.obsm['X_pca_harmony']
         sc.pp.neighbors(adata)
         sc.tl.umap(adata)
