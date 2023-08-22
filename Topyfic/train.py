@@ -59,13 +59,13 @@ class Train:
         :type single_trains: list
         """
         for i in range(len(single_trains)):
-            gene_weights = pd.DataFrame(np.transpose(single_trains[i].top_models[0].rLDA.components_),
+            gene_weights = pd.DataFrame(np.transpose(single_trains[i].top_models[0].model.components_),
                                         columns=[f'Topic{i + 1}_R{self.random_state_range[i]}' for i in range(self.k)],
                                         index=data.var.index.tolist())
             TopModel_lda_model = TopModel(name=f"{self.name}_{self.random_state_range[i]}",
                                           N=gene_weights.shape[1],
                                           gene_weights=gene_weights,
-                                          rlda=single_trains[i].top_models[0].rLDA)
+                                          model=single_trains[i].top_models[0].model)
             self.top_models.append(TopModel_lda_model)
 
     def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, kwargs):
@@ -108,7 +108,7 @@ class Train:
         TopModel_lda_model = TopModel(name=f"{name}_{random_state}",
                                       N=gene_weights.shape[1],
                                       gene_weights=gene_weights,
-                                      rlda=lda_model)
+                                      model=lda_model)
 
         return TopModel_lda_model
 

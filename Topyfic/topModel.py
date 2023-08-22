@@ -26,28 +26,35 @@ class TopModel:
     :type gene_weights: pandas dataframe
     :param topics: dictionary contains all topics for the topmodel
     :type topics: Dictionary of Topics
-    :param rlda: store reproducible LDA model
-    :type rlda: sklearn.decomposition.LatentDirichletAllocation
+    :param model: store reproducible LDA model
+    :type model: sklearn.decomposition.LatentDirichletAllocation
 
     """
 
     def __init__(self,
                  name,
                  N,
-                 gene_weights,
+                 topics=None,
+                 gene_weights=None,
                  gene_information=None,
-                 rlda=None):
-        self.topics = dict()
-        for i in range(N):
-            topic_gene_weights = pd.DataFrame(gene_weights.iloc[:, i].values,
-                                              index=gene_weights.index,
-                                              columns=[f"Topic_{i + 1}"])
-            self.topics[f"Topic_{i + 1}"] = Topic(topic_id=f"Topic_{i + 1}",
-                                                  topic_gene_weights=topic_gene_weights,
-                                                  gene_information=gene_information)
+                 model=None):
+        if gene_weights is None and topics is None:
+            sys.exit("Both gene weights and topics can not be empty at the same time!")
+
+        if topics is not None:
+            self.topics = topics
+        else:
+            self.topics = dict()
+            for i in range(N):
+                topic_gene_weights = pd.DataFrame(gene_weights.iloc[:, i].values,
+                                                  index=gene_weights.index,
+                                                  columns=[f"Topic_{i + 1}"])
+                self.topics[f"Topic_{i + 1}"] = Topic(topic_id=f"Topic_{i + 1}",
+                                                      topic_gene_weights=topic_gene_weights,
+                                                      gene_information=gene_information)
         self.name = name
         self.N = N
-        self.rLDA = rlda
+        self.model = model
 
     def get_feature_name(self):
         """
@@ -70,7 +77,7 @@ class TopModel:
         """
         print(f"Saving rLDA model as {name}_{self.N}topics.joblib")
 
-        joblib.dump(self.rLDA, f"{save_path}{name}_{self.N}topics.joblib", compress=3)
+        joblib.dump(self.model, f"{save_path}{name}_{self.N}topics.joblib", compress=3)
 
     def get_gene_weights(self):
         """
@@ -79,9 +86,9 @@ class TopModel:
         :return: dataframe contains feature(gene) weights; genes are indexes and topics are columns
         :rtype: pandas dataframe
         """
-        gene_weights = pd.DataFrame(np.transpose(self.rLDA.components_),
+        gene_weights = pd.DataFrame(np.transpose(self.model.components_),
                                     columns=[f'{self.name}_Topic_{i + 1}' for i in
-                                             range(self.rLDA.components_.shape[0])],
+                                             range(self.model.components_.shape[0])],
                                     index=self.get_feature_name())
 
         return gene_weights
@@ -93,12 +100,12 @@ class TopModel:
         :return: dataframe contains feature(gene) and their weights; ranks are indexes and topics are columns
         :rtype: pandas dataframe
         """
-        gene_weights = pd.DataFrame(np.transpose(self.rLDA.components_),
+        gene_weights = pd.DataFrame(np.transpose(self.model.components_),
                                     columns=[f'{self.name}_Topic_{i + 1}' for i in
-                                             range(self.rLDA.components_.shape[0])],
+                                             range(self.model.components_.shape[0])],
                                     index=self.get_feature_name())
         ranked_gene_weights = pd.DataFrame(columns=[f'{self.name}_Topic_{i + 1}' for i in
-                                                    range(self.rLDA.components_.shape[0])],
+                                                    range(self.model.components_.shape[0])],
                                            index=range(len(self.get_feature_name())))
         for col in gene_weights.columns:
             tmp = gene_weights.sort_values(by=col, ascending=False)
@@ -117,11 +124,11 @@ class TopModel:
         """
         feature = self.get_feature_name()
 
-        components = pd.DataFrame(self.rLDA.components_,
+        components = pd.DataFrame(self.model.components_,
                                   index=[f"Topic_{i + 1}" for i in range(self.N)],
                                   columns=feature)
 
-        exp_dirichlet_component = pd.DataFrame(self.rLDA.exp_dirichlet_component_,
+        exp_dirichlet_component = pd.DataFrame(self.model.exp_dirichlet_component_,
                                                index=[f"Topic_{i + 1}" for i in range(self.N)],
                                                columns=feature)
 
@@ -134,12 +141,12 @@ class TopModel:
                      "doc_topic_prior",
                      "topic_word_prior"])
 
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_batch_iter"] = self.rLDA.n_batch_iter_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_features_in"] = self.rLDA.n_features_in_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_iter"] = self.rLDA.n_iter_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "bound"] = self.rLDA.bound_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "doc_topic_prior"] = self.rLDA.doc_topic_prior_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "topic_word_prior"] = self.rLDA.topic_word_prior_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_batch_iter"] = self.model.n_batch_iter_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_features_in"] = self.model.n_features_in_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_iter"] = self.model.n_iter_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "bound"] = self.model.bound_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "doc_topic_prior"] = self.model.doc_topic_prior_
+        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "topic_word_prior"] = self.model.topic_word_prior_
 
         return components, exp_dirichlet_component, others
 
@@ -181,9 +188,9 @@ class TopModel:
             sys.exit("some/all of genes are not part of topModel!")
 
         if topics is None:
-            topics = [f'{self.name}_Topic_{i + 1}' for i in range(self.rLDA.components_.shape[0])]
+            topics = [f'{self.name}_Topic_{i + 1}' for i in range(self.model.components_.shape[0])]
         elif not (set(topics) & set(
-                [f'{self.name}_Topic_{i + 1}' for i in range(self.rLDA.components_.shape[0])])) == set(topics):
+                [f'{self.name}_Topic_{i + 1}' for i in range(self.model.components_.shape[0])])) == set(topics):
             sys.exit("some/all of topics are not part of topModel!")
 
         if scale not in ["log2", "log10", None]:

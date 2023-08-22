@@ -10,7 +10,7 @@ import os
 from multiprocessing import Pool
 from itertools import repeat
 import pickle
-from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.decomposition import LatentDirichletAllocation, NMF
 from scipy import stats as st
 import scanpy.external as sce
 import networkx as nx
@@ -21,10 +21,13 @@ import gseapy as gp
 from gseapy.plot import dotplot
 from gseapy import gseaplot
 from reactome2py import analysis
+import yaml
+from yaml.loader import SafeLoader
 
 from Topyfic.train import Train
 from Topyfic.analysis import Analysis
 from Topyfic.topModel import TopModel
+from Topyfic.topic import Topic
 
 warnings.filterwarnings("ignore")
 
@@ -157,7 +160,7 @@ def calculate_leiden_clustering(trains,
     :type n_top_genes: int
     :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
     :type resolution: int
-    :param min_cell_participation: minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than number of cell / 10000.
+    :param min_cell_participation: minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than 1% of #cells (#cells / 100)
     :type min_cell_participation: float
     :param file_format: indicate the format of plot (default: pdf)
     :type file_format: str
@@ -171,7 +174,7 @@ def calculate_leiden_clustering(trains,
     all_others = None
 
     if min_cell_participation is None:
-        min_cell_participation = data.to_df().shape[0] / 10000
+        min_cell_participation = data.shape[0] / 100
 
     for train in trains:
         components, exp_dirichlet_component, others = train.make_LDA_models_attributes()
@@ -264,7 +267,7 @@ def calculate_leiden_clustering(trains,
         top_model = TopModel(name=trains[0].name,
                              N=n_rtopics,
                              gene_weights=gene_weights,
-                             rlda=rlda)
+                             model=rlda)
 
     else:
         name = np.unique(all_batches).tolist()
@@ -273,7 +276,7 @@ def calculate_leiden_clustering(trains,
         top_model = TopModel(name=name,
                              N=n_rtopics,
                              gene_weights=gene_weights,
-                             rlda=rlda)
+                             model=rlda)
 
     return top_model, clustering, adata
 
@@ -538,3 +541,77 @@ def read_analysis(file):
     return analysis
 
 
+def read_model_yaml(model_yaml_path="model.yaml",
+                    topic_yaml_path=None,
+                    cell_topic_participation_path=None,
+                    save=True):
+    """
+    read YMAL files and make topmodel object
+    write topic in YAML format
+
+    :param model_yaml_path: model yaml path
+    :type model_yaml_path: str
+    :param topic_yaml_path: path that you use to save all topics information
+    :type topic_yaml_path: str
+    :param cell_topic_participation_path: path of cell-topic participation
+    :type cell_topic_participation_path: str
+    :param save: indicate if you want to save objects (topmodel and analysis) as a pickle file (default: True)
+    :type save: bool
+
+    :return: Topmodel and analysis objects
+    :rtype: TopModel, Analysis
+    """
+
+    with open(model_yaml_path, 'r') as file:
+        model_yaml = yaml.safe_load(file)
+
+    if not all(value in list(model_yaml.keys()) for value in
+               ['Topic IDs', 'Cell-Topic participation ID', 'Experiment ID', 'Name of method', 'Number of topics']):
+        sys.exit("Model YMAL file is not correct!")
+
+    topics = dict()
+    topics_gene_weights = None
+    for i in range(len(model_yaml['Topic IDs'])):
+        topic_path = f"{topic_yaml_path}{model_yaml['Topic IDs'][i]}.yaml"
+        with open(topic_path, 'r') as file:
+            topic_yaml = yaml.safe_load(file)
+
+        if not all(value in list(topic_yaml.keys()) for value in
+                   ['Topic ID', 'Gene weights', 'Gene information', 'Topic information']):
+            sys.exit(f"Topic {model_yaml['Topic IDs'][i]} YMAL file is not correct!")
+
+        topic_id = topic_yaml['Topic ID']
+        topic_gene_weights = pd.DataFrame(list(topic_yaml['Gene weights'].values()),
+                                          index=topic_yaml['Gene weights'].keys(),
+                                          columns=[topic_yaml['Topic ID']])
+        gene_information = pd.DataFrame(topic_yaml['Gene information'])
+        topic_information = pd.DataFrame(topic_yaml['Topic information'], index=topic_gene_weights.columns)
+        topics[f"Topic_{i + 1}"] = Topic(topic_id=topic_id,
+                                         topic_gene_weights=topic_gene_weights,
+                                         gene_information=gene_information,
+                                         topic_information=topic_information)
+        if topics_gene_weights is None:
+            topics_gene_weights = topic_gene_weights.copy(deep=True)
+        else:
+            topics_gene_weights = pd.concat([topics_gene_weights, topic_gene_weights], axis=1)
+
+    if "NMF" in model_yaml['Name of method']:
+        model = NMF(n_components=int(model_yaml['Number of topics']))
+    else:
+        model = LatentDirichletAllocation(n_components=int(model_yaml['Number of topics']))
+
+    model.components_ = topics_gene_weights.values
+    topModel = TopModel(name=model_yaml['Experiment ID'],
+                        N=int(model_yaml['Number of topics']),
+                        topics=topics,
+                        model=model)
+
+    cell_participation = sc.read_h5ad(cell_topic_participation_path)
+    analysis = Analysis(Top_model=topModel,
+                        cell_participation=cell_participation)
+
+    if save:
+        topModel.save_topModel()
+        analysis.save_analysis()
+
+    return topModel, analysis

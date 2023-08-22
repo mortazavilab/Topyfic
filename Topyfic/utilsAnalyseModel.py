@@ -101,8 +101,10 @@ def compare_topModels(topModels,
             return corrs
 
     if output_type == 'heatmap':
+        if topModels_label is not None:
+            corrs.rename(columns=topModels_label, index=topModels_label, inplace=True)
         sns.clustermap(corrs,
-                       figsize=None)
+                       figsize=figsize)
         if save:
             plt.savefig(f"{file_name}.{plot_format}")
         if plot_show:
