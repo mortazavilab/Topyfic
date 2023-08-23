@@ -17,6 +17,17 @@ Topyfic's full documentation can be found at [here](https://mortazavilab.github.
 
 To install Topyfic, python version 3.8 or greater is required.
 
+**IMPORTANT**: If you upgrade Topyfic from any version below 0.4.5 you need to run this
+
+```
+import Topyfic
+#read your top model
+top_model = Topyfic.read_topModel(FILE_NAME)
+top_model.model = top_model.rLDA
+top_model.save_topModel()
+```
+
+
 ### Install from PyPi (recommended)
 Install the most recent release, run
 
@@ -28,6 +39,7 @@ git cloning the [Topyfic repository](https://github.com/mortazavilab/Topyfic), g
 `pip install .`
 
 ## Tutorials
+
 
 In general, you need to make three objects (Train, TopModel and Analysis). 
 
