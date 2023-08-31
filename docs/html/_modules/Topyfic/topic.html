@@ -106,21 +106,17 @@
   <h1>Source code for Topyfic.topic</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">yaml.loader</span> <span class="kn">import</span> <span class="n">SafeLoader</span>
 
-<span class="kn">import</span> <span class="nn">gseapy</span> <span class="k">as</span> <span class="nn">gp</span>
-<span class="kn">from</span> <span class="nn">gseapy.plot</span> <span class="kn">import</span> <span class="n">dotplot</span>
-<span class="kn">from</span> <span class="nn">gseapy</span> <span class="kn">import</span> <span class="n">gseaplot</span>
-<span class="kn">from</span> <span class="nn">reactome2py</span> <span class="kn">import</span> <span class="n">analysis</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
 <span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">Topyfic.utilsAnalyseModel</span> <span class="kn">import</span> <span class="n">GSEA</span><span class="p">,</span> <span class="n">functional_enrichment_analysis</span>
 
 
 <div class="viewcode-block" id="Topic"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic">[docs]</a><span class="k">class</span> <span class="nc">Topic</span><span class="p">:</span>
@@ -199,51 +195,17 @@
 <span class="sd">        :param file_name: name and path of the plot use for save (default: gene_composition)</span>
 <span class="sd">        :type file_name: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="nb">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;GO&quot;</span><span class="p">,</span> <span class="s2">&quot;REACTOME&quot;</span><span class="p">]:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Type is not valid! it should be one of them GO, KEGG, REACTOME&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;GO&quot;</span> <span class="ow">and</span> <span class="n">sets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GO_Biological_Process_2021&quot;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;KEGG&quot;</span> <span class="ow">and</span> <span class="n">sets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;KEGG_2016&quot;</span><span class="p">]</span>
-
         <span class="n">gene_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="p">[</span><span class="n">gene_weights</span> <span class="o">&gt;</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span>
         <span class="n">genes</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;GO&quot;</span><span class="p">,</span> <span class="s2">&quot;KEGG&quot;</span><span class="p">]:</span>
-            <span class="n">enr</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">enrichr</span><span class="p">(</span><span class="n">gene_list</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
-                             <span class="n">gene_sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span>
-                             <span class="n">organism</span><span class="o">=</span><span class="n">organism</span><span class="p">,</span>
-                             <span class="n">outdir</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                             <span class="n">cutoff</span><span class="o">=</span><span class="n">p_value</span><span class="p">)</span>
-            <span class="n">dotplot</span><span class="p">(</span><span class="n">enr</span><span class="o">.</span><span class="n">res2d</span><span class="p">,</span>
-                    <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Gene ontology in Topic </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span>
-                    <span class="n">cutoff</span><span class="o">=</span><span class="n">p_value</span><span class="p">,</span>
-                    <span class="n">ofname</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">numGeneModule</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
-            <span class="n">genes</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">identifiers</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
-                                          <span class="n">species</span><span class="o">=</span><span class="n">organism</span><span class="p">,</span>
-                                          <span class="n">p_value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">))</span>
-            <span class="n">token</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">][</span><span class="s1">&#39;token&#39;</span><span class="p">]</span>
-            <span class="n">analysis</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="n">token</span><span class="p">,</span>
-                            <span class="n">path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span>
-                            <span class="n">file</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                            <span class="n">number</span><span class="o">=</span><span class="s1">&#39;50&#39;</span><span class="p">,</span>
-                            <span class="n">species</span><span class="o">=</span><span class="n">organism</span><span class="p">)</span>
-            <span class="n">token_result</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">token</span><span class="p">(</span><span class="n">token</span><span class="p">,</span>
-                                          <span class="n">species</span><span class="o">=</span><span class="n">organism</span><span class="p">,</span>
-                                          <span class="n">p_value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">))</span>
 
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">numGeneModule</span> <span class="o">-</span> <span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;identifiersNotFound&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="n">numGeneModule</span><span class="si">}</span><span class="s2"> identifiers in the sample were found in Reactome.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;resourceSummary&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;pathways&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> pathways were hit by at least one of them, which </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;pathways&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> of them have p-value more than </span><span class="si">{</span><span class="n">p_value</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Report was saved </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;For more information please visit https://reactome.org/PathwayBrowser/#/DTAB=AN&amp;ANALYSIS=</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+        <span class="n">functional_enrichment_analysis</span><span class="p">(</span><span class="n">gene_list</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
+                                       <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span>
+                                       <span class="n">organism</span><span class="o">=</span><span class="n">organism</span><span class="p">,</span>
+                                       <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span>
+                                       <span class="n">p_value</span><span class="o">=</span><span class="n">p_value</span><span class="p">,</span>
+                                       <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                                       <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Topic.GSEA"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.GSEA">[docs]</a>    <span class="k">def</span> <span class="nf">GSEA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
              <span class="n">gene_sets</span><span class="o">=</span><span class="s1">&#39;GO_Biological_Process_2021&#39;</span><span class="p">,</span>
@@ -283,29 +245,73 @@
         <span class="k">if</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="n">pre_res</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">prerank</span><span class="p">(</span><span class="n">rnk</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
-                             <span class="n">gene_sets</span><span class="o">=</span><span class="n">gene_sets</span><span class="p">,</span>
-                             <span class="nb">format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
-                             <span class="n">no_plot</span><span class="o">=~</span><span class="n">plot</span><span class="p">,</span>
-                             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">GSEA_df</span> <span class="o">=</span> <span class="n">GSEA</span><span class="p">(</span><span class="n">gene_list</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
+                       <span class="n">gene_sets</span><span class="o">=</span><span class="n">gene_sets</span><span class="p">,</span>
+                       <span class="n">p_value</span><span class="o">=</span><span class="n">p_value</span><span class="p">,</span>
+                       <span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
+                       <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span>
+                       <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                       <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;NOM p-val&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;Name&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">GSEA_df</span></div>
 
-        <span class="k">if</span> <span class="n">table</span><span class="p">:</span>
-            <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Topic.gene_weight_variance"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.gene_weight_variance">[docs]</a>    <span class="k">def</span> <span class="nf">gene_weight_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculate the gene weight variance</span>
 
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;NOM p-val&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p_value</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">Term</span><span class="p">:</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="n">term</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(GO:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">gseaplot</span><span class="p">(</span><span class="n">rank_metric</span><span class="o">=</span><span class="n">pre_res</span><span class="o">.</span><span class="n">ranking</span><span class="p">,</span>
-                         <span class="n">term</span><span class="o">=</span><span class="n">term</span><span class="p">,</span>
-                         <span class="o">**</span><span class="n">pre_res</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="n">term</span><span class="p">],</span>
-                         <span class="n">ofname</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">_GO_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">        :param save: added as an information to the Topic (default: True)</span>
+<span class="sd">        :type save: bool</span>
 
-        <span class="k">return</span> <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span></div></div>
+<span class="sd">        :return: Gene weight variance for given topic</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">variance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">var</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topic_information</span><span class="p">[</span><span class="s1">&#39;variance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">var</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gene weight variance for given topic is </span><span class="si">{</span><span class="n">variance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Topic.write_topic_yaml"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.write_topic_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">write_topic_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_yaml_path</span><span class="o">=</span><span class="s2">&quot;model.yaml&quot;</span><span class="p">,</span> <span class="n">topic_yaml_path</span><span class="o">=</span><span class="s2">&quot;topic.yaml&quot;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        write topic in YAML format</span>
+
+<span class="sd">        :param topic_id: unique topic ID (default is topic ID)</span>
+<span class="sd">        :type topic_id: str</span>
+<span class="sd">        :param model_yaml_path: model yaml path that has information about the dataset you use</span>
+<span class="sd">        :type model_yaml_path: str</span>
+<span class="sd">        :param topic_yaml_path: path that you use to save topic</span>
+<span class="sd">        :type topic_yaml_path: str</span>
+<span class="sd">        :param save: indicate if you want to save yaml file (True) or just show them (Fasle) (default: True)</span>
+<span class="sd">        :type save: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check require columns</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">{</span><span class="s1">&#39;gene_name&#39;</span><span class="p">,</span> <span class="s1">&#39;gene_id&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gene information doesn&#39;t contain gene_name and gene_id columns!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Open the file and load the file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_yaml_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">model_yaml</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">SafeLoader</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">topic_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_yaml</span><span class="p">[</span><span class="s1">&#39;Topic IDs&#39;</span><span class="p">]:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Topic_id is not in model YAML file!&quot;</span><span class="p">)</span>
+
+        <span class="n">topic_yaml</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Topic ID&#39;</span><span class="p">:</span> <span class="n">topic_id</span><span class="p">,</span>
+                      <span class="s1">&#39;Gene weights&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+                      <span class="s1">&#39;Gene information&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+                      <span class="s1">&#39;Topic information&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_information</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">]}</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">topic_yaml_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">topic_yaml</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">yaml_string</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">topic_yaml</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The Topic YAML is:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">yaml_string</span><span class="p">)</span></div></div>
 </pre></div>
 
     </div>
