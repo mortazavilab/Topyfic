@@ -7,6 +7,7 @@ import warnings
 import random
 import pickle
 from scipy.cluster.hierarchy import ward, dendrogram, leaves_list
+from statsmodels.stats.multitest import multipletests, fdrcorrection
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -110,7 +111,7 @@ class Analysis:
             figsize = (10 * (len(category) + 1), 10)
 
         if self.top_model.N <= n:
-            n = max(0, self.top_model.N-2)
+            n = max(0, self.top_model.N - 2)
 
         fig, axs = plt.subplots(ncols=len(category) + 1,
                                 figsize=figsize,
@@ -280,6 +281,7 @@ class Analysis:
                 tissue.sort_values(by=order_cell, ascending=ascending[i], inplace=True)
                 tmp = tmp.reindex(tissue.index)
                 tissue['count'] = 1
+                tissue = tissue.astype(object)
                 groups = tissue.groupby(order_cell).sum().reset_index()[order_cell + ['count']]
                 groups.sort_values(by=order_cell, ascending=ascending[i], inplace=True)
                 count = 0
@@ -344,7 +346,8 @@ class Analysis:
                                               linewidths=1)
                     else:
                         axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
-                                              c=color, cmap=metaData_palette[metaData[j]].get_cmap(), s=1000, marker="|",
+                                              c=color, cmap=metaData_palette[metaData[j]].get_cmap(), s=1000,
+                                              marker="|",
                                               alpha=1,
                                               linewidths=1)
 
@@ -448,18 +451,28 @@ class Analysis:
         """
         datTraits = Analysis.convertDatTraits(self.cell_participation.obs[metaData])
 
-        topicsTraitCor = pd.DataFrame(index=self.cell_participation.to_df().columns,
+        topicsTraitCor = pd.DataFrame(index=self.cell_participation.var.index,
                                       columns=datTraits.columns,
                                       dtype="float")
-        topicsTraitPvalue = pd.DataFrame(index=self.cell_participation.to_df().columns,
+        topicsTraitPvalue = pd.DataFrame(index=self.cell_participation.var.index,
                                          columns=datTraits.columns,
                                          dtype="float")
 
-        for i in self.cell_participation.to_df().columns:
+        min_cell_participation = self.cell_participation.to_df().min().min()
+        for i in self.cell_participation.var.index:
             for j in datTraits.columns:
-                tmp = stats.pearsonr(self.cell_participation.to_df()[i], datTraits[j], alternative='greater')
+                tmp = self.cell_participation.to_df()[
+                    ~np.isclose(self.cell_participation.to_df()[i],
+                                min_cell_participation, atol=min_cell_participation)]
+
+                tmp = stats.spearmanr(tmp[i], datTraits.loc[tmp.index, j], alternative='greater')
                 topicsTraitCor.loc[i, j] = tmp[0]
                 topicsTraitPvalue.loc[i, j] = tmp[1]
+
+        for i in range(topicsTraitPvalue.shape[0]):
+            rejected, tmp = fdrcorrection(topicsTraitPvalue.iloc[i, :])
+            if not rejected.all():
+                topicsTraitPvalue.iloc[i, :] = tmp
 
         fig, ax = plt.subplots(figsize=(topicsTraitPvalue.shape[0] * 1.5,
                                         topicsTraitPvalue.shape[1] * 1.5), facecolor='white')
@@ -467,17 +480,9 @@ class Analysis:
         xlabels = self.cell_participation.to_df().columns
         ylabels = datTraits.columns
 
-        # print(topicsTraitPvalue)
-        # for i in range(topicsTraitPvalue.shape[0]):
-        #     rejected, tmp = fdrcorrection(topicsTraitPvalue.iloc[i, :])
-        #     print(rejected)
-        #     if not rejected:
-        #         topicsTraitPvalue.iloc[i, :] = tmp
-        # print(topicsTraitPvalue)
-
         # Loop over data dimensions and create text annotations.
-        tmp_cor = topicsTraitCor.T.round(decimals=2)
-        tmp_pvalue = topicsTraitPvalue.T.round(decimals=2)
+        tmp_cor = topicsTraitCor.T.round(decimals=3)
+        tmp_pvalue = topicsTraitPvalue.T.round(decimals=3)
         labels = (np.asarray(["{0}\n({1})".format(cor, pvalue)
                               for cor, pvalue in zip(tmp_cor.values.flatten(),
                                                      tmp_pvalue.values.flatten())])) \

@@ -577,15 +577,20 @@ def read_model_yaml(model_yaml_path="model.yaml",
             topic_yaml = yaml.safe_load(file)
 
         if not all(value in list(topic_yaml.keys()) for value in
-                   ['Topic ID', 'Gene weights', 'Gene information', 'Topic information']):
+                   ['Topic ID', 'Gene weights', 'Gene information']):
             sys.exit(f"Topic {model_yaml['Topic IDs'][i]} YMAL file is not correct!")
 
         topic_id = topic_yaml['Topic ID']
         topic_gene_weights = pd.DataFrame(list(topic_yaml['Gene weights'].values()),
                                           index=topic_yaml['Gene weights'].keys(),
                                           columns=[topic_yaml['Topic ID']])
+        mask = topic_gene_weights.applymap(lambda x: isinstance(x, (int, float)))
+
+        topic_gene_weights = topic_gene_weights.where(mask)
         gene_information = pd.DataFrame(topic_yaml['Gene information'])
-        topic_information = pd.DataFrame(topic_yaml['Topic information'], index=topic_gene_weights.columns)
+        topic_information = None
+        if 'Topic information' in topic_yaml.keys():
+            topic_information = pd.DataFrame(topic_yaml['Topic information'], index=topic_gene_weights.columns)
         topics[f"Topic_{i + 1}"] = Topic(topic_id=topic_id,
                                          topic_gene_weights=topic_gene_weights,
                                          gene_information=gene_information,
@@ -600,7 +605,7 @@ def read_model_yaml(model_yaml_path="model.yaml",
     else:
         model = LatentDirichletAllocation(n_components=int(model_yaml['Number of topics']))
 
-    model.components_ = topics_gene_weights.values
+    model.components_ = topics_gene_weights.T.values
     topModel = TopModel(name=model_yaml['Experiment ID'],
                         N=int(model_yaml['Number of topics']),
                         topics=topics,
@@ -615,3 +620,71 @@ def read_model_yaml(model_yaml_path="model.yaml",
         analysis.save_analysis()
 
     return topModel, analysis
+
+
+def combine_topModels(topModels):
+    """
+    Combine two topmodels. It will not apply any method when we want to combine them, so basically just combine all models without performing any method
+
+    :param topModels: list of topmodels you want to combine
+    :type topModels: list of TopModel
+
+    :return: return the combined model, number of topics, gene weights
+    :rtype: LatentDirichletAllocation, int, pandas DataFrame
+    """
+    n_topics = 0
+    components = None
+    exp_dirichlet_component = None
+    n_batch_iter = 0
+    n_features_in = 0
+    n_iter = 0
+    bound = 0.0
+    doc_topic_prior = 0.0
+    topic_word_prior = 0.0
+    for topmodel in topModels:
+        n_topics += topmodel.N
+
+        tmp = pd.DataFrame(topmodel.model.components_,
+                           index=[f'{topmodel.name}_Topic_{i + 1}' for i in
+                                  range(topmodel.model.components_.shape[0])],
+                           columns=topmodel.get_feature_name())
+        if components is None:
+            components = tmp
+        else:
+            components = pd.concat([components, tmp], axis=0)
+
+        tmp = pd.DataFrame(topmodel.model.exp_dirichlet_component_,
+                           index=[f'{topmodel.name}_Topic_{i + 1}' for i in
+                                  range(topmodel.model.components_.shape[0])],
+                           columns=topmodel.get_feature_name())
+        if exp_dirichlet_component is None:
+            exp_dirichlet_component = tmp
+        else:
+            exp_dirichlet_component = pd.concat([exp_dirichlet_component, tmp], axis=0)
+
+        n_batch_iter += topmodel.N * topmodel.model.n_batch_iter_
+        n_features_in += topmodel.N * topmodel.model.n_features_in_
+        n_iter += topmodel.N * topmodel.model.n_iter_
+        bound += topmodel.N * topmodel.model.bound_
+        doc_topic_prior += topmodel.N * topmodel.model.doc_topic_prior_
+        topic_word_prior += topmodel.N * topmodel.model.topic_word_prior_
+
+    n_batch_iter /= n_topics
+    n_features_in /= n_topics
+    n_iter /= n_topics
+    bound /= n_topics
+    doc_topic_prior /= n_topics
+    topic_word_prior /= n_topics
+
+    model = LatentDirichletAllocation(n_components=n_topics)
+
+    model.components_ = components.values
+    model.exp_dirichlet_component_ = exp_dirichlet_component.values
+    model.n_batch_iter_ = int(n_batch_iter)
+    model.n_features_in_ = int(n_features_in)
+    model.n_iter_ = int(n_iter)
+    model.bound_ = bound
+    model.doc_topic_prior_ = doc_topic_prior
+    model.topic_word_prior_ = topic_word_prior
+
+    return model, n_topics, components.T
