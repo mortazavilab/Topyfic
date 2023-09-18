@@ -31,6 +31,7 @@ def compare_topModels(topModels,
                       threshold=0.8,
                       topModels_color=None,
                       topModels_label=None,
+                      ignore_genes=True,
                       save=False,
                       plot_show=True,
                       figsize=None,
@@ -49,6 +50,8 @@ def compare_topModels(topModels,
     :type topModels_color: dict
     :param topModels_label: dictionary of label mapping each topics to each label
     :type topModels_label: dict
+    :param ignore_genes: idicate how to behave to the genes that only represent in one the topics. "True" means it's gonna ignore those genes and "False" means it's gonna asumne the weights are zero for those genes that we don't have any weights in one of the mouse models
+    :type ignore_genes: bool
     :param save: indicate if you want to save the plot or not (default: True)
     :type save: bool
     :param plot_show: indicate if you want to show the plot or not (default: True)
@@ -89,8 +92,11 @@ def compare_topModels(topModels,
                 corrs.at[d1, d2] = 1
                 continue
             a = all_gene_weights[[d1, d2]]
-            a.dropna(axis=0, how='all', inplace=True)
-            a.fillna(0, inplace=True)
+            if ignore_genes:
+                a.dropna(axis=0, how='any', inplace=True)
+            else:
+                a.dropna(axis=0, how='all', inplace=True)
+                a.fillna(0, inplace=True)
             corr = st.pearsonr(a[d1].tolist(), a[d2].tolist())
             corrs.at[d1, d2] = corr[0]
 
