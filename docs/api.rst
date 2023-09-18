@@ -13,6 +13,9 @@ API Documentation
 .. automodule:: Topyfic.analysis
    :members:
 
-.. automodule:: Topyfic.utils
+.. automodule:: Topyfic.utilsMakeModel
+   :members:
+
+.. automodule:: Topyfic.utilsAnalyseModel
    :members:
 

@@ -737,6 +737,393 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 </dd></dl>
 
+<span class="target" id="module-Topyfic.utilsMakeModel"></span><dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.calculate_leiden_clustering">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">calculate_leiden_clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_top_genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter_harmony</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cell_participation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#calculate_leiden_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.calculate_leiden_clustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trains</strong> (<em>list of Train</em>) – list of train class</p></li>
+<li><p><strong>data</strong> (<em>anndata</em>) – gene-count data with cells and genes information</p></li>
+<li><p><strong>n_top_genes</strong> (<em>int</em>) – Number of highly-variable genes to keep (default: 50)</p></li>
+<li><p><strong>resolution</strong> (<em>int</em>) – A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)</p></li>
+<li><p><strong>min_cell_participation</strong> (<em>float</em>) – minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than 1% of #cells (#cells / 100)</p></li>
+<li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#Topyfic.topModel.TopModel" title="Topyfic.topModel.TopModel">TopModel</a>, pandas dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.combine_topModels">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">combine_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#combine_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.combine_topModels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two topmodels. It will not apply any method when we want to combine them, so basically just combine all models without performing any method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>topModels</strong> (<em>list of TopModel</em>) – list of topmodels you want to combine</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>return the combined model, number of topics, gene weights</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>LatentDirichletAllocation, int, pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.filter_LDA_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">filter_LDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main_lda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#filter_LDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.filter_LDA_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter LDA based on the topics we want to keep</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>main_lda</strong> (<em>sklearn.decomposition.LatentDirichletAllocation</em>) – Latent Dirichlet Allocation with online variational Bayes algorithm.</p></li>
+<li><p><strong>keep</strong> (<em>pandas dataframe</em>) – dataframe that define which topics we want to keep</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Latent Dirichlet Allocation with online variational Bayes algorithm, weights of genes in each topics (indexes are topics and columns are genes)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>sklearn.decomposition.LatentDirichletAllocation, pandas dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.initialize_lda_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">initialize_lda_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_dirichlet_component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#initialize_lda_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.initialize_lda_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize LDA model by passing all necessary attributes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>components</strong> (<em>pandas dataframe</em>) – Variational parameters for topic gene distribution</p></li>
+<li><p><strong>exp_dirichlet_component</strong> (<em>pandas dataframe</em>) – Exponential value of expectation of log topic gene distribution</p></li>
+<li><p><strong>others</strong> (<em>pandas dataframe</em>) – dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Latent Dirichlet Allocation with online variational Bayes algorithm.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>sklearn.decomposition.LatentDirichletAllocation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.initialize_rLDA_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">initialize_rLDA_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_exp_dirichlet_component</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_others</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clusters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#initialize_rLDA_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.initialize_rLDA_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize reproducible LDA model by calculating all necessary attributes using clustering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_components</strong> (<em>pandas dataframe</em>) – Variational parameters for topic gene distribution from all single LDA models</p></li>
+<li><p><strong>all_exp_dirichlet_component</strong> (<em>pandas dataframe</em>) – Exponential value of expectation of log topic gene distribution from all single LDA models</p></li>
+<li><p><strong>all_others</strong> (<em>pandas dataframe</em>) – dataframe contains remaining necessary attributes including: n_batch_iter: Number of iterations of the EM step. n_features_in: Number of features seen during fit. n_iter: Number of passes over the dataset. bound: Final perplexity score on training set. doc_topic_prior: Prior of document topic distribution theta. If the value is None, it is 1 / n_components. topic_word_prior: Prior of topic word distribution beta. If the value is None, it is 1 / n_components.</p></li>
+<li><p><strong>clusters</strong> (<em>pandas dataframe</em>) – dataframe that mapped each LDA run to each clusters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Latent Dirichlet Allocation with online variational Bayes algorithm.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>sklearn.decomposition.LatentDirichletAllocation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.make_analysis_class">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">make_analysis_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors_topics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#make_analysis_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.make_analysis_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creating Analysis object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>top_model</strong> (<a class="reference internal" href="#Topyfic.topModel.TopModel" title="Topyfic.topModel.TopModel"><em>TopModel</em></a>) – top model that used for analysing topics, gene weights compositions and calculate cell participation</p></li>
+<li><p><strong>data</strong> (<em>anndata</em>) – processed expression data along with cells and genes/region information</p></li>
+<li><p><strong>colors_topics</strong> (<em>pandas dataframe</em>) – dataframe that mapped colored to topics</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – directory you want to use to save pickle file (default is saving near script)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.make_topModel">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">make_topModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_top_genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#make_topModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.make_topModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creating topModel base on train data and save it along with clustering information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trains</strong> (<em>list of Train</em>) – list of train class</p></li>
+<li><p><strong>data</strong> (<em>anndata</em>) – expression data embedded in anndata format along with cells and genes/region information</p></li>
+<li><p><strong>n_top_genes</strong> (<em>int</em>) – Number of highly-variable genes to keep (default: 50)</p></li>
+<li><p><strong>resolution</strong> (<em>int</em>) – A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)</p></li>
+<li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – directory you want to use to save pickle file (default is saving near script)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.plot_cluster_contribution">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">plot_cluster_contribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clustering</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cluster_contribution'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#plot_cluster_contribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.plot_cluster_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>barplot shows number of topics contribute to each cluster</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clustering</strong> (<em>pandas dataframe</em>) – dataframe that map each single LDA run to each cluster</p></li>
+<li><p><strong>feature</strong> (<em>str</em>) – name of the feature you want to see the cluster contribution (should be one of the columns name of clustering df)</p></li>
+<li><p><strong>show_all</strong> (<em>bool</em>) – Indicate if you want to show all clusters or only the ones that pass threshold (default: False)</p></li>
+<li><p><strong>portion</strong> (<em>bool</em>) – Indicate if you want to normalized the bar to show percentage instead of actual value (default: True)</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – indicate if you want to save the plot or not (default: True)</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – indicate if you want to show the plot or not (default: True)</p></li>
+<li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: cluster_contribution)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.read_analysis">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">read_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#read_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.read_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>reading analysis pickle file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – path of the pickle file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>analysis instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Analysis class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.read_model_yaml">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">read_model_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_yaml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'model.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic_yaml_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_topic_participation_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#read_model_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.read_model_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>read YMAL files and make topmodel object
+write topic in YAML format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_yaml_path</strong> (<em>str</em>) – model yaml path</p></li>
+<li><p><strong>topic_yaml_path</strong> (<em>str</em>) – path that you use to save all topics information</p></li>
+<li><p><strong>cell_topic_participation_path</strong> (<em>str</em>) – path of cell-topic participation</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – indicate if you want to save objects (topmodel and analysis) as a pickle file (default: True)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Topmodel and analysis objects</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#Topyfic.topModel.TopModel" title="Topyfic.topModel.TopModel">TopModel</a>, <a class="reference internal" href="#Topyfic.analysis.Analysis" title="Topyfic.analysis.Analysis">Analysis</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.read_topModel">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">read_topModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#read_topModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.read_topModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>reading topModel pickle file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – path of the pickle file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>topModel instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>TopModel class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.read_train">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">read_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#read_train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.read_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>reading train pickle file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – path of the pickle file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>train instance</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Train class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.subset_data">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">subset_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'var'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#subset_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.subset_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subsetting data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>anndata</em>) – data we want to subset</p></li>
+<li><p><strong>keep</strong> (<em>list</em>) – values in the obs/var_names</p></li>
+<li><p><strong>loc</strong> – subsetting in which direction (default: ‘var’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data we want to keep</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>anndata</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsMakeModel.train_model">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_runs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_thread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training model and save it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – name of the Train class</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – number of topics to learn one LDA model using sklearn package (default: 50)</p></li>
+<li><p><strong>n_runs</strong> (<em>int</em>) – number of run to define rLDA model (default: 100)</p></li>
+<li><p><strong>random_state_range</strong> (<em>list of int</em>) – list of random state, we used to run LDA models (default: range(n_runs))</p></li>
+<li><p><strong>data</strong> (<em>anndata</em>) – data embedded in anndata format use to train LDA model</p></li>
+<li><p><strong>n_thread</strong> (<em>int</em>) – number of threads you used to learn LDA models (default=5)</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – directory you want to use to save pickle file (default is saving near script)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-Topyfic.utilsAnalyseModel"></span><dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.GSEA">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">GSEA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene_sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GO_Biological_Process_2021'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GSEA'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#GSEA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.GSEA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gene_list</strong> (<em>pandas series</em>) – pandas series with index as a gene names and their ranks/weights as value</p></li>
+<li><p><strong>gene_sets</strong> (<em>str</em><em>, </em><em>list</em><em>, </em><em>tuple</em>) – Enrichr Library name or .gmt gene sets file or dict of gene sets. (you can add any Enrichr Libraries from here: <a class="reference external" href="https://maayanlab.cloud/Enrichr/#stats">https://maayanlab.cloud/Enrichr/#stats</a>)</p></li>
+<li><p><strong>p_value</strong> (<em>float</em>) – Defines the pValue threshold for plotting. (default: 0.05)</p></li>
+<li><p><strong>table</strong> (<em>bool</em>) – indicate if you want to save all GO terms that passed the threshold as a table (default: True)</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – indicate if you want to plot all GO terms that passed the threshold (default: True)</p></li>
+<li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: gene_composition)</p></li>
+<li><p><strong>kwargs</strong> – Argument to pass to gseapy.prerank(). more info: <a class="reference external" href="https://gseapy.readthedocs.io/en/latest/run.html?highlight=gp.prerank#gseapy.prerank">https://gseapy.readthedocs.io/en/latest/run.html?highlight=gp.prerank#gseapy.prerank</a></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dataframe contains these columns: Term: gene set name, ES: enrichment score, NES: normalized enrichment score, NOM p-val:  Nominal p-value (from the null distribution of the gene set, FDR q-val: FDR qvalue (adjusted False Discory Rate), FWER p-val: Family wise error rate p-values, Tag %: Percent of gene set before running enrichment peak (ES), Gene %: Percent of gene list before running enrichment peak (ES), Lead_genes: leading edge genes (gene hits before running enrichment peak)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.MA_plot">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">MA_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topic1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pseudocount</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consistency_correction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.4826</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MA_plot'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#MA_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.MA_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot MA based on the gene weights on given topics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topic1</strong> (<em>pandas.series</em>) – gene weight of first topic to be compared</p></li>
+<li><p><strong>topic2</strong> (<em>pandas.series</em>) – gene weight of second topic to be compared</p></li>
+<li><p><strong>size</strong> (<em>pandas dataframe</em>) – table contains size of dot for each genes (genes are index)</p></li>
+<li><p><strong>pseudocount</strong> (<em>float</em>) – pseudocount that you want to add (default: 1)</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – threshold to filter genes based on A values (default: 1)</p></li>
+<li><p><strong>cutoff</strong> (<em>float</em>) – cutoff for categorized genes by modified z-score (default: 2)</p></li>
+<li><p><strong>consistency_correction</strong> (<em>float</em>) – the factor converts the MAD to the standard deviation for a given distribution. The default value (1.4826) is the conversion factor if the underlying data is normally distributed</p></li>
+<li><p><strong>topN</strong> (<em>int</em>) – number of genes to be consider for calculating z-score based on the A value (if it’s none is gonna be avarage of # genes in both topics with weights above threshold</p></li>
+<li><p><strong>labels</strong> (<em>list</em>) – list of gene names wish to show in MA-plot</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – indicate if you want to save the plot or not (default: True)</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – indicate if you want to show the plot or not (default: True)</p></li>
+<li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: MA_plot)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>return M and A values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.compare_topModels">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">compare_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'compare_topics'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#compare_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.compare_topModels" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare several topModels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topModels</strong> (<em>list of TopModel class</em>) – list of topModel class you want to compare to each other</p></li>
+<li><p><strong>output_type</strong> (<em>str</em>) – indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – only apply when you choose circular which only show correlation above that</p></li>
+<li><p><strong>topModels_color</strong> (<em>dict</em>) – dictionary of colors mapping each topics to each color (default: blue)</p></li>
+<li><p><strong>topModels_label</strong> (<em>dict</em>) – dictionary of label mapping each topics to each label</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – indicate if you want to save the plot or not (default: True)</p></li>
+<li><p><strong>plot_show</strong> (<em>bool</em>) – indicate if you want to show the plot or not (default: True)</p></li>
+<li><p><strong>figsize</strong> (<em>tuple of int</em>) – indicate the size of plot (default: (10 * (len(category) + 1), 10))</p></li>
+<li><p><strong>plot_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: piechart_topicAvgCell)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>table contains correlation between topics only when table is choose and save is False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.functional_enrichment_analysis">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">functional_enrichment_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gene_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organism</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'functional_enrichment_analysis'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#functional_enrichment_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.functional_enrichment_analysis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Doing functional enrichment analysis including GO, KEGG and REACTOME</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gene_list</strong> – list of gene name</p>
+</dd>
+</dl>
+<p>:type gene_list:list
+:param type: indicate the type of databases which it should be one of “GO”, “REACTOME”
+:type type: str
+:param organism: name of the organ you want to do functional enrichment analysis
+:type organism: str
+:param sets: str, list, tuple of Enrichr Library name(s). (you can add any Enrichr Libraries from here: <a class="reference external" href="https://maayanlab.cloud/Enrichr/#stats">https://maayanlab.cloud/Enrichr/#stats</a>) only need to fill if the type is GO
+:type sets: str, list, tuple
+:param p_value: Defines the pValue threshold. (default: 0.05)
+:type p_value: float
+:param file_format: indicate the format of plot (default: pdf)
+:type file_format: str
+:param file_name: name and path of the plot use for save (default: gene_composition)
+:type file_name: str</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.modified_zscore">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">modified_zscore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consistency_correction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.4826</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#modified_zscore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.modified_zscore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the modified z score and Median Absolute Deviation (MAD) from the scores in data.
+The consistency_correction factor converts the MAD to the standard deviation for a given
+distribution. The default value (1.4826) is the conversion factor if the underlying data
+is normally distributed</p>
+</dd></dl>
+
 </div>
 
 
