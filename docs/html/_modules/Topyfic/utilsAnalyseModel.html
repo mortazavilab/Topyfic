@@ -118,6 +118,7 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">LatentDirichletAllocation</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span> <span class="k">as</span> <span class="n">st</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">distance</span>
 <span class="kn">import</span> <span class="nn">scanpy.external</span> <span class="k">as</span> <span class="nn">sce</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -128,26 +129,34 @@
 <span class="kn">from</span> <span class="nn">gseapy</span> <span class="kn">import</span> <span class="n">gseaplot</span>
 <span class="kn">from</span> <span class="nn">reactome2py</span> <span class="kn">import</span> <span class="n">analysis</span>
 <span class="kn">from</span> <span class="nn">adjustText</span> <span class="kn">import</span> <span class="n">adjust_text</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">cosine_similarity</span>
+<span class="kn">import</span> <span class="nn">umap</span>
+<span class="kn">import</span> <span class="nn">obonet</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="compare_topModels"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.compare_topModels">[docs]</a><span class="k">def</span> <span class="nf">compare_topModels</span><span class="p">(</span><span class="n">topModels</span><span class="p">,</span>
+                      <span class="n">comparison_method</span><span class="o">=</span><span class="s2">&quot;Jensen–Shannon divergence&quot;</span><span class="p">,</span>
                       <span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span>
                       <span class="n">threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
                       <span class="n">topModels_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">topModels_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">ignore_genes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                       <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                       <span class="n">plot_show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                       <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">plot_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                       <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;compare_topics&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    compare several topModels</span>
+<span class="sd">    compare topModels using topic gene weights</span>
 
 <span class="sd">    :param topModels: list of topModel class you want to compare to each other</span>
 <span class="sd">    :type topModels: list of TopModel class</span>
-<span class="sd">    :param output_type: indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation</span>
+<span class="sd">    :param comparison_method: indicate the method you want to use for comparing topics. if you used Jensen–Shannon, we show -log2 (options: pearson correlation, spearman correlation, Jensen–Shannon divergence)</span>
+<span class="sd">    :type comparison_method: str</span>
+<span class="sd">    :param output_type: indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation. Note: if you want to plot Jensen–Shannon divergence as a graph, we convert the values to be at the -log2(), so you need to take that account for defining threshold</span>
 <span class="sd">    :type output_type: str</span>
 <span class="sd">    :param threshold: only apply when you choose circular which only show correlation above that</span>
 <span class="sd">    :type threshold: float</span>
@@ -155,6 +164,8 @@
 <span class="sd">    :type topModels_color: dict</span>
 <span class="sd">    :param topModels_label: dictionary of label mapping each topics to each label</span>
 <span class="sd">    :type topModels_label: dict</span>
+<span class="sd">    :param ignore_genes: idicate how to behave to the genes that only represent in one the topics. &quot;True&quot; means it&#39;s gonna ignore those genes and &quot;False&quot; means it&#39;s gonna asumne the weights are zero for those genes that we don&#39;t have any weights in one of the mouse models</span>
+<span class="sd">    :type ignore_genes: bool</span>
 <span class="sd">    :param save: indicate if you want to save the plot or not (default: True)</span>
 <span class="sd">    :type save: bool</span>
 <span class="sd">    :param plot_show: indicate if you want to show the plot or not (default: True)</span>
@@ -163,14 +174,17 @@
 <span class="sd">    :type figsize: tuple of int</span>
 <span class="sd">    :param plot_format: indicate the format of plot (default: pdf)</span>
 <span class="sd">    :type plot_format: str</span>
-<span class="sd">    :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)</span>
+<span class="sd">    :param file_name: name and path of the plot use for save (default: compare_topics)</span>
 <span class="sd">    :type file_name: str</span>
 
 <span class="sd">    :return: table contains correlation between topics only when table is choose and save is False</span>
 <span class="sd">    :rtype: pandas dataframe</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">output_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span> <span class="s1">&#39;heatmap&#39;</span><span class="p">,</span> <span class="s1">&#39;table&#39;</span><span class="p">]:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;output_type is not valid! it should be one of &#39;graph&#39;, &#39;heatmap&#39; or &#39;table&#39;&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;output_type is not valid! it should be one of &#39;graph&#39;, &#39;heatmap&#39;, or &#39;table&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">comparison_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;spearman correlation&#39;</span><span class="p">,</span> <span class="s1">&#39;pearson correlation&#39;</span><span class="p">,</span> <span class="s1">&#39;Jensen–Shannon divergence&#39;</span><span class="p">]:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;comparison_method is not valid! it should be one of &#39;spearman correlation&#39;, &#39;pearson correlation&#39;, or &#39;Jensen–Shannon divergence&#39;&quot;</span><span class="p">)</span>
 
     <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">topModel</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">topModel</span> <span class="ow">in</span> <span class="n">topModels</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
@@ -195,10 +209,25 @@
                 <span class="n">corrs</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
                 <span class="k">continue</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">all_gene_weights</span><span class="p">[[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]]</span>
-            <span class="n">a</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">a</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">corr</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">d1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">a</span><span class="p">[</span><span class="n">d2</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
-            <span class="n">corrs</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ignore_genes</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">a</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">a</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">comparison_method</span> <span class="o">==</span> <span class="s2">&quot;Jensen–Shannon divergence&quot;</span><span class="p">:</span>
+                <span class="n">JSd</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">jensenshannon</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">d1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">a</span><span class="p">[</span><span class="n">d2</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+                <span class="n">corrs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="n">JSd</span> <span class="o">*</span> <span class="n">JSd</span>
+            <span class="k">elif</span> <span class="n">comparison_method</span> <span class="o">==</span> <span class="s2">&quot;pearson correlation&quot;</span><span class="p">:</span>
+                <span class="n">corr</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">d1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">a</span><span class="p">[</span><span class="n">d2</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+                <span class="n">corrs</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">comparison_method</span> <span class="o">==</span> <span class="s2">&quot;spearman correlation&quot;</span><span class="p">:</span>
+                <span class="n">corr</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">d1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">a</span><span class="p">[</span><span class="n">d2</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+                <span class="n">corrs</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">comparison_method</span> <span class="o">==</span> <span class="s2">&quot;Jensen–Shannon divergence&quot;</span><span class="p">:</span>
+        <span class="n">corrs</span> <span class="o">=</span> <span class="n">corrs</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">)</span>
+        <span class="n">corrs</span> <span class="o">=</span> <span class="n">corrs</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">output_type</span> <span class="o">==</span> <span class="s1">&#39;table&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
@@ -270,6 +299,8 @@
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">connected_components</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span>
+            <span class="k">elif</span> <span class="n">ncols</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="n">ncols</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="n">ncols</span><span class="p">),</span> <span class="n">i</span> <span class="o">%</span> <span class="n">ncols</span><span class="p">]</span>
 
@@ -280,6 +311,7 @@
                              <span class="n">node_color</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">node_color</span><span class="p">),</span>
                              <span class="n">font_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
                              <span class="n">node_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                             <span class="n">font_family</span><span class="o">=</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span>
                              <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
             <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edge_labels</span><span class="p">(</span><span class="n">g_connected_component</span><span class="p">,</span>
@@ -418,12 +450,13 @@
         <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">plot_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;abs(mod_Zscore)&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;#topics GW &gt;= 1&quot;</span><span class="p">,</span>
                         <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">markers</span><span class="o">=</span><span class="n">markers</span><span class="p">)</span>
 
-    <span class="n">texts</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">plot_df</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="n">texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">plot_df</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">plot_df</span><span class="o">.</span><span class="n">M</span><span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">label</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">plot_df</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">plot_df</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">plot_df</span><span class="o">.</span><span class="n">M</span><span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">label</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">))</span>
 
-    <span class="n">adjust_text</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+        <span class="n">adjust_text</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
@@ -583,6 +616,90 @@
                      <span class="n">ofname</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">_GO_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span></div>
+
+
+<div class="viewcode-block" id="summarize_GO_Term"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.summarize_GO_Term">[docs]</a><span class="k">def</span> <span class="nf">summarize_GO_Term</span><span class="p">(</span><span class="n">GO_terms</span><span class="p">,</span>
+                      <span class="n">p_value</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                      <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">,</span>
+                      <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;GO_sum&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Summarize long, unintelligible lists of GO terms by finding a representative subset of the terms showing more unique (child) Go terms</span>
+<span class="sd">    We suggest save it as html since it&#39;s gonna be plot by plotly so you can take an advantage of using plotly</span>
+
+<span class="sd">    :param GO_terms: Dataframe contains results of gene ontology analysis performs by GSEAPY (https://gseapy.readthedocs.io/en/latest/index.html)</span>
+<span class="sd">    :type GO_terms: pandas dataframe</span>
+<span class="sd">    :param p_value: Defines the pValue threshold for plotting. (default: 0.05)</span>
+<span class="sd">    :type p_value: float</span>
+<span class="sd">    :param file_format: indicate the format of plot (default: html)</span>
+<span class="sd">    :type file_format: str</span>
+<span class="sd">    :param file_name: name and path of the plot use for save (default: gene_composition)</span>
+<span class="sd">    :type file_name: str</span>
+
+<span class="sd">    :return: dataframe used to plot the results</span>
+<span class="sd">    :rtype: pandas dataframe</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">GO_terms</span><span class="o">.</span><span class="n">Term</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">GO_terms</span><span class="o">.</span><span class="n">Term</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">GO_terms</span><span class="p">[</span><span class="s1">&#39;GO_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">genes</span> <span class="o">=</span> <span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">GO_terms</span><span class="p">[</span><span class="s1">&#39;Lead_genes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">genes</span> <span class="o">=</span> <span class="n">genes</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+    <span class="n">genes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">genes</span><span class="p">))</span>
+
+    <span class="n">go_genes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">GO_terms</span><span class="o">.</span><span class="n">GO_id</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">genes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">go_genes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">GO_terms</span><span class="o">.</span><span class="n">Lead_genes</span><span class="p">[</span><span class="n">GO_terms</span><span class="o">.</span><span class="n">GO_id</span> <span class="o">==</span> <span class="n">go_genes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">go_genes</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">go_genes</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tmp</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">go_go_cosine_similarity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">go_genes</span><span class="p">),</span>
+                                           <span class="n">index</span><span class="o">=</span><span class="n">GO_terms</span><span class="o">.</span><span class="n">GO_id</span><span class="p">,</span>
+                                           <span class="n">columns</span><span class="o">=</span><span class="n">GO_terms</span><span class="o">.</span><span class="n">GO_id</span><span class="p">,</span>
+                                           <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+
+    <span class="n">fit</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">()</span>
+
+    <span class="c1"># principalComponents = pca.fit_transform(go_genes)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">go_genes</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">u</span><span class="p">,</span>
+                      <span class="n">index</span><span class="o">=</span><span class="n">go_genes</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;umap1&#39;</span><span class="p">,</span> <span class="s1">&#39;umap2&#39;</span><span class="p">],</span>
+                      <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">GO_terms</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">GO_terms</span><span class="o">.</span><span class="n">GO_id</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">GO_terms</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gene %&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gene %&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="s1">&#39;e-2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://purl.obolibrary.org/obo/go.obo&#39;</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">obonet</span><span class="o">.</span><span class="n">read_obo</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">remove_goid</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">go_go_cosine_similarity</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">go_go_cosine_similarity</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">graph</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">source</span><span class="p">)</span> <span class="ow">and</span> <span class="n">graph</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">target</span><span class="p">)</span> <span class="ow">and</span> <span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+                                                                                 <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">)</span> <span class="ow">and</span> <span class="n">source</span> <span class="o">!=</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">remove_goid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+                <span class="c1"># print(nx.shortest_path(graph, source=source, target=target))</span>
+    <span class="n">remove_goid</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">remove_goid</span><span class="p">))</span>
+    <span class="c1"># df = go_go_cosine_similarity.drop(remove_goid, axis=0)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">remove_goid</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;NOM p-val&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">p_value</span><span class="p">]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+                     <span class="n">x</span><span class="o">=</span><span class="s2">&quot;umap1&quot;</span><span class="p">,</span>
+                     <span class="n">y</span><span class="o">=</span><span class="s2">&quot;umap2&quot;</span><span class="p">,</span>
+                     <span class="n">size</span><span class="o">=</span><span class="s2">&quot;Gene %&quot;</span><span class="p">,</span>
+                     <span class="n">color</span><span class="o">=</span><span class="s2">&quot;NOM p-val&quot;</span><span class="p">,</span>
+                     <span class="n">hover_data</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GO_id&#39;</span><span class="p">,</span> <span class="s1">&#39;Term&#39;</span><span class="p">],</span>
+                     <span class="n">color_continuous_scale</span><span class="o">=</span><span class="n">px</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">sequential</span><span class="o">.</span><span class="n">Viridis_r</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
 </pre></div>
 
     </div>

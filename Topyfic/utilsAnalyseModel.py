@@ -396,7 +396,7 @@ def functional_enrichment_analysis(gene_list,
     Doing functional enrichment analysis including GO, KEGG and REACTOME
 
     :param gene_list: list of gene name
-    :type gene_list:list
+    :type gene_list: list
     :param type: indicate the type of databases which it should be one of "GO", "REACTOME"
     :type type: str
     :param organism: name of the organ you want to do functional enrichment analysis

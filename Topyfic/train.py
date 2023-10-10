@@ -116,6 +116,7 @@ class Train:
         """
         train LDA models
 
+
         :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)
         :type max_iter: int
         :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)
@@ -149,10 +150,12 @@ class Train:
         """
         make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)
 
+
         :return: three data frame which the first one is gathering all components from all LDA runs,
         the second one is exp_dirichlet_component from all LDA runs and
         the last one is combining the rest of LDA attributes which put them to gather as a dataframe
         :rtype: pandas dataframe, pandas dataframe, pandas dataframe
+
         """
         feature = self.top_models[0].get_feature_name()
 

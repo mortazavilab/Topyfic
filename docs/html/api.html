@@ -499,12 +499,13 @@ the last one is combining the rest of LDA attributes which put them to gather as
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap">
-<span class="sig-name descname"><span class="pre">TopicTraitRelationshipHeatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metaData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topic-traitRelationships'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.TopicTraitRelationshipHeatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">TopicTraitRelationshipHeatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metaData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'topic-traitRelationships'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/analysis.html#Analysis.TopicTraitRelationshipHeatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot topic-trait relationship heatmap</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>metaData</strong> (<em>list</em>) – traits you would like to see the relationship with topics (must be column name of cell_participation.obs)</p></li>
+<li><p><strong>annotation</strong> (<em>bool</em>) – indicate if you want to add correlation and p_values as a text in each square (default:False)</p></li>
 <li><p><strong>save</strong> (<em>bool</em>) – indicate if you want to save the plot or not (default: True)</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – indicate if you want to show the plot or not (default: True)</p></li>
 <li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
@@ -748,6 +749,7 @@ the last one is combining the rest of LDA attributes which put them to gather as
 <li><p><strong>data</strong> (<em>anndata</em>) – gene-count data with cells and genes information</p></li>
 <li><p><strong>n_top_genes</strong> (<em>int</em>) – Number of highly-variable genes to keep (default: 50)</p></li>
 <li><p><strong>resolution</strong> (<em>int</em>) – A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)</p></li>
+<li><p><strong>max_iter_harmony</strong> (<em>int</em>) – number of iteration for running harmony (default: 10)</p></li>
 <li><p><strong>min_cell_participation</strong> (<em>float</em>) – minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than 1% of #cells (#cells / 100)</p></li>
 <li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
 </ul>
@@ -763,17 +765,22 @@ the last one is combining the rest of LDA attributes which put them to gather as
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Topyfic.utilsMakeModel.combine_topModels">
-<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">combine_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#combine_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.combine_topModels" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsMakeModel.</span></span><span class="sig-name descname"><span class="pre">combine_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Combined_TopModel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cell_participation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsMakeModel.html#combine_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsMakeModel.combine_topModels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine two topmodels. It will not apply any method when we want to combine them, so basically just combine all models without performing any method</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>topModels</strong> (<em>list of TopModel</em>) – list of topmodels you want to combine</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topModels</strong> (<em>list of TopModel</em>) – list of topmodels you want to combine</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – name of the combined topmodels</p></li>
+<li><p><strong>data</strong> (<em>anndata</em>) – if you want to remove topics with low cell participation, you can pass the data you used to train models</p></li>
+<li><p><strong>min_cell_participation</strong> (<em>float</em>) – minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than 1% of #cells (#cells / 100)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>return the combined model, number of topics, gene weights</p>
+<dd class="field-even"><p>return the combined TopModel, number of topics, gene weights</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>LatentDirichletAllocation, int, pandas DataFrame</p>
+<dd class="field-odd"><p><a class="reference internal" href="#Topyfic.topModel.TopModel" title="Topyfic.topModel.TopModel">TopModel</a>, int, pandas DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1065,21 +1072,23 @@ write topic in YAML format</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.compare_topModels">
-<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">compare_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'compare_topics'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#compare_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.compare_topModels" title="Permalink to this definition">¶</a></dt>
-<dd><p>compare several topModels</p>
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">compare_topModels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topModels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comparison_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Jensen–Shannon</span> <span class="pre">divergence'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'graph'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topModels_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_genes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'compare_topics'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#compare_topModels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.compare_topModels" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare topModels using topic gene weights</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>topModels</strong> (<em>list of TopModel class</em>) – list of topModel class you want to compare to each other</p></li>
-<li><p><strong>output_type</strong> (<em>str</em>) – indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation</p></li>
+<li><p><strong>comparison_method</strong> (<em>str</em>) – indicate the method you want to use for comparing topics. if you used Jensen–Shannon, we show -log2 (options: pearson correlation, spearman correlation, Jensen–Shannon divergence)</p></li>
+<li><p><strong>output_type</strong> (<em>str</em>) – indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation. Note: if you want to plot Jensen–Shannon divergence as a graph, we convert the values to be at the -log2(), so you need to take that account for defining threshold</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – only apply when you choose circular which only show correlation above that</p></li>
 <li><p><strong>topModels_color</strong> (<em>dict</em>) – dictionary of colors mapping each topics to each color (default: blue)</p></li>
 <li><p><strong>topModels_label</strong> (<em>dict</em>) – dictionary of label mapping each topics to each label</p></li>
+<li><p><strong>ignore_genes</strong> (<em>bool</em>) – idicate how to behave to the genes that only represent in one the topics. “True” means it’s gonna ignore those genes and “False” means it’s gonna asumne the weights are zero for those genes that we don’t have any weights in one of the mouse models</p></li>
 <li><p><strong>save</strong> (<em>bool</em>) – indicate if you want to save the plot or not (default: True)</p></li>
 <li><p><strong>plot_show</strong> (<em>bool</em>) – indicate if you want to show the plot or not (default: True)</p></li>
 <li><p><strong>figsize</strong> (<em>tuple of int</em>) – indicate the size of plot (default: (10 * (len(category) + 1), 10))</p></li>
 <li><p><strong>plot_format</strong> (<em>str</em>) – indicate the format of plot (default: pdf)</p></li>
-<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: piechart_topicAvgCell)</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: compare_topics)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1122,6 +1131,29 @@ write topic in YAML format</p>
 The consistency_correction factor converts the MAD to the standard deviation for a given
 distribution. The default value (1.4826) is the conversion factor if the underlying data
 is normally distributed</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Topyfic.utilsAnalyseModel.summarize_GO_Term">
+<span class="sig-prename descclassname"><span class="pre">Topyfic.utilsAnalyseModel.</span></span><span class="sig-name descname"><span class="pre">summarize_GO_Term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">GO_terms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'html'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GO_sum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Topyfic/utilsAnalyseModel.html#summarize_GO_Term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Topyfic.utilsAnalyseModel.summarize_GO_Term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Summarize long, unintelligible lists of GO terms by finding a representative subset of the terms showing more unique (child) Go terms
+We suggest save it as html since it’s gonna be plot by plotly so you can take an advantage of using plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>GO_terms</strong> (<em>pandas dataframe</em>) – Dataframe contains results of gene ontology analysis performs by GSEAPY (<a class="reference external" href="https://gseapy.readthedocs.io/en/latest/index.html">https://gseapy.readthedocs.io/en/latest/index.html</a>)</p></li>
+<li><p><strong>p_value</strong> (<em>float</em>) – Defines the pValue threshold for plotting. (default: 0.05)</p></li>
+<li><p><strong>file_format</strong> (<em>str</em>) – indicate the format of plot (default: html)</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – name and path of the plot use for save (default: gene_composition)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dataframe used to plot the results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas dataframe</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

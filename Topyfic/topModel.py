@@ -118,6 +118,7 @@ class TopModel:
         """
         get top model attributes to be able to make sklearn.decomposition.LatentDirichletAllocation
 
+
         :return: three data frame which the first one is components, the second one is exp_dirichlet_component and
         the last one is combining the rest of LDA attributes which put them to gather as a dataframe
         :rtype: pandas dataframe, pandas dataframe, pandas dataframe

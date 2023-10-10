@@ -659,8 +659,8 @@ class Analysis:
         :type topic: str
         :param color: name of the feature you want to have one line per group of that (it should be column name of cell_participation.obs)
         :type color:str
-        :type color_pallet: color of each category of color (if it None color assign randomly)
-        :param color_pallet: dict
+        :param color_pallet: color of each category of color (if it None color assign randomly)
+        :type color_pallet: dict
         :param category: name of the feature you want to have on x axis (it should be column name of cell_participation.obs)
         :type category: str
         :param save: indicate if you want to save the plot or not (default: True)
