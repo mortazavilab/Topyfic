@@ -7,7 +7,7 @@ import warnings
 import random
 import pickle
 from scipy.cluster.hierarchy import ward, dendrogram, leaves_list
-from statsmodels.stats.multitest import multipletests, fdrcorrection
+from statsmodels.stats.multitest import fdrcorrection
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -431,6 +431,7 @@ class Analysis:
 
     def TopicTraitRelationshipHeatmap(self,
                                       metaData,
+                                      annotation=False,
                                       save=True,
                                       show=True,
                                       file_format="pdf",
@@ -440,6 +441,8 @@ class Analysis:
 
         :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)
         :type metaData: list
+        :param annotation: indicate if you want to add correlation and p_values as a text in each square (default:False)
+        :type annotation: bool
         :param save: indicate if you want to save the plot or not (default: True)
         :type save: bool
         :param show: indicate if you want to show the plot or not (default: True)
@@ -469,29 +472,42 @@ class Analysis:
                 topicsTraitCor.loc[i, j] = tmp[0]
                 topicsTraitPvalue.loc[i, j] = tmp[1]
 
+        topicsTraitCor.fillna(0.0, inplace=True)
+        topicsTraitPvalue.fillna(1.0, inplace=True)
+
         for i in range(topicsTraitPvalue.shape[0]):
             rejected, tmp = fdrcorrection(topicsTraitPvalue.iloc[i, :])
             if not rejected.all():
                 topicsTraitPvalue.iloc[i, :] = tmp
 
-        fig, ax = plt.subplots(figsize=(topicsTraitPvalue.shape[0] * 1.5,
-                                        topicsTraitPvalue.shape[1] * 1.5), facecolor='white')
-
         xlabels = self.cell_participation.to_df().columns
         ylabels = datTraits.columns
 
-        # Loop over data dimensions and create text annotations.
-        tmp_cor = topicsTraitCor.T.round(decimals=3)
-        tmp_pvalue = topicsTraitPvalue.T.round(decimals=3)
-        labels = (np.asarray(["{0}\n({1})".format(cor, pvalue)
-                              for cor, pvalue in zip(tmp_cor.values.flatten(),
-                                                     tmp_pvalue.values.flatten())])) \
-            .reshape(topicsTraitCor.T.shape)
+        if annotation:
+            fig, ax = plt.subplots(figsize=(topicsTraitPvalue.shape[0] * 1.5,
+                                            topicsTraitPvalue.shape[1] * 1.5), facecolor='white')
 
-        sns.set(font_scale=1.5)
-        res = sns.heatmap(topicsTraitCor.T, annot=labels, fmt="", cmap='RdBu_r',
-                          vmin=-1, vmax=1, ax=ax, annot_kws={'size': 20, "weight": "bold"},
-                          xticklabels=xlabels, yticklabels=ylabels)
+            # Loop over data dimensions and create text annotations.
+            tmp_cor = topicsTraitCor.T.round(decimals=3)
+            tmp_pvalue = topicsTraitPvalue.T.round(decimals=3)
+            labels = (np.asarray(["{0}\n({1})".format(cor, pvalue)
+                                  for cor, pvalue in zip(tmp_cor.values.flatten(),
+                                                         tmp_pvalue.values.flatten())])) \
+                .reshape(topicsTraitCor.T.shape)
+
+            sns.set(font_scale=1.5)
+            res = sns.heatmap(topicsTraitCor.T, annot=labels, fmt="", cmap='RdBu_r',
+                              vmin=-1, vmax=1, ax=ax, annot_kws={'size': 20, "weight": "bold"},
+                              xticklabels=xlabels, yticklabels=ylabels)
+
+        else:
+            fig, ax = plt.subplots(figsize=(topicsTraitPvalue.shape[0],
+                                            topicsTraitPvalue.shape[1]), facecolor='white')
+
+            sns.set(font_scale=1.5)
+            res = sns.heatmap(topicsTraitCor.T, cmap='RdBu_r',
+                              vmin=-1, vmax=1, ax=ax, annot_kws={'size': 20, "weight": "bold"},
+                              xticklabels=xlabels, yticklabels=ylabels)
         res.set_xticklabels(res.get_xmajorticklabels(), fontsize=20, fontweight="bold", rotation=90)
         res.set_yticklabels(res.get_ymajorticklabels(), fontsize=20, fontweight="bold")
         plt.yticks(rotation=0)
@@ -615,6 +631,7 @@ class Analysis:
         plt.bar(df['index'], df[0], color=color, width=0.5)
 
         plt.xlabel(self.top_model.name)
+        plt.xticks(rotation=45)
         plt.title(f"Distribution of Cell-Topic participation of {self.top_model.name}")
         plt.ylabel("Average cell participation")
 
@@ -764,6 +781,7 @@ class Analysis:
         else:
             sns.boxplot(data=df, color=color, ax=ax)
 
+        plt.xticks(rotation=45)
         plt.ylabel("cell participation")
         plt.title(f"Distribution of Cell-Topic participation of {self.top_model.name}")
 

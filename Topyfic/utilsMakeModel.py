@@ -160,6 +160,8 @@ def calculate_leiden_clustering(trains,
     :type n_top_genes: int
     :param resolution: A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
     :type resolution: int
+    :param max_iter_harmony: number of iteration for running harmony (default: 10)
+    :type max_iter_harmony: int
     :param min_cell_participation: minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than 1% of #cells (#cells / 100)
     :type min_cell_participation: float
     :param file_format: indicate the format of plot (default: pdf)
@@ -622,15 +624,24 @@ def read_model_yaml(model_yaml_path="model.yaml",
     return topModel, analysis
 
 
-def combine_topModels(topModels):
+def combine_topModels(topModels,
+                      name="Combined_TopModel",
+                      data=None,
+                      min_cell_participation=None):
     """
     Combine two topmodels. It will not apply any method when we want to combine them, so basically just combine all models without performing any method
 
     :param topModels: list of topmodels you want to combine
     :type topModels: list of TopModel
+    :param name: name of the combined topmodels
+    :type name: str
+    :param data: if you want to remove topics with low cell participation, you can pass the data you used to train models
+    :type data: anndata
+    :param min_cell_participation: minimum cell participation across for each topics to keep them, when is None, it will keep topics with cell participation more than 1% of #cells (#cells / 100)
+    :type min_cell_participation: float
 
-    :return: return the combined model, number of topics, gene weights
-    :rtype: LatentDirichletAllocation, int, pandas DataFrame
+    :return: return the combined TopModel, number of topics, gene weights
+    :rtype: TopModel, int, pandas DataFrame
     """
     n_topics = 0
     components = None
@@ -687,4 +698,28 @@ def combine_topModels(topModels):
     model.doc_topic_prior_ = doc_topic_prior
     model.topic_word_prior_ = topic_word_prior
 
-    return model, n_topics, components.T
+    if data is not None:
+        if min_cell_participation is None:
+            min_cell_participation = data.shape[0] / 100
+
+        lda_output = model.transform(data.X)
+        cell_participation = pd.DataFrame(np.round(lda_output, 2),
+                                          columns=[f"Topic{i + 1}" for i in range(n_topics)],
+                                          index=data.obs.index)
+
+        keep = cell_participation.sum() > min_cell_participation
+        print(
+            f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {min_cell_participation}")
+        n_topics = keep.sum()
+        model, tmp = filter_LDA_model(model, keep)
+        components = pd.DataFrame(model.components_,
+                                  index=[f'{name}_Topic_{i + 1}' for i in
+                                         range(model.components_.shape[0])],
+                                  columns=components.columns.tolist())
+
+    top_model = TopModel(name=name,
+                         N=n_topics,
+                         gene_weights=components.T,
+                         model=model)
+
+    return top_model, n_topics, components.T

@@ -37,6 +37,9 @@ setup(
         'adjustText>=0.8',
         'PyYAML>=6.0.1',
         'click>=8.1.7',
+        'umap',
+        'obonet',
+        'plotly',
 
     ],
     classifiers=[  # choose from here: https://pypi.org/classifiers/

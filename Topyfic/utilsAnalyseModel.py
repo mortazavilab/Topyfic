@@ -12,6 +12,7 @@ from itertools import repeat
 import pickle
 from sklearn.decomposition import LatentDirichletAllocation
 from scipy import stats as st
+from scipy.spatial import distance
 import scanpy.external as sce
 import networkx as nx
 import math
@@ -22,11 +23,16 @@ from gseapy.plot import dotplot
 from gseapy import gseaplot
 from reactome2py import analysis
 from adjustText import adjust_text
+from sklearn.metrics.pairwise import cosine_similarity
+import umap
+import obonet
+import plotly.express as px
 
 warnings.filterwarnings("ignore")
 
 
 def compare_topModels(topModels,
+                      comparison_method="Jensen–Shannon divergence",
                       output_type='graph',
                       threshold=0.8,
                       topModels_color=None,
@@ -38,11 +44,13 @@ def compare_topModels(topModels,
                       plot_format="pdf",
                       file_name="compare_topics"):
     """
-    compare several topModels
+    compare topModels using topic gene weights
 
     :param topModels: list of topModel class you want to compare to each other
     :type topModels: list of TopModel class
-    :param output_type: indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation
+    :param comparison_method: indicate the method you want to use for comparing topics. if you used Jensen–Shannon, we show -log2 (options: pearson correlation, spearman correlation, Jensen–Shannon divergence)
+    :type comparison_method: str
+    :param output_type: indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation. Note: if you want to plot Jensen–Shannon divergence as a graph, we convert the values to be at the -log2(), so you need to take that account for defining threshold
     :type output_type: str
     :param threshold: only apply when you choose circular which only show correlation above that
     :type threshold: float
@@ -60,14 +68,17 @@ def compare_topModels(topModels,
     :type figsize: tuple of int
     :param plot_format: indicate the format of plot (default: pdf)
     :type plot_format: str
-    :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
+    :param file_name: name and path of the plot use for save (default: compare_topics)
     :type file_name: str
 
     :return: table contains correlation between topics only when table is choose and save is False
     :rtype: pandas dataframe
     """
     if output_type not in ['graph', 'heatmap', 'table']:
-        sys.exit("output_type is not valid! it should be one of 'graph', 'heatmap' or 'table'")
+        sys.exit("output_type is not valid! it should be one of 'graph', 'heatmap', or 'table'")
+
+    if comparison_method not in ['spearman correlation', 'pearson correlation', 'Jensen–Shannon divergence']:
+        sys.exit("comparison_method is not valid! it should be one of 'spearman correlation', 'pearson correlation', or 'Jensen–Shannon divergence'")
 
     names = [topModel.name for topModel in topModels]
     if len(names) != len(set(names)):
@@ -97,8 +108,20 @@ def compare_topModels(topModels,
             else:
                 a.dropna(axis=0, how='all', inplace=True)
                 a.fillna(0, inplace=True)
-            corr = st.pearsonr(a[d1].tolist(), a[d2].tolist())
-            corrs.at[d1, d2] = corr[0]
+
+            a = a / a.sum()
+            if comparison_method == "Jensen–Shannon divergence":
+                JSd = distance.jensenshannon(a[d1].tolist(), a[d2].tolist())
+                corrs.loc[d1, d2] = JSd * JSd
+            elif comparison_method == "pearson correlation":
+                corr = st.pearsonr(a[d1].tolist(), a[d2].tolist())
+                corrs.at[d1, d2] = corr[0]
+            elif comparison_method == "spearman correlation":
+                corr = st.spearmanr(a[d1].tolist(), a[d2].tolist())
+                corrs.at[d1, d2] = corr[0]
+    if comparison_method == "Jensen–Shannon divergence":
+        corrs = corrs.applymap(math.log2)
+        corrs = corrs * -1
 
     if output_type == 'table':
         if save:
@@ -170,6 +193,8 @@ def compare_topModels(topModels,
 
             if len(connected_components) == 1:
                 ax = axs
+            elif ncols == 1:
+                ax = axs[int(i / ncols)]
             else:
                 ax = axs[int(i / ncols), i % ncols]
 
@@ -180,6 +205,7 @@ def compare_topModels(topModels,
                              node_color=list(node_color),
                              font_size=8,
                              node_size=500,
+                             font_family='Arial',
                              ax=ax)
 
             nx.draw_networkx_edge_labels(g_connected_component,
@@ -318,12 +344,13 @@ def MA_plot(topic1,
         sns.scatterplot(data=plot_df, x="A", y="M", style="abs(mod_Zscore)", hue="#topics GW >= 1",
                         linewidth=0.1, markers=markers)
 
-    texts = []
-    for label in plot_df.label.unique():
-        if label != "":
-            texts.append(plt.text(plot_df.A[label], plot_df.M[label], label, horizontalalignment='left'))
+    if labels is not None:
+        texts = []
+        for label in plot_df.label.unique():
+            if label != "":
+                texts.append(plt.text(plot_df.A[label], plot_df.M[label], label, horizontalalignment='left'))
 
-    adjust_text(texts, arrowprops=dict(arrowstyle="-", color='black', lw=0.5))
+        adjust_text(texts, arrowprops=dict(arrowstyle="-", color='black', lw=0.5))
 
     plt.legend(loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1)
     plt.hlines(y=y, xmin=xmin, xmax=xmax, colors="red")
@@ -483,3 +510,87 @@ def GSEA(gene_list,
                      ofname=f"{file_name}_GO_{name}.{file_format}")
 
     return pre_res.res2d
+
+
+def summarize_GO_Term(GO_terms,
+                      p_value=0.05,
+                      file_format="html",
+                      file_name="GO_sum"):
+    """
+    Summarize long, unintelligible lists of GO terms by finding a representative subset of the terms showing more unique (child) Go terms
+    We suggest save it as html since it's gonna be plot by plotly so you can take an advantage of using plotly
+
+    :param GO_terms: Dataframe contains results of gene ontology analysis performs by GSEAPY (https://gseapy.readthedocs.io/en/latest/index.html)
+    :type GO_terms: pandas dataframe
+    :param p_value: Defines the pValue threshold for plotting. (default: 0.05)
+    :type p_value: float
+    :param file_format: indicate the format of plot (default: html)
+    :type file_format: str
+    :param file_name: name and path of the plot use for save (default: gene_composition)
+    :type file_name: str
+
+    :return: dataframe used to plot the results
+    :rtype: pandas dataframe
+    """
+
+    tmp = GO_terms.Term.str.split(pat="(", expand=True)
+    GO_terms.Term = tmp[0]
+    GO_terms['GO_id'] = tmp[1].str.split(pat=")", expand=True)[0]
+
+    genes = ";".join(GO_terms['Lead_genes'].tolist())
+    genes = genes.split(";")
+    genes = list(set(genes))
+
+    go_genes = pd.DataFrame(0, index=GO_terms.GO_id, columns=genes)
+    for i in range(go_genes.shape[0]):
+        tmp = GO_terms.Lead_genes[GO_terms.GO_id == go_genes.index[i]].tolist()[0]
+        tmp = tmp.split(";")
+        go_genes.loc[go_genes.index[i], tmp] = 1
+
+    go_go_cosine_similarity = pd.DataFrame(cosine_similarity(go_genes),
+                                           index=GO_terms.GO_id,
+                                           columns=GO_terms.GO_id,
+                                           dtype='float64')
+
+    fit = umap.UMAP()
+
+    # principalComponents = pca.fit_transform(go_genes)
+    u = fit.fit_transform(go_genes)
+
+    df = pd.DataFrame(data=u,
+                      index=go_genes.index.tolist(),
+                      columns=['umap1', 'umap2'],
+                      dtype=float)
+
+    GO_terms.index = GO_terms.GO_id.values
+    df = pd.concat([df, GO_terms], axis=1)
+    df['Gene %'] = df['Gene %'].str.replace('%', 'e-2').astype(float)
+
+    url = 'http://purl.obolibrary.org/obo/go.obo'
+    graph = obonet.read_obo(url)
+
+    remove_goid = []
+    for source in go_go_cosine_similarity.index.tolist():
+        for target in go_go_cosine_similarity.index.tolist():
+            if graph.has_node(source) and graph.has_node(target) and nx.has_path(graph, source=source,
+                                                                                 target=target) and source != target:
+                remove_goid.append(target)
+                # print(nx.shortest_path(graph, source=source, target=target))
+    remove_goid = list(set(remove_goid))
+    # df = go_go_cosine_similarity.drop(remove_goid, axis=0)
+    df.drop(remove_goid, axis=0, inplace=True)
+
+    df = df[df['NOM p-val'] < p_value]
+
+    fig = px.scatter(df,
+                     x="umap1",
+                     y="umap2",
+                     size="Gene %",
+                     color="NOM p-val",
+                     hover_data=['GO_id', 'Term'],
+                     color_continuous_scale=px.colors.sequential.Viridis_r)
+    fig.show()
+    fig.write_html(f"{file_name}.{file_format}")
+
+    return df
+
