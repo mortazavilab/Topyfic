@@ -122,3 +122,20 @@ for topic in analysis.top_model.topics:
                      save=True)
 ```
 
+## Read results and embed them in Topyfic data model
+
+```python 
+import Topyfic
+
+topic_yaml_path = 'topic_files/'
+model_yaml_path = 'topic_files/model.yaml'
+cell_topic_participation_path = "topic_files/cell_topic_participation.h5ad"
+
+topModel, analysis = Topyfic.read_model_yaml(model_yaml_path=model_yaml_path,
+                    topic_yaml_path=topic_yaml_path,
+                    cell_topic_participation_path=cell_topic_participation_path,
+                    save=True)
+
+```
+
+

@@ -280,10 +280,7 @@ class Analysis:
                 order_cell = order_cells[:-1]
                 tissue.sort_values(by=order_cell, ascending=ascending[i], inplace=True)
                 tmp = tmp.reindex(tissue.index)
-                tissue['count'] = 1
-                tissue = tissue.astype(object)
-                groups = tissue.groupby(order_cell).sum().reset_index()[order_cell + ['count']]
-                groups.sort_values(by=order_cell, ascending=ascending[i], inplace=True)
+                groups = tissue[order_cell].value_counts(sort=False).reset_index()
                 count = 0
                 index = []
                 for j in range(groups.shape[0]):
@@ -341,15 +338,22 @@ class Analysis:
                 for j in range(len(metaData)):
                     color = tissue[metaData[j]].values
                     if type(metaData_palette[metaData[j]]) == dict:
-                        axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
-                                              c=color, s=1000, marker="|", alpha=1,
-                                              linewidths=1)
-                    else:
-                        axs[j + 1, i].scatter(x, y, label=metaData_palette[metaData[j]],
-                                              c=color, cmap=metaData_palette[metaData[j]].get_cmap(), s=1000,
+                        axs[j + 1, i].scatter(x, y,
+                                              label=metaData_palette[metaData[j]],
+                                              c=color,
+                                              s=1000,
                                               marker="|",
                                               alpha=1,
-                                              linewidths=1)
+                                              edgecolor='none')
+                    else:
+                        axs[j + 1, i].scatter(x, y,
+                                              label=metaData_palette[metaData[j]],
+                                              c=color,
+                                              cmap=metaData_palette[metaData[j]].get_cmap(),
+                                              s=1000,
+                                              marker="|",
+                                              alpha=1,
+                                              edgecolor='none')
 
                     axs[j + 1, i].axis('off')
                     axs[j + 1, i].set_xlim(0, a[i])

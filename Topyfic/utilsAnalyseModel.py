@@ -238,7 +238,7 @@ def MA_plot(topic1,
             threshold=1,
             cutoff=2.0,
             consistency_correction=1.4826,
-            topN=None,
+            #topN=None,
             labels=None,
             save=True,
             show=True,
@@ -282,10 +282,10 @@ def MA_plot(topic1,
     A = (np.log2(topic1) + np.log2(topic2)) / 2
     M = np.log2(topic1) - np.log2(topic2)
 
-    if topN is None:
-        len_topic1 = sum(topic1 > threshold)
-        len_topic2 = sum(topic2 > threshold)
-        topN = round((len_topic1 + len_topic2) / 2)
+    # if topN is None:
+    #     len_topic1 = sum(topic1 > threshold)
+    #     len_topic2 = sum(topic2 > threshold)
+    #     topN = round((len_topic1 + len_topic2) / 2)
 
     gene_zscore = pd.concat([A, M], axis=1)
     gene_zscore.columns = ["A", "M"]
@@ -297,7 +297,7 @@ def MA_plot(topic1,
         gene_zscore.columns = ["A", "M", "size"]
 
     gene_zscore.sort_values('A', ascending=False, inplace=True)
-    gene_zscore = gene_zscore.iloc[:topN, :]
+    #gene_zscore = gene_zscore.iloc[:topN, :]
 
     gene_zscore['mod_zscore'], mad = modified_zscore(gene_zscore['M'],
                                                      consistency_correction=consistency_correction)
@@ -309,8 +309,8 @@ def MA_plot(topic1,
     plot_df.mod_zscore = plot_df.mod_zscore.abs()
     plot_df.mod_zscore[plot_df.mod_zscore > cutoff] = cutoff
     plot_df.mod_zscore[plot_df.mod_zscore < cutoff] = 0
-    plot_df.mod_zscore.replace(float('-inf'), -2.0)
-    plot_df.mod_zscore.replace(float('inf'), 2.0)
+    plot_df.mod_zscore.replace(float('-inf'), -1*cutoff)
+    plot_df.mod_zscore.replace(float('inf'), cutoff)
     plot_df.mod_zscore.fillna(0, inplace=True)
     plot_df.mod_zscore = plot_df.mod_zscore.astype(str)
     plot_df.mod_zscore[plot_df.mod_zscore == str(cutoff)] = f'> {cutoff}'
