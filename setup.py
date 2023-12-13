@@ -40,6 +40,7 @@ setup(
         'umap',
         'obonet',
         'plotly',
+        'h5py',
 
     ],
     classifiers=[  # choose from here: https://pypi.org/classifiers/

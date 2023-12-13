@@ -27,7 +27,6 @@ top_model.model = top_model.rLDA
 top_model.save_topModel()
 ```
 
-
 ### Install from PyPi (recommended)
 Install the most recent release, run
 
@@ -39,7 +38,6 @@ git cloning the [Topyfic repository](https://github.com/mortazavilab/Topyfic), g
 `pip install .`
 
 ## Tutorials
-
 
 In general, you need to make three objects (Train, TopModel and Analysis). 
 

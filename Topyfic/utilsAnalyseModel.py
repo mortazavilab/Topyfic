@@ -13,6 +13,7 @@ import pickle
 from sklearn.decomposition import LatentDirichletAllocation
 from scipy import stats as st
 from scipy.spatial import distance
+from sklearn.metrics.pairwise import cosine_similarity
 import scanpy.external as sce
 import networkx as nx
 import math
@@ -23,7 +24,6 @@ from gseapy.plot import dotplot
 from gseapy import gseaplot
 from reactome2py import analysis
 from adjustText import adjust_text
-from sklearn.metrics.pairwise import cosine_similarity
 import umap
 import obonet
 import plotly.express as px
@@ -48,7 +48,7 @@ def compare_topModels(topModels,
 
     :param topModels: list of topModel class you want to compare to each other
     :type topModels: list of TopModel class
-    :param comparison_method: indicate the method you want to use for comparing topics. if you used Jensen–Shannon, we show -log2 (options: pearson correlation, spearman correlation, Jensen–Shannon divergence)
+    :param comparison_method: indicate the method you want to use for comparing topics. if you used Jensen–Shannon, we show -log2 (options: pearson correlation, spearman correlation, Jensen–Shannon divergence, cosine similarity)
     :type comparison_method: str
     :param output_type: indicate the type of output you want. graph: plot as a graph, heatmap: plot as a heatmap, table: table contains correlation. Note: if you want to plot Jensen–Shannon divergence as a graph, we convert the values to be at the -log2(), so you need to take that account for defining threshold
     :type output_type: str
@@ -77,7 +77,7 @@ def compare_topModels(topModels,
     if output_type not in ['graph', 'heatmap', 'table']:
         sys.exit("output_type is not valid! it should be one of 'graph', 'heatmap', or 'table'")
 
-    if comparison_method not in ['spearman correlation', 'pearson correlation', 'Jensen–Shannon divergence']:
+    if comparison_method not in ['spearman correlation', 'pearson correlation', 'Jensen–Shannon divergence', 'cosine similarity']:
         sys.exit("comparison_method is not valid! it should be one of 'spearman correlation', 'pearson correlation', or 'Jensen–Shannon divergence'")
 
     names = [topModel.name for topModel in topModels]
@@ -109,6 +109,7 @@ def compare_topModels(topModels,
                 a.dropna(axis=0, how='all', inplace=True)
                 a.fillna(0, inplace=True)
 
+            a = a[np.logical_or(a[d1] > a[d1].min(), a[d2] > a[d2].min())]
             a = a / a.sum()
             if comparison_method == "Jensen–Shannon divergence":
                 JSd = distance.jensenshannon(a[d1].tolist(), a[d2].tolist())
@@ -119,6 +120,9 @@ def compare_topModels(topModels,
             elif comparison_method == "spearman correlation":
                 corr = st.spearmanr(a[d1].tolist(), a[d2].tolist())
                 corrs.at[d1, d2] = corr[0]
+            elif comparison_method == 'cosine similarity':
+                corr = distance.cosine(a[d1].tolist(), a[d2].tolist())
+                corrs.at[d1, d2] = 1 - corr
     if comparison_method == "Jensen–Shannon divergence":
         corrs = corrs.applymap(math.log2)
         corrs = corrs * -1

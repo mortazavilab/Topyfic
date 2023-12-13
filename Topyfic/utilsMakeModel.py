@@ -23,6 +23,7 @@ from gseapy import gseaplot
 from reactome2py import analysis
 import yaml
 from yaml.loader import SafeLoader
+import h5py
 
 from Topyfic.train import Train
 from Topyfic.analysis import Analysis
@@ -505,22 +506,83 @@ def read_train(file):
 
 def read_topModel(file):
     """
-    reading topModel pickle file
+    reading topModel pickle/HDF5 file
 
-    :param file: path of the pickle file
+    :param file: path of the pickle/HDF5 file
     :type file: str
 
     :return: topModel instance
     :rtype: TopModel class
     """
     if not os.path.isfile(file):
-        raise ValueError('TopModel object not found at given path!')
+        raise ValueError('TopModel file not found at given path!')
+    if not file.endswith('.p') and not file.endswith('.h5'):
+        raise ValueError('TopModel file type is not correct!')
 
-    picklefile = open(file, 'rb')
-    topModel = pickle.load(picklefile)
+    if file.endswith('.p'):
+        picklefile = open(file, 'rb')
+        top_model = pickle.load(picklefile)
+
+    if file.endswith('.h5'):
+        f = h5py.File(file, 'r')
+
+        name = np.string_(f['name']).decode('ascii')
+        N = np.int_(f['N'])
+
+        # topics
+        topics = dict()
+        topic_ids = [f'Topic_{i + 1}' for i in range(N)]
+        for topic in topic_ids:
+            topic_id = np.string_(f['topics'][topic]['id']).decode('ascii')
+            topic_name = np.string_(f['topics'][topic]['name']).decode('ascii')
+            gene_weights = pd.DataFrame(np.array(f['topics'][topic]['gene_weights']))
+            gene_information = pd.DataFrame(np.array(f['topics'][topic]['gene_information']), dtype=str)
+            gene_information.columns = gene_information.iloc[0, :]
+            gene_information.drop(index=0, inplace=True)
+            gene_information.index = gene_information['index']
+            gene_information.drop(columns='index', inplace=True)
+            gene_information.index.name = None
+
+            topic_information = pd.DataFrame(np.array(f['topics'][topic]['topic_information']), dtype=str)
+            topic_information.columns = topic_information.iloc[0, :]
+            topic_information.drop(index=0, inplace=True)
+            topic_information.index = topic_information['index']
+            topic_information.drop(columns='index', inplace=True)
+            topic_information.index.name = None
+
+            gene_weights.index = gene_information.index.tolist()
+            gene_weights.columns = topic_information.index.tolist()
+
+            topic = Topyfic.Topic(topic_id=topic_id,
+                                  topic_name=topic_name,
+                                  topic_gene_weights=gene_weights,
+                                  gene_information=gene_information,
+                                  topic_information=topic_information)
+            topics[topic_id] = topic
+
+        # model
+        components = pd.DataFrame(np.array(f['model']['components_']))
+        exp_dirichlet_component = pd.DataFrame(np.array(f['model']['exp_dirichlet_component_']))
+
+        others = pd.DataFrame()
+        others.loc[0, 'n_batch_iter'] = np.int_(f['model']['n_batch_iter_'])
+        others.loc[0, 'n_features_in'] = np.array(f['model']['n_features_in_'])
+        others.loc[0, 'n_iter'] = np.int_(f['model']['n_iter_'])
+        others.loc[0, 'bound'] = np.float_(f['model']['bound_'])
+        others.loc[0, 'doc_topic_prior'] = np.array(f['model']['doc_topic_prior_'])
+        others.loc[0, 'topic_word_prior'] = np.array(f['model']['topic_word_prior_'])
+
+        model = Topyfic.initialize_lda_model(components, exp_dirichlet_component, others)
+
+        top_model = Topyfic.TopModel(name=name,
+                                     N=N,
+                                     topics=topics,
+                                     model=model)
+
+        f.close()
 
     print(f"Reading TopModel done!")
-    return topModel
+    return top_model
 
 
 def read_analysis(file):

@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import h5py
 
 sns.set_context('paper')
 warnings.filterwarnings('ignore')
@@ -66,18 +67,40 @@ class TopModel:
         topic1 = next(iter(self.topics.items()))[1]
         return topic1.gene_information.index.tolist()
 
-    def save_rLDA_model(self, name='rLDA', save_path=""):
+    def save_rLDA_model(self, name='rLDA', save_path="", file_format='joblib'):
         """
-        save Train class as a pickle file
+            save rLDA model (instance of LDA model in sklearn) as a joblib/HDF5 file.
 
-        :param name: name of the pickle file (default: rLDA)
-        :type name: str
-        :param save_path: directory you want to use to save pickle file (default is saving near script)
-        :type save_path: str
+            :param name: name of the joblib file (default: rLDA)
+            :type name: str
+            :param save_path: directory you want to use to save pickle file (default is saving near script)
+            :type save_path: str
+            :param file_format: format of the file you want to save (option: joblib (default), HDF5)
+            :type file_format: str
         """
-        print(f"Saving rLDA model as {name}_{self.N}topics.joblib")
+        if file_format not in ['joblib', 'HDF5']:
+            sys.exit(f"{file_format} is not correct! It should be 'joblib' or 'HDF5'.")
 
-        joblib.dump(self.model, f"{save_path}{name}_{self.N}topics.joblib", compress=3)
+        if file_format == "joblib":
+            print(f"Saving rLDA model as {name}_{self.N}topics.joblib")
+
+            joblib.dump(self.model, f"{save_path}{name}_{self.N}topics.joblib", compress=3)
+
+        if file_format == "HDF5":
+            print(f"Saving rLDA model as {name}_{self.N}topics.h5")
+
+            f = h5py.File(f"{name}_{self.N}topics.h5", "a")
+
+            f['components_'] = self.model.components_
+            f['exp_dirichlet_component_'] = self.model.exp_dirichlet_component_
+            f['n_batch_iter_'] = np.int_(self.model.n_batch_iter_)
+            f['n_features_in_'] = self.model.n_features_in_
+            f['n_iter_'] = np.int_(self.model.n_iter_)
+            f['bound_'] = np.float_(self.model.bound_)
+            f['doc_topic_prior_'] = np.float_(self.model.doc_topic_prior_)
+            f['topic_word_prior_'] = np.float_(self.model.topic_word_prior_)
+
+            f.close()
 
     def get_gene_weights(self):
         """
@@ -319,19 +342,62 @@ class TopModel:
 
         return gene_zscore
 
-    def save_topModel(self, name=None, save_path=""):
+    def save_topModel(self, name=None, save_path="", file_format='pickle'):
         """
-        save TopModel class as a pickle file
+            save TopModel class as a pickle/HDF5 file
 
-        :param name: name of the pickle file (default: topModel_TopModel.name)
-        :type name: str
-        :param save_path: directory you want to use to save pickle file (default is saving near script)
-        :type save_path: str
+            :param name: name of the file (default: topModel_TopModel.name)
+            :type name: str
+            :param save_path: directory you want to use to save pickle file (default is saving near script)
+            :type save_path: str
+            :param file_format: format of the file you want to save (option: pickle (default), HDF5)
+            :type file_format: str
         """
+        if file_format not in ['pickle', 'HDF5']:
+            sys.exit(f"{file_format} is not correct! It should be 'pickle' or 'HDF5'.")
         if name is None:
             name = f"topModel_{self.name}"
-        print(f"Saving topModel as {name}.p")
 
-        picklefile = open(f"{save_path}{name}.p", "wb")
-        pickle.dump(self, picklefile)
-        picklefile.close()
+        if file_format == "pickle":
+            print(f"Saving topModel as {name}.p")
+
+            picklefile = open(f"{save_path}{name}.p", "wb")
+            pickle.dump(self, picklefile)
+            picklefile.close()
+
+        if file_format == "HDF5":
+            print(f"Saving topModel as {name}.h5")
+
+            f = h5py.File(f"{name}.h5", "w")
+            # model
+            model = f.create_group("model")
+            model['components_'] = self.model.components_
+            model['exp_dirichlet_component_'] = self.model.exp_dirichlet_component_
+            model['n_batch_iter_'] = np.int_(self.model.n_batch_iter_)
+            model['n_features_in_'] = self.model.n_features_in_
+            model['n_iter_'] = np.int_(self.model.n_iter_)
+            model['bound_'] = np.float_(self.model.bound_)
+            model['doc_topic_prior_'] = np.float_(self.model.doc_topic_prior_)
+            model['topic_word_prior_'] = np.float_(self.model.topic_word_prior_)
+
+            # topics
+            topics = f.create_group("topics")
+            for topic in self.topics.keys():
+                topic_gp = topics.create_group(self.topics[topic].id)
+                topic_gp['id'] = np.string_(self.topics[topic].id)
+                topic_gp['name'] = np.string_(self.topics[topic].name)
+                topic_gp['gene_weights'] = self.topics[topic].gene_weights
+                gene_information = self.topics[topic].gene_information.copy(deep=True)
+                gene_information.reset_index(inplace=True)
+                gene_information = gene_information.T.reset_index().T
+                topic_gp['gene_information'] = np.array(gene_information)
+                topic_information = self.topics[topic].topic_information.copy(deep=True)
+                topic_information.reset_index(inplace=True)
+                topic_information = topic_information.T.reset_index().T
+                topic_gp['topic_information'] = np.array(topic_information)
+
+            f['name'] = np.string_(self.name)
+            f['N'] = np.int_(self.N)
+
+            f.close()
+
