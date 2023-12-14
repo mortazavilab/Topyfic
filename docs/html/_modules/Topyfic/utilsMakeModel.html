@@ -129,6 +129,7 @@
 <span class="kn">from</span> <span class="nn">reactome2py</span> <span class="kn">import</span> <span class="n">analysis</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">from</span> <span class="nn">yaml.loader</span> <span class="kn">import</span> <span class="n">SafeLoader</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
 
 <span class="kn">from</span> <span class="nn">Topyfic.train</span> <span class="kn">import</span> <span class="n">Train</span>
 <span class="kn">from</span> <span class="nn">Topyfic.analysis</span> <span class="kn">import</span> <span class="n">Analysis</span>
@@ -611,22 +612,83 @@
 
 <div class="viewcode-block" id="read_topModel"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_topModel">[docs]</a><span class="k">def</span> <span class="nf">read_topModel</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    reading topModel pickle file</span>
+<span class="sd">    reading topModel pickle/HDF5 file</span>
 
-<span class="sd">    :param file: path of the pickle file</span>
+<span class="sd">    :param file: path of the pickle/HDF5 file</span>
 <span class="sd">    :type file: str</span>
 
 <span class="sd">    :return: topModel instance</span>
 <span class="sd">    :rtype: TopModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;TopModel object not found at given path!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;TopModel file not found at given path!&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.p&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.h5&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;TopModel file type is not correct!&#39;</span><span class="p">)</span>
 
-    <span class="n">picklefile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="n">topModel</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">picklefile</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.p&#39;</span><span class="p">):</span>
+        <span class="n">picklefile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">top_model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">picklefile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.h5&#39;</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">])</span>
+
+        <span class="c1"># topics</span>
+        <span class="n">topics</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">topic_ids</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topic_ids</span><span class="p">:</span>
+            <span class="n">topic_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+            <span class="n">topic_name</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+            <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;gene_weights&#39;</span><span class="p">]))</span>
+            <span class="n">gene_information</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;gene_information&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">gene_information</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">gene_information</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">gene_information</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">gene_information</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">gene_information</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+            <span class="n">gene_information</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">gene_information</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">topic_information</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;topic_information&#39;</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">topic_information</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">topic_information</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">topic_information</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">topic_information</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">topic_information</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+            <span class="n">topic_information</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">topic_information</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">gene_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">gene_information</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">gene_weights</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">topic_information</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+            <span class="n">topic</span> <span class="o">=</span> <span class="n">Topyfic</span><span class="o">.</span><span class="n">Topic</span><span class="p">(</span><span class="n">topic_id</span><span class="o">=</span><span class="n">topic_id</span><span class="p">,</span>
+                                  <span class="n">topic_name</span><span class="o">=</span><span class="n">topic_name</span><span class="p">,</span>
+                                  <span class="n">topic_gene_weights</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
+                                  <span class="n">gene_information</span><span class="o">=</span><span class="n">gene_information</span><span class="p">,</span>
+                                  <span class="n">topic_information</span><span class="o">=</span><span class="n">topic_information</span><span class="p">)</span>
+            <span class="n">topics</span><span class="p">[</span><span class="n">topic_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">topic</span>
+
+        <span class="c1"># model</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;components_&#39;</span><span class="p">]))</span>
+        <span class="n">exp_dirichlet_component</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;exp_dirichlet_component_&#39;</span><span class="p">]))</span>
+
+        <span class="n">others</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;n_batch_iter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;n_batch_iter_&#39;</span><span class="p">])</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;n_features_in&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;n_features_in_&#39;</span><span class="p">])</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;n_iter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;n_iter_&#39;</span><span class="p">])</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;bound&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;bound_&#39;</span><span class="p">])</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;doc_topic_prior&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;doc_topic_prior_&#39;</span><span class="p">])</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;topic_word_prior&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;topic_word_prior_&#39;</span><span class="p">])</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Topyfic</span><span class="o">.</span><span class="n">initialize_lda_model</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span><span class="p">)</span>
+
+        <span class="n">top_model</span> <span class="o">=</span> <span class="n">Topyfic</span><span class="o">.</span><span class="n">TopModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                     <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span>
+                                     <span class="n">topics</span><span class="o">=</span><span class="n">topics</span><span class="p">,</span>
+                                     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading TopModel done!&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">topModel</span></div>
+    <span class="k">return</span> <span class="n">top_model</span></div>
 
 
 <div class="viewcode-block" id="read_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_analysis">[docs]</a><span class="k">def</span> <span class="nf">read_analysis</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>

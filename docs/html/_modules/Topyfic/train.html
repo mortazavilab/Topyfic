@@ -222,6 +222,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        train LDA models</span>
 
+
 <span class="sd">        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)</span>
 <span class="sd">        :type max_iter: int</span>
 <span class="sd">        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</span>
@@ -255,10 +256,12 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)</span>
 
+
 <span class="sd">        :return: three data frame which the first one is gathering all components from all LDA runs,</span>
 <span class="sd">        the second one is exp_dirichlet_component from all LDA runs and</span>
 <span class="sd">        the last one is combining the rest of LDA attributes which put them to gather as a dataframe</span>
 <span class="sd">        :rtype: pandas dataframe, pandas dataframe, pandas dataframe</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">feature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">()</span>
 
