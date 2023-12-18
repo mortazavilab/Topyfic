@@ -204,6 +204,8 @@ class Train:
             :type name: str
             :param save_path: directory you want to use to save pickle file (default is saving near script)
             :type save_path: str
+            :param file_format: format of the file you want to save (option: pickle (default), HDF5)
+            :type file_format: str
         """
         if file_format not in ['pickle', 'HDF5']:
             sys.exit(f"{file_format} is not correct! It should be 'pickle' or 'HDF5'.")
@@ -226,9 +228,6 @@ class Train:
             models = f.create_group("models")
             for i in range(len(self.top_models)):
                 model = models.create_group(str(i))
-
-                self.top_models[i].model = self.top_models[i].rLDA
-
                 model['components_'] = self.top_models[i].model.components_
                 model['exp_dirichlet_component_'] = self.top_models[i].model.exp_dirichlet_component_
                 model['n_batch_iter_'] = np.int_(self.top_models[i].model.n_batch_iter_)

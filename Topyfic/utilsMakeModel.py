@@ -528,15 +528,15 @@ def read_train(file):
             model = initialize_lda_model(components, exp_dirichlet_component, others)
 
             top_model = TopModel(name=f"{name}_{random_state}",
-                                         N=k,
-                                         gene_weights=components,
-                                         model=model)
+                                 N=k,
+                                 gene_weights=components,
+                                 model=model)
             top_models.append(top_model)
 
         train = Train(name=name,
-                              k=k,
-                              n_runs=n_runs,
-                              random_state_range=random_state_range)
+                      k=k,
+                      n_runs=n_runs,
+                      random_state_range=random_state_range)
         train.top_models = top_models
 
         f.close()
