@@ -10,6 +10,7 @@ from multiprocessing import Pool
 from itertools import repeat
 import pickle
 from sklearn.decomposition import LatentDirichletAllocation
+import h5py
 
 from Topyfic.topModel import TopModel
 
@@ -195,20 +196,51 @@ class Train:
 
         return all_components, all_exp_dirichlet_component, all_others
 
-    def save_train(self, name=None, save_path=""):
+    def save_train(self, name=None, save_path="", file_format='pickle'):
         """
-        save Train class as a pickle file
+            save Train class as a pickle file
 
-        :param name: name of the pickle file (default is train_Train.name)
-        :type name: str
-        :param save_path: directory you want to use to save pickle file (default is saving near script)
-        :type save_path: str
+            :param name: name of the pickle file (default is train_Train.name)
+            :type name: str
+            :param save_path: directory you want to use to save pickle file (default is saving near script)
+            :type save_path: str
         """
+        if file_format not in ['pickle', 'HDF5']:
+            sys.exit(f"{file_format} is not correct! It should be 'pickle' or 'HDF5'.")
         if name is None:
             name = f"train_{self.name}"
 
-        print(f"Saving train class as {name}.p")
+        if file_format == "pickle":
+            print(f"Saving train as {name}.p")
 
-        picklefile = open(f"{save_path}{name}.p", "wb")
-        pickle.dump(self, picklefile)
-        picklefile.close()
+            picklefile = open(f"{save_path}{name}.p", "wb")
+            pickle.dump(self, picklefile)
+            picklefile.close()
+
+        if file_format == "HDF5":
+            print(f"Saving train as {name}.h5")
+
+            f = h5py.File(f"{name}.h5", "w")
+
+            # models
+            models = f.create_group("models")
+            for i in range(len(self.top_models)):
+                model = models.create_group(str(i))
+
+                self.top_models[i].model = self.top_models[i].rLDA
+
+                model['components_'] = self.top_models[i].model.components_
+                model['exp_dirichlet_component_'] = self.top_models[i].model.exp_dirichlet_component_
+                model['n_batch_iter_'] = np.int_(self.top_models[i].model.n_batch_iter_)
+                model['n_features_in_'] = self.top_models[i].model.n_features_in_
+                model['n_iter_'] = np.int_(self.top_models[i].model.n_iter_)
+                model['bound_'] = np.float_(self.top_models[i].model.bound_)
+                model['doc_topic_prior_'] = np.float_(self.top_models[i].model.doc_topic_prior_)
+                model['topic_word_prior_'] = np.float_(self.top_models[i].model.topic_word_prior_)
+
+            f['name'] = np.string_(self.name)
+            f['k'] = np.int_(self.k)
+            f['n_runs'] = np.int_(self.n_runs)
+            f['random_state_range'] = np.array(list(self.random_state_range))
+
+            f.close()

@@ -495,10 +495,51 @@ def read_train(file):
     :rtype: Train class
     """
     if not os.path.isfile(file):
-        raise ValueError('Train object not found at given path!')
+        raise ValueError('Train file not found at given path!')
+    if not file.endswith('.p') and not file.endswith('.h5'):
+        raise ValueError('Train file type is not correct!')
 
-    picklefile = open(file, 'rb')
-    train = pickle.load(picklefile)
+    if file.endswith('.p'):
+        picklefile = open(file, 'rb')
+        train = pickle.load(picklefile)
+
+    if file.endswith('.h5'):
+        f = h5py.File(file, 'r')
+
+        name = np.string_(f['name']).decode('ascii')
+        k = np.int_(f['k'])
+        n_runs = np.int_(f['n_runs'])
+        random_state_range = list(f['random_state_range'])
+
+        # models
+        top_models = []
+        for random_state in random_state_range:
+            components = pd.DataFrame(np.array(f[f"models/{random_state}/components_"]))
+            exp_dirichlet_component = pd.DataFrame(np.array(f[f"models/{random_state}/exp_dirichlet_component_"]))
+
+            others = pd.DataFrame()
+            others.loc[0, 'n_batch_iter'] = np.int_(f[f"models/{random_state}/n_batch_iter_"])
+            others.loc[0, 'n_features_in'] = np.array(f[f"models/{random_state}/n_features_in_"])
+            others.loc[0, 'n_iter'] = np.int_(f[f"models/{random_state}/n_iter_"])
+            others.loc[0, 'bound'] = np.float_(f[f"models/{random_state}/bound_"])
+            others.loc[0, 'doc_topic_prior'] = np.array(f[f"models/{random_state}/doc_topic_prior_"])
+            others.loc[0, 'topic_word_prior'] = np.array(f[f"models/{random_state}/topic_word_prior_"])
+
+            model = initialize_lda_model(components, exp_dirichlet_component, others)
+
+            top_model = TopModel(name=f"{name}_{random_state}",
+                                         N=k,
+                                         gene_weights=components,
+                                         model=model)
+            top_models.append(top_model)
+
+        train = Train(name=name,
+                              k=k,
+                              n_runs=n_runs,
+                              random_state_range=random_state_range)
+        train.top_models = top_models
+
+        f.close()
 
     print(f"Reading Train done!")
     return train
@@ -553,11 +594,11 @@ def read_topModel(file):
             gene_weights.index = gene_information.index.tolist()
             gene_weights.columns = topic_information.index.tolist()
 
-            topic = Topyfic.Topic(topic_id=topic_id,
-                                  topic_name=topic_name,
-                                  topic_gene_weights=gene_weights,
-                                  gene_information=gene_information,
-                                  topic_information=topic_information)
+            topic = Topic(topic_id=topic_id,
+                          topic_name=topic_name,
+                          topic_gene_weights=gene_weights,
+                          gene_information=gene_information,
+                          topic_information=topic_information)
             topics[topic_id] = topic
 
         # model
@@ -572,12 +613,12 @@ def read_topModel(file):
         others.loc[0, 'doc_topic_prior'] = np.array(f['model']['doc_topic_prior_'])
         others.loc[0, 'topic_word_prior'] = np.array(f['model']['topic_word_prior_'])
 
-        model = Topyfic.initialize_lda_model(components, exp_dirichlet_component, others)
+        model = initialize_lda_model(components, exp_dirichlet_component, others)
 
-        top_model = Topyfic.TopModel(name=name,
-                                     N=N,
-                                     topics=topics,
-                                     model=model)
+        top_model = TopModel(name=name,
+                             N=N,
+                             topics=topics,
+                             model=model)
 
         f.close()
 
