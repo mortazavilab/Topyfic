@@ -181,16 +181,14 @@ class Topic:
         :type save: bool
         """
 
-        # check require columns
-        cols = self.gene_information.reset_index().columns
-        if not {'gene_name', 'gene_id'}.issubset(cols):
-            sys.exit(f"Gene information doesn't contain gene_name and gene_id columns!")
-
         # Open the file and load the file
         with open(model_yaml_path) as f:
             model_yaml = yaml.load(f, Loader=SafeLoader)
 
-        if topic_id not in model_yaml['Topic IDs']:
+        if topic_id is None:
+            topic_id = self.id
+
+        if topic_id not in model_yaml['Topic file_name(s)']:
             sys.exit("Topic_id is not in model YAML file!")
 
         topic_yaml = {'Topic ID': topic_id,

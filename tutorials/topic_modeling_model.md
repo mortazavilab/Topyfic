@@ -15,14 +15,14 @@ You have to save three type of objects
 ## Model YAML
 ```yaml
 Assay: single nucleus RNA-seq
-Cell-Topic participation ID: IGVF_000001_23
-Experiment ID: IGVF_000001
-Name of method: Topyfic
-Number of topics: 22
+Cell-Topic participation file_name: topic_cell_participation.h5ad
+Data source: ali-mortazavi:topyfic_annotation
+Method Name: Topyfic
+Number of topics: 19
 Technology:
 - Parse
 - 10x
-Topic IDs:
+Topic file_name(s):
 - IGVF_000001_Topic_1
 - IGVF_000001_Topic_2
 - IGVF_000001_Topic_3
@@ -45,7 +45,11 @@ Topic IDs:
 - IGVF_000001_Topic_20
 - IGVF_000001_Topic_21
 - IGVF_000001_Topic_22
+Train file_name(s):
+- train_parse_adrenal_13
+- train_10x_adrenal_15
 level: tissue
+tissue: Adrenal gland
 ```
 
 ## Topic YAML
@@ -92,32 +96,45 @@ Topic information:
 
 ## Write Topyfic results in this format
 
-you can use `write_model_yaml()` and `write_topic_yaml()` functions to embedded your results in this format.
+you can use this script to write model yaml file.
 
 ```python 
 import Topyfic
 
 # Read analysis object
-analysis = Topyfic.read_analysis("analysis.p")
+analysis_top_model = Topyfic.read_analysis(f"../analysis_10x_adrenal_15_parse_adrenal_13.p")
+
+analysis_top_model.cell_participation.write_h5ad('topic_cell_participation.h5ad')
 
 # information about model and datasets
 model_info = {
-    'Experiment ID': 'IGVF_000001',
+    'Data source': 'ali-mortazavi:topyfic_annotation',
     'Assay': 'single nucleus RNA-seq',
     'Technology': ['Parse', '10x'],
     'level': 'tissue',
-    'Name of method': 'Topyfic',
-    'Number of topics': 22,
+    'tissue': 'Adrenal gland',
+    'Method Name': 'Topyfic',
+    'Number of topics': 19,
+    
 }
+model_info['Topic file_name(s)'] = list(top_model.topics.keys())
+model_info['Cell-Topic participation file_name'] = 'topic_cell_participation.h5ad'
+model_info['Train file_name(s)'] = ['train_parse_adrenal_13', 'train_10x_adrenal_15']
 
+file = open('Adrenal_model_yaml.yaml', "w")
+yaml.dump(model_info, file, default_flow_style=False)
+file.close()
+```
 
-write_model_yaml(model_info, analysis.cell_participation)
+you can use `write_topic_yaml()` functions to embedded your topics in this format.
 
-for topic in analysis.top_model.topics:
+```python 
+import Topyfic
+
+top_model = Topyfic.read_topModel(f"topModel_10x_adrenal_15_parse_adrenal_13.p")
+for topic in top_model.topics:
     print(topic)
-    write_topic_yaml(topic_id=f"IGVF_000001_{topic}",
-                     topic_info=analysis.top_model.topics[topic], 
-                     model_yaml_path="model.yaml", 
+    top_model.topics[topic].write_topic_yaml(model_yaml_path="Adrenal_model_yaml.yaml", 
                      topic_yaml_path=f"{topic}.yaml", 
                      save=True)
 ```
