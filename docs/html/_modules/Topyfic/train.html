@@ -116,6 +116,7 @@
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">repeat</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">LatentDirichletAllocation</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
 
 <span class="kn">from</span> <span class="nn">Topyfic.topModel</span> <span class="kn">import</span> <span class="n">TopModel</span>
 
@@ -301,23 +302,53 @@
 
         <span class="k">return</span> <span class="n">all_components</span><span class="p">,</span> <span class="n">all_exp_dirichlet_component</span><span class="p">,</span> <span class="n">all_others</span></div>
 
-<div class="viewcode-block" id="Train.save_train"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.save_train">[docs]</a>    <span class="k">def</span> <span class="nf">save_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Train.save_train"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.save_train">[docs]</a>    <span class="k">def</span> <span class="nf">save_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;pickle&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        save Train class as a pickle file</span>
+<span class="sd">            save Train class as a pickle file</span>
 
-<span class="sd">        :param name: name of the pickle file (default is train_Train.name)</span>
-<span class="sd">        :type name: str</span>
-<span class="sd">        :param save_path: directory you want to use to save pickle file (default is saving near script)</span>
-<span class="sd">        :type save_path: str</span>
+<span class="sd">            :param name: name of the pickle file (default is train_Train.name)</span>
+<span class="sd">            :type name: str</span>
+<span class="sd">            :param save_path: directory you want to use to save pickle file (default is saving near script)</span>
+<span class="sd">            :type save_path: str</span>
+<span class="sd">            :param file_format: format of the file you want to save (option: pickle (default), HDF5)</span>
+<span class="sd">            :type file_format: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file_format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;HDF5&#39;</span><span class="p">]:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2"> is not correct! It should be &#39;pickle&#39; or &#39;HDF5&#39;.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;train_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving train class as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_format</span> <span class="o">==</span> <span class="s2">&quot;pickle&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving train as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">)</span>
 
-        <span class="n">picklefile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">picklefile</span><span class="p">)</span>
-        <span class="n">picklefile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+            <span class="n">picklefile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">picklefile</span><span class="p">)</span>
+            <span class="n">picklefile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">file_format</span> <span class="o">==</span> <span class="s2">&quot;HDF5&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving train as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+            <span class="c1"># models</span>
+            <span class="n">models</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;models&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">)):</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;components_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;exp_dirichlet_component_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exp_dirichlet_component_</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;n_batch_iter_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_batch_iter_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;n_features_in_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_features_in_</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;n_iter_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_iter_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;bound_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">bound_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;doc_topic_prior_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">doc_topic_prior_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;topic_word_prior_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">topic_word_prior_</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;n_runs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_runs</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;random_state_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">))</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 </pre></div>
 
     </div>

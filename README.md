@@ -41,6 +41,8 @@ git cloning the [Topyfic repository](https://github.com/mortazavilab/Topyfic), g
 
 In general, you need to make three objects (Train, TopModel and Analysis). 
 
+![Topyfic workflow](docs/Topyfic_workflow.png)
+
 The Train object can be initialized either from (a) single cell RNA-seq dataset or (b) single cell ATAC-seq or (c) bulk RNA-seq.
 
 Training part can be time-consuming depending on how big your data is, however you can learn each train model per random state in different jobs and then combine all together. Look at [this tutorial](tutorials/make_train_object.ipynb) for mor information.
@@ -49,6 +51,8 @@ For guidance on using Topyfic to analyze your data look at our more depth-in tut
 
 - [Analysing single cell C2C12 data only using regulatory elements](tutorials/C2C12_TFs_mirhgs_chromreg/C2C12.ipynb): Analysing single cell and single nucleus using C2C12 ENCODE datasets using regulatory elements instead of all genes.
 - [Analysing single cell microglia data](tutorials/microglia_all_genes/microglia.ipynb): Analysing single cell microglia data from [Model-AD portal](https://www.model-ad.org/).
+- [Analysing ENCODE time course hippocampus data](tutorials/ENCODE_Hipp_parse_10x/analysing.ipynb): Analysing parse single-nucleus RNA-seq data and RNA part of 10x multiome hippocampus data from ENCODE.
+
 
 If you are using other methods to learn your topics but you are still interested in doing downstream analysis, you can embeded your results in the format describe [here](tutorials/topic_modeling_model.md). Once you have all your files ready you can embed them Topyfic format following the instruction in the same [tutorial](tutorials/topic_modeling_model.md).
 

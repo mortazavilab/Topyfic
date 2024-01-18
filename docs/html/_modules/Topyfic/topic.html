@@ -287,16 +287,14 @@
 <span class="sd">        :type save: bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># check require columns</span>
-        <span class="n">cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">{</span><span class="s1">&#39;gene_name&#39;</span><span class="p">,</span> <span class="s1">&#39;gene_id&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gene information doesn&#39;t contain gene_name and gene_id columns!&quot;</span><span class="p">)</span>
-
         <span class="c1"># Open the file and load the file</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_yaml_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">model_yaml</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">SafeLoader</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">topic_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_yaml</span><span class="p">[</span><span class="s1">&#39;Topic IDs&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">topic_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">topic_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="n">topic_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_yaml</span><span class="p">[</span><span class="s1">&#39;Topic file_name(s)&#39;</span><span class="p">]:</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Topic_id is not in model YAML file!&quot;</span><span class="p">)</span>
 
         <span class="n">topic_yaml</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Topic ID&#39;</span><span class="p">:</span> <span class="n">topic_id</span><span class="p">,</span>

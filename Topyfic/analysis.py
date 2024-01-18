@@ -172,7 +172,7 @@ class Analysis:
 
     def structure_plot(self,
                        level,
-                       category,
+                       category=None,
                        topic_order=None,
                        ascending=None,
                        metaData=None,
@@ -217,6 +217,8 @@ class Analysis:
         :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
         :type file_name: str
         """
+        if category is None:
+            category = self.cell_participation.obs[level].unique().tolist()
         if figsize is None:
             figsize = (10 * (len(category) + 1), 10)
 
@@ -325,7 +327,7 @@ class Analysis:
                 axs[0, i].set_title(category[i], fontsize=40)
                 axs[0, i].set_ylim(0, 1)
                 axs[0, i].set_xlim(0, a[i])
-                axs[0, 0].set_ylabel("Topic proportion", fontsize=25)
+                axs[0, 0].set_ylabel("Topic proportion", fontsize=30)
 
                 tissue = tissue[metaData]
                 tissue = tissue.reindex(tmp.index.tolist())
