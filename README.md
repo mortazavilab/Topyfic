@@ -58,4 +58,6 @@ If you are using other methods to learn your topics but you are still interested
 
 ## Cite
 
-comming soon ...
+Please cite our paper when using Topyfic:
+
+(https://www.biorxiv.org/content/10.1101/2024.02.26.582178v1)https://www.biorxiv.org/content/10.1101/2024.02.26.582178v1
