@@ -61,3 +61,14 @@ If you are using other methods to learn your topics but you are still interested
 Please cite our paper when using Topyfic:
 
 [Topyfic](https://www.biorxiv.org/content/10.1101/2024.02.26.582178v1)
+
+```
+@article{rezaie2024identification,
+  title={Identification of robust cellular programs using reproducible LDA that impact sex-specific disease progression in different genotypes of a mouse model of AD},
+  author={Rezaie, Narges and Rebboah, Elisabeth and Williams, Brian A and Liang, Heidi Yahan and Reese, Fairlie and Balderrama-Gutierrez, Gabriela and Dionne, Louise and Reinholdt, Laura G and Trout, Diane and Wold, Barbara and others},
+  journal={bioRxiv},
+  pages={2024--02},
+  year={2024},
+  publisher={Cold Spring Harbor Laboratory}
+}
+```
