@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topyfic.topic &#8212; Topyfic 0.0.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          Topyfic</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cite.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for Topyfic.topic</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">yaml.loader</span> <span class="kn">import</span> <span class="n">SafeLoader</span>
+
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">Topyfic.utilsAnalyseModel</span> <span class="kn">import</span> <span class="n">GSEA</span><span class="p">,</span> <span class="n">functional_enrichment_analysis</span>
+
+
+<div class="viewcode-block" id="Topic"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic">[docs]</a><span class="k">class</span> <span class="nc">Topic</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class saved topic along with other useful information</span>
+
+<span class="sd">    :param topic_id: ID of topic which is unique</span>
+<span class="sd">    :type topic_id: str</span>
+<span class="sd">    :param topic_name: name of the topic (default: topic_id)</span>
+<span class="sd">    :type topic_name: str</span>
+<span class="sd">    :param topic_gene_weights: dataframe that contains weights of the topics for each genes</span>
+<span class="sd">    :type topic_gene_weights: pandas dataframe</span>
+<span class="sd">    :param gene_information: dataframe that contains information of genes i.e gene biotype</span>
+<span class="sd">    :type gene_information: pandas dataframe</span>
+<span class="sd">    :param topic_information: dataframe that contains information of genes i.e cell state / cell type</span>
+<span class="sd">    :type topic_information: pandas dataframe</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">topic_id</span><span class="p">,</span>
+                 <span class="n">topic_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">topic_gene_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">gene_information</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">topic_information</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">topic_id</span>
+
+        <span class="k">if</span> <span class="n">topic_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">topic_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">topic_id</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span> <span class="o">=</span> <span class="n">topic_gene_weights</span>
+
+        <span class="k">if</span> <span class="n">gene_information</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">topic_gene_weights</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span> <span class="o">=</span> <span class="n">gene_information</span>
+
+        <span class="k">if</span> <span class="n">topic_information</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topic_information</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">topic_gene_weights</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topic_information</span> <span class="o">=</span> <span class="n">topic_information</span>
+
+<div class="viewcode-block" id="Topic.update_gene_information"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.update_gene_information">[docs]</a>    <span class="k">def</span> <span class="nf">update_gene_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gene_information</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        update/add genes information for each topics</span>
+
+<span class="sd">        :param gene_information: dataframe contains genes information we would like to add/update (the index should be same as an index of gene_information in class)</span>
+<span class="sd">        :type gene_information: pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">same_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">gene_information</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">same_columns</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="p">,</span> <span class="n">gene_information</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Topic.functional_enrichment_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.functional_enrichment_analysis">[docs]</a>    <span class="k">def</span> <span class="nf">functional_enrichment_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                       <span class="nb">type</span><span class="p">,</span>
+                                       <span class="n">organism</span><span class="p">,</span>
+                                       <span class="n">sets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                       <span class="n">p_value</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                                       <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+                                       <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;functional_enrichment_analysis&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Doing functional enrichment analysis including GO, KEGG and REACTOME</span>
+
+<span class="sd">        :param type: indicate the type of databases which it should be one of &quot;GO&quot;, &quot;REACTOME&quot;</span>
+<span class="sd">        :type type: str</span>
+<span class="sd">        :param organism: name of the organ you want to do functional enrichment analysis</span>
+<span class="sd">        :type organism: str</span>
+<span class="sd">        :param sets: str, list, tuple of Enrichr Library name(s). (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats) only need to fill if the type is GO</span>
+<span class="sd">        :type sets: str, list, tuple</span>
+<span class="sd">        :param p_value: Defines the pValue threshold. (default: 0.05)</span>
+<span class="sd">        :type p_value: float</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
+<span class="sd">        :param file_name: name and path of the plot use for save (default: gene_composition)</span>
+<span class="sd">        :type file_name: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="p">[</span><span class="n">gene_weights</span> <span class="o">&gt;</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span>
+        <span class="n">genes</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">functional_enrichment_analysis</span><span class="p">(</span><span class="n">gene_list</span><span class="o">=</span><span class="n">genes</span><span class="p">,</span>
+                                       <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span>
+                                       <span class="n">organism</span><span class="o">=</span><span class="n">organism</span><span class="p">,</span>
+                                       <span class="n">sets</span><span class="o">=</span><span class="n">sets</span><span class="p">,</span>
+                                       <span class="n">p_value</span><span class="o">=</span><span class="n">p_value</span><span class="p">,</span>
+                                       <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                                       <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Topic.GSEA"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.GSEA">[docs]</a>    <span class="k">def</span> <span class="nf">GSEA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+             <span class="n">gene_sets</span><span class="o">=</span><span class="s1">&#39;GO_Biological_Process_2021&#39;</span><span class="p">,</span>
+             <span class="n">p_value</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+             <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;GSEA&quot;</span><span class="p">,</span>
+             <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.</span>
+
+<span class="sd">        :param gene_sets: Enrichr Library name or .gmt gene sets file or dict of gene sets. (you can add any Enrichr Libraries from here: https://maayanlab.cloud/Enrichr/#stats)</span>
+<span class="sd">        :type gene_sets: str, list, tuple</span>
+<span class="sd">        :param p_value: Defines the pValue threshold for plotting. (default: 0.05)</span>
+<span class="sd">        :type p_value: float</span>
+<span class="sd">        :param table: indicate if you want to save all GO terms that passed the threshold as a table (default: True)</span>
+<span class="sd">        :type table: bool</span>
+<span class="sd">        :param plot: indicate if you want to plot all GO terms that passed the threshold (default: True)</span>
+<span class="sd">        :type plot: bool</span>
+<span class="sd">        :param file_format: indicate the format of plot (default: pdf)</span>
+<span class="sd">        :type file_format: str</span>
+<span class="sd">        :param file_name: name and path of the plot use for save (default: gene_composition)</span>
+<span class="sd">        :type file_name: str</span>
+<span class="sd">        :param kwargs: Argument to pass to gseapy.prerank(). more info: https://gseapy.readthedocs.io/en/latest/run.html?highlight=gp.prerank#gseapy.prerank</span>
+
+<span class="sd">        :return: dataframe contains these columns: Term: gene set name, ES: enrichment score, NES: normalized enrichment score, NOM p-val:  Nominal p-value (from the null distribution of the gene set, FDR q-val: FDR qvalue (adjusted False Discory Rate), FWER p-val: Family wise error rate p-values, Tag %: Percent of gene set before running enrichment peak (ES), Gene %: Percent of gene list before running enrichment peak (ES), Lead_genes: leading edge genes (gene hits before running enrichment peak)</span>
+<span class="sd">        :rtype: pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gene_weights</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">gene_weights</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">gene_weights</span><span class="p">[</span><span class="n">gene_weights</span> <span class="o">&gt;</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span>
+        <span class="n">gene_weights</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">GSEA_df</span> <span class="o">=</span> <span class="n">GSEA</span><span class="p">(</span><span class="n">gene_list</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
+                       <span class="n">gene_sets</span><span class="o">=</span><span class="n">gene_sets</span><span class="p">,</span>
+                       <span class="n">p_value</span><span class="o">=</span><span class="n">p_value</span><span class="p">,</span>
+                       <span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
+                       <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span>
+                       <span class="n">file_format</span><span class="o">=</span><span class="n">file_format</span><span class="p">,</span>
+                       <span class="n">file_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">GSEA_df</span></div>
+
+<div class="viewcode-block" id="Topic.gene_weight_variance"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.gene_weight_variance">[docs]</a>    <span class="k">def</span> <span class="nf">gene_weight_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calculate the gene weight variance</span>
+
+<span class="sd">        :param save: added as an information to the Topic (default: True)</span>
+<span class="sd">        :type save: bool</span>
+
+<span class="sd">        :return: Gene weight variance for given topic</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">variance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">var</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topic_information</span><span class="p">[</span><span class="s1">&#39;variance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">var</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gene weight variance for given topic is </span><span class="si">{</span><span class="n">variance</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Topic.write_topic_yaml"><a class="viewcode-back" href="../../api.html#Topyfic.topic.Topic.write_topic_yaml">[docs]</a>    <span class="k">def</span> <span class="nf">write_topic_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_yaml_path</span><span class="o">=</span><span class="s2">&quot;model.yaml&quot;</span><span class="p">,</span> <span class="n">topic_yaml_path</span><span class="o">=</span><span class="s2">&quot;topic.yaml&quot;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        write topic in YAML format</span>
+
+<span class="sd">        :param topic_id: unique topic ID (default is topic ID)</span>
+<span class="sd">        :type topic_id: str</span>
+<span class="sd">        :param model_yaml_path: model yaml path that has information about the dataset you use</span>
+<span class="sd">        :type model_yaml_path: str</span>
+<span class="sd">        :param topic_yaml_path: path that you use to save topic</span>
+<span class="sd">        :type topic_yaml_path: str</span>
+<span class="sd">        :param save: indicate if you want to save yaml file (True) or just show them (Fasle) (default: True)</span>
+<span class="sd">        :type save: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Open the file and load the file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_yaml_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">model_yaml</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">SafeLoader</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">topic_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">topic_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+
+        <span class="k">if</span> <span class="n">topic_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_yaml</span><span class="p">[</span><span class="s1">&#39;Topic file_name(s)&#39;</span><span class="p">]:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Topic_id is not in model YAML file!&quot;</span><span class="p">)</span>
+
+        <span class="n">topic_yaml</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Topic ID&#39;</span><span class="p">:</span> <span class="n">topic_id</span><span class="p">,</span>
+                      <span class="s1">&#39;Gene weights&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+                      <span class="s1">&#39;Gene information&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+                      <span class="s1">&#39;Topic information&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_information</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">]}</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">topic_yaml_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">topic_yaml</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">yaml_string</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">topic_yaml</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The Topic YAML is:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">yaml_string</span><span class="p">)</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2022, Narges Rezaie.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

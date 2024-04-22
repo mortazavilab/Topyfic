@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topyfic.train &#8212; Topyfic 0.0.11 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          Topyfic</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cite.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for Topyfic.train</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">anndata</span>
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">repeat</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">LatentDirichletAllocation</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+
+<span class="kn">from</span> <span class="nn">Topyfic.topModel</span> <span class="kn">import</span> <span class="n">TopModel</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Train"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train">[docs]</a><span class="k">class</span> <span class="nc">Train</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class used to train reproducible latent dirichlet allocation (rLDA) model</span>
+
+<span class="sd">    :param name: name of the Train class</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param k: number of topics to learn one LDA model using sklearn package</span>
+<span class="sd">    :type k: int</span>
+<span class="sd">    :param n_runs: number of run to define rLDA model (default: 100)</span>
+<span class="sd">    :type n_runs: int</span>
+<span class="sd">    :param random_state_range: list of random state, we used to run LDA models (default: range(n_runs))</span>
+<span class="sd">    :type random_state_range: list of int</span>
+<span class="sd">    :param top_models: list of TopModel class to save all LDA models</span>
+<span class="sd">    :type top_models: list of TopModel</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">,</span>
+                 <span class="n">k</span><span class="p">,</span>
+                 <span class="n">n_runs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">random_state_range</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">random_state_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">random_state_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_runs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">n_runs</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">random_state_range</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;number of runs and length of random state did not match!&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_runs</span> <span class="o">=</span> <span class="n">n_runs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span> <span class="o">=</span> <span class="n">random_state_range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Train.combine_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.combine_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">combine_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">single_trains</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        combine single top_model</span>
+
+<span class="sd">        :param data: data you used to learn model</span>
+<span class="sd">        :type data: anndata</span>
+<span class="sd">        :param single_trains: list of single train object</span>
+<span class="sd">        :type single_trains: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">single_trains</span><span class="p">)):</span>
+            <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">single_trains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">),</span>
+                                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">_R</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span>
+                                        <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="n">TopModel_lda_model</span> <span class="o">=</span> <span class="n">TopModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                          <span class="n">N</span><span class="o">=</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                          <span class="n">gene_weights</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
+                                          <span class="n">model</span><span class="o">=</span><span class="n">single_trains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TopModel_lda_model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Train.make_single_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_single_LDA_model">[docs]</a>    <span class="k">def</span> <span class="nf">make_single_LDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">learning_method</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        train simple LDA model using sklearn package and embed it to TopModel class</span>
+
+
+<span class="sd">        :param name: name of LDA model</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :param data: processed expression data along with cells and genes/region information</span>
+<span class="sd">        :type data: anndata</span>
+<span class="sd">        :param random_state: Pass an int for reproducible results across multiple function calls</span>
+<span class="sd">        :type random_state: int</span>
+<span class="sd">        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)</span>
+<span class="sd">        :type max_iter: int</span>
+<span class="sd">        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</span>
+<span class="sd">        :type batch_size: int</span>
+<span class="sd">        :param learning_method: Method used to update _component. {‘batch’, ‘online’} (default=’online’)</span>
+<span class="sd">        :type learning_method: str</span>
+<span class="sd">        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend &lt;https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend&gt;`_ context. -1 means using all processors.  See `Glossary &lt;https://scikit-learn.org/stable/glossary.html#term-n_jobs&gt;`_ for more details. (default = None)</span>
+<span class="sd">        :type n_jobs: int</span>
+
+<span class="sd">        :return: LDA model embedded in TopModel class</span>
+<span class="sd">        :rtype: TopModel</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lda_model</span> <span class="o">=</span> <span class="n">LatentDirichletAllocation</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+                                              <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+                                              <span class="n">learning_method</span><span class="o">=</span><span class="n">learning_method</span><span class="p">,</span>
+                                              <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                                              <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+                                              <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
+                                              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">lda_model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+
+        <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">lda_model</span><span class="o">.</span><span class="n">components_</span><span class="p">),</span>
+                                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span>
+                                    <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+        <span class="n">TopModel_lda_model</span> <span class="o">=</span> <span class="n">TopModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                      <span class="n">N</span><span class="o">=</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                      <span class="n">gene_weights</span><span class="o">=</span><span class="n">gene_weights</span><span class="p">,</span>
+                                      <span class="n">model</span><span class="o">=</span><span class="n">lda_model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TopModel_lda_model</span></div>
+
+<div class="viewcode-block" id="Train.run_LDA_models"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.run_LDA_models">[docs]</a>    <span class="k">def</span> <span class="nf">run_LDA_models</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">learning_method</span><span class="o">=</span><span class="s2">&quot;online&quot;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_thread</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        train LDA models</span>
+
+
+<span class="sd">        :param max_iter: The maximum number of passes over the training data (aka epochs) (default = 10)</span>
+<span class="sd">        :type max_iter: int</span>
+<span class="sd">        :param batch_size: Number of documents to use in each EM iteration. Only used in online learning. (default = 1000)</span>
+<span class="sd">        :type batch_size: int</span>
+<span class="sd">        :param learning_method: Method used to update _component. {‘batch’, ‘online’} (default=’online’)</span>
+<span class="sd">        :type learning_method: str</span>
+<span class="sd">        :param data: expression data embedded in anndata format use to train LDA model</span>
+<span class="sd">        :type data: anndata</span>
+<span class="sd">        :param n_jobs: The number of jobs to use in the E-step. None means 1 unless in a `joblib.parallel_backend &lt;https://joblib.readthedocs.io/en/latest/parallel.html#joblib.parallel_backend&gt;`_ context. -1 means using all processors.  See `Glossary &lt;https://scikit-learn.org/stable/glossary.html#term-n_jobs&gt;`_ for more details. (default = None)</span>
+<span class="sd">        :type n_jobs: int</span>
+<span class="sd">        :param n_thread: number of threads you used to learn LDA models (default=1)</span>
+<span class="sd">        :type n_thread: int</span>
+<span class="sd">        :param **kwargs: other parameter in sklearn.decomposition.LatentDirichletAllocation function (more info: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html)</span>
+<span class="sd">        :type **kwargs: dict</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n_thread</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">random_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_single_LDA_model</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">learning_method</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">n_thread</span><span class="p">)</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_single_LDA_model</span><span class="p">,</span>
+                                                           <span class="nb">zip</span><span class="p">(</span><span class="n">repeat</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                                                               <span class="n">repeat</span><span class="p">(</span><span class="n">learning_method</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">batch_size</span><span class="p">),</span>
+                                                               <span class="n">repeat</span><span class="p">(</span><span class="n">max_iter</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_runs</span><span class="si">}</span><span class="s2"> LDA models with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> topics learned</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Train.make_LDA_models_attributes"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.make_LDA_models_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">make_LDA_models_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        make LDA attributes by combining all single LDA model attributes which you need to define LDA model (sklearn.decomposition.LatentDirichletAllocation)</span>
+
+
+<span class="sd">        :return: three data frame which the first one is gathering all components from all LDA runs,</span>
+<span class="sd">        the second one is exp_dirichlet_component from all LDA runs and</span>
+<span class="sd">        the last one is combining the rest of LDA attributes which put them to gather as a dataframe</span>
+<span class="sd">        :rtype: pandas dataframe, pandas dataframe, pandas dataframe</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">feature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">()</span>
+
+        <span class="n">all_components</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">feature</span><span class="p">)</span>
+
+        <span class="n">all_exp_dirichlet_component</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span>
+            <span class="n">columns</span><span class="o">=</span><span class="n">feature</span><span class="p">)</span>
+
+        <span class="n">all_others</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n_batch_iter&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;n_features_in&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;n_iter&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;bound&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;doc_topic_prior&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;topic_word_prior&quot;</span><span class="p">])</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">random_state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">:</span>
+            <span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">count</span><span class="p">]</span><span class="o">.</span><span class="n">get_top_model_attributes</span><span class="p">()</span>
+
+            <span class="n">all_components</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="n">all_exp_dirichlet_component</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">exp_dirichlet_component</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="n">all_others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="s2">&quot;n_batch_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">others</span><span class="o">.</span><span class="n">n_batch_iter</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">all_others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="s2">&quot;n_features_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">others</span><span class="o">.</span><span class="n">n_features_in</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">all_others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="s2">&quot;n_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">others</span><span class="o">.</span><span class="n">n_iter</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">all_others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="s2">&quot;bound&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">others</span><span class="o">.</span><span class="n">bound</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">all_others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="s2">&quot;doc_topic_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">others</span><span class="o">.</span><span class="n">doc_topic_prior</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">all_others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">random_state</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)],</span> <span class="s2">&quot;topic_word_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">others</span><span class="o">.</span><span class="n">topic_word_prior</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">all_components</span><span class="p">,</span> <span class="n">all_exp_dirichlet_component</span><span class="p">,</span> <span class="n">all_others</span></div>
+
+<div class="viewcode-block" id="Train.save_train"><a class="viewcode-back" href="../../api.html#Topyfic.train.Train.save_train">[docs]</a>    <span class="k">def</span> <span class="nf">save_train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;pickle&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            save Train class as a pickle file</span>
+
+<span class="sd">            :param name: name of the pickle file (default is train_Train.name)</span>
+<span class="sd">            :type name: str</span>
+<span class="sd">            :param save_path: directory you want to use to save pickle file (default is saving near script)</span>
+<span class="sd">            :type save_path: str</span>
+<span class="sd">            :param file_format: format of the file you want to save (option: pickle (default), HDF5)</span>
+<span class="sd">            :type file_format: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file_format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;HDF5&#39;</span><span class="p">]:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_format</span><span class="si">}</span><span class="s2"> is not correct! It should be &#39;pickle&#39; or &#39;HDF5&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;train_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="n">file_format</span> <span class="o">==</span> <span class="s2">&quot;pickle&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving train as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">)</span>
+
+            <span class="n">picklefile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">picklefile</span><span class="p">)</span>
+            <span class="n">picklefile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">file_format</span> <span class="o">==</span> <span class="s2">&quot;HDF5&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saving train as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span>
+
+            <span class="n">f</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+            <span class="c1"># models</span>
+            <span class="n">models</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;models&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">)):</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;components_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;exp_dirichlet_component_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exp_dirichlet_component_</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;n_batch_iter_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_batch_iter_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;n_features_in_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_features_in_</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;n_iter_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_iter_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;bound_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">bound_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;doc_topic_prior_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">doc_topic_prior_</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">[</span><span class="s1">&#39;topic_word_prior_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">topic_word_prior_</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;n_runs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_runs</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="s1">&#39;random_state_range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state_range</span><span class="p">))</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2022, Narges Rezaie.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
