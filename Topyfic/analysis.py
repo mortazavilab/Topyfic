@@ -437,6 +437,7 @@ class Analysis:
 
     def TopicTraitRelationshipHeatmap(self,
                                       metaData,
+                                      alternative='two-sided',
                                       annotation=False,
                                       save=True,
                                       show=True,
@@ -447,6 +448,8 @@ class Analysis:
 
         :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)
         :type metaData: list
+        :param alternative: Defines the alternative hypothesis for calculating correlation for module-trait relationship. Default is ‘two-sided’. The following options are available: 'two-sided’: the correlation is nonzero, ‘less’: the correlation is negative (less than zero), ‘greater’: the correlation is positive (greater than zero)
+        :type alternative: str
         :param annotation: indicate if you want to add correlation and p_values as a text in each square (default:False)
         :type annotation: bool
         :param save: indicate if you want to save the plot or not (default: True)
@@ -474,7 +477,7 @@ class Analysis:
                     ~np.isclose(self.cell_participation.to_df()[i],
                                 min_cell_participation, atol=min_cell_participation)]
 
-                tmp = stats.spearmanr(tmp[i], datTraits.loc[tmp.index, j], alternative='greater')
+                tmp = stats.spearmanr(tmp[i], datTraits.loc[tmp.index, j], alternative=alternative)
                 topicsTraitCor.loc[i, j] = tmp[0]
                 topicsTraitPvalue.loc[i, j] = tmp[1]
 
