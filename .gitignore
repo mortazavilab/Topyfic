@@ -3,6 +3,9 @@
 __pycache__/
 */__pycache__/
 *ipynb_checkpoint*
+*.snakemake*
+*h5ad*
+*mtx*
 
 # other
 .DS_Store
@@ -13,3 +16,6 @@ Topyfic.egg-info/
 
 # test
 test/
+
+# for now
+workflow/nextflow

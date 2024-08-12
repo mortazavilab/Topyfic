@@ -1,0 +1,27 @@
+from scripts.make_train import *
+from scripts.make_topmodel import *
+
+configfile: "config/config.yaml"
+
+n_topics = config['n_topics']
+
+##### load rules #####
+include: "rules/train.smk"
+include: "rules/topModel.smk"
+
+#### check if merging is necessary ###
+merging = []
+if 'merging' in config:
+    merging = f"{config['merging']['workdir']}/topModel_{'_'.join(config['names'])}.p"
+
+
+##### target rules #####
+rule all:
+    input:
+        expand(f"{config['train']['workdir']}/train_{{name}}_{{n_topic}}.p",
+            name=config['names'],
+            n_topic=config["n_topics"]),
+        expand(f"{config['top_model']['workdir']}/topModel_{{name}}_{{n_topic}}.p",
+            name=config['names'],
+            n_topic=config["n_topics"]),
+        merging,
