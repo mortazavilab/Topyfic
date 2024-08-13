@@ -61,7 +61,7 @@ class Train:
         """
         for i in range(len(single_trains)):
             gene_weights = pd.DataFrame(np.transpose(single_trains[i].top_models[0].model.components_),
-                                        columns=[f'Topic{i + 1}_R{self.random_state_range[i]}' for i in range(self.k)],
+                                        columns=[f'Topic{j + 1}_R{self.random_state_range[i]}' for j in range(self.k)],
                                         index=data.var.index.tolist())
             TopModel_lda_model = TopModel(name=f"{self.name}_{self.random_state_range[i]}",
                                           N=gene_weights.shape[1],
