@@ -33,9 +33,10 @@ def make_top_model(trains, adata_paths, n_top_genes=50, resolution=1, max_iter_h
 
     # Check if the file exists
     if not os.path.exists(topmodel_output):
-        os.makedirs(topmodel_output)
+        os.makedirs(topmodel_output, mode=0o777)
 
     adata = None
+    print(adata_paths)
     if isinstance(adata_paths, str):
         adata = sc.read_h5ad(adata_paths)
     else:
@@ -53,6 +54,7 @@ def make_top_model(trains, adata_paths, n_top_genes=50, resolution=1, max_iter_h
                                                                                 max_iter_harmony=max_iter_harmony,
                                                                                 min_cell_participation=min_cell_participation)
 
+    print(top_model.name, topmodel_output)
     top_model.save_topModel(save_path=topmodel_output)
 
     adata_topmodel.write_h5ad(f"{topmodel_output}/topic_weight_umap.h5ad")

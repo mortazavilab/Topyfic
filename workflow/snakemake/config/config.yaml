@@ -1,6 +1,6 @@
 n_jobs: 8 # Threads
 
-names: [parse, 10x]
+names: ['parse', '10x']
 
 count_adata:
   parse:
@@ -11,6 +11,8 @@ count_adata:
 n_topics: [5, 10] #, 15, 20, 25, 30, 35, 40, 45, 50]
 
 organism: mouse # human or mouse
+
+workdir: /Users/nargesrezaie/Documents/MortazaviLab/Topyfic/workflow/snakemake/results/
 
 train:
   n_runs: 100
@@ -24,15 +26,11 @@ train:
                   70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
                   80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
                   90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
-  workdir: /Users/nargesrezaie/Documents/MortazaviLab/Topyfic/workflow/snakemake/results/{name}/{n_topic}/train
 
 top_model:
-  workdir: /Users/nargesrezaie/Documents/MortazaviLab/Topyfic/workflow/snakemake/results/{name}/{n_topic}/topmodel
   n_top_genes: 50
   resolution: 1
   max_iter_harmony: 10
   min_cell_participation: None
 
-# only if you have multiple adata input
-merging:
-  workdir: /Users/nargesrezaie/Documents/MortazaviLab/Topyfic/workflow/snakemake/results
+merge: True

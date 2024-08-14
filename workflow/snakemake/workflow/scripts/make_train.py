@@ -25,7 +25,7 @@ def make_single_train_model(name, adata_path, k, random_state, train_output):
 
     # Check if the file exists
     if not os.path.exists(train_output):
-        os.makedirs(train_output)
+        os.makedirs(train_output, mode=0o777)
 
     adata = sc.read_h5ad(adata_path)
 
@@ -61,7 +61,7 @@ def make_train_model(name, adata_path, k, n_runs, random_state, train_output):
 
     # Check if the file exists
     if not os.path.exists(train_output):
-        os.makedirs(train_output)
+        os.makedirs(train_output, mode=0o777)
 
     adata = sc.read_h5ad(adata_path)
 
@@ -71,9 +71,13 @@ def make_train_model(name, adata_path, k, n_runs, random_state, train_output):
                                random_state_range=random_state)
     trains = []
     for i in random_state:
-        train = Topyfic.read_train(f"{name}_{k}_{i}.p")
+        print(f"{train_output}train_{name}_{k}_{i}.p")
+        train = Topyfic.read_train(f"{train_output}train_{name}_{k}_{i}.p")
+        print(train.random_state_range)
         trains.append(train)
 
+    print(main_train.random_state_range)
     main_train.combine_LDA_models(adata, single_trains=trains)
+    print(f"{train_output}{main_train.name}")
     main_train.save_train(save_path=train_output)
 

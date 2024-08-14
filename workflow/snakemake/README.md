@@ -2,10 +2,11 @@
 
 This directory contains a Snakemake pipeline for running the Topyfic automatically.
 
-The snakemake will run training and building model (topModel). 
+The snakemake will run training (Train) and building model (topModel, Analysis). 
 
 **Note**: Please make sure to install necessary packages and set up your Snakemake appropriately.
-**Note**: pipeline is tested for >= 8.*
+
+**Note**: pipeline is tested for Snakemake >= 8.X ([more info](https://snakemake.readthedocs.io/en/stable/index.html))
 
 ## Getting started
 
@@ -31,55 +32,64 @@ Modify the [config file](config/config.yaml) or create a new one with the same s
 
 3. **n_topics**
    - Contains list of number of initial topics you wish to train model base on them
-   - list of int: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+   - list of int: `[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]`
 
 4. **organism**
    - Indicate spices which will be used for downstream analysis
    - Example: human or mouse
 
-5. **train**
+5. **workdir**
+   - Directory to put the outputs
+   - Make sure to have write access.
+   - It will create one folder per dataset.
+
+6. **train**
    - most of the item is an input of `train_model()`
    - n_runs: number of run to define rLDA model (default: 100)
    - random_states: list of random state, we used to run LDA models (default: range(n_runs))
-   - workdir: directory of train outputs. make sure to have write access.
 
-6. **top_model**
-   - workdir: directory of topModel outputs. make sure to have write access.
+7. **top_model**
    - n_top_genes (int): Number of highly-variable genes to keep (default: 50)
    - resolution (int): A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
    - max_iter_harmony (int): Number of iteration for running harmony (default: 10)
    - min_cell_participation (float): Minimum cell participation across for each topic to keep them, when is `None`, it will keep topics with cell participation more than 1% of #cells (#cells / 100)
 
-7. **merging**
-   - workdir: directory of merged outputs. make sure to have write access.
-   - only if you have multiple adata input
+8. **merge**
+   - Indicate if you want to also get a model for all data together.
 
 
 ### 3. Run snakemake
 
-First run it with -n to make sure the steps that it plans to run are reasonable. 
-After it finishes, run the same command without the -n option.
+First run it with `-n` to make sure the steps that it plans to run are reasonable. 
+After it finishes, run the same command without the `-n` option.
 
 `snakemake -n`
 
-for slurm:
+For SLURM:
 
 ```
 snakemake \
--j 200 \
---latency-wait 120 \
+-j 1000 \
+--latency-wait 300 \
 --use-conda \
 --rerun-triggers mtime \
 --executor cluster-generic \
 --cluster-generic-submit-cmd \
 "sbatch -A model-ad_lab \
-  --partition=standard \
+  --partition=highmem \
   --cpus-per-task 16 \
   --mail-user=nargesr@uci.edu \
   --mail-type=START,END,FAIL \
   --time=72:00:00" \
--n
+-n \
+-p \
+--verbose
 ```
+highmem
+standard
+
+Development hints: If you ran to any error `-p --verbose` would give you more detail about each run and will help you to debug your code.
+
 
 ### 4. Further downstream analysis
 
