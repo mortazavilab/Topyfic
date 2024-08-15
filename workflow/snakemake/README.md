@@ -93,6 +93,7 @@ Development hints: If you run into any error `-p --verbose` would give you more 
 ### 4. Further downstream analysis
 
 Once you get all the three main objects (Train, TopModel, Analysis), I would recommend using [this notebook](resources/analysing.ipynb) for depth_in downstream analysis.
+** Section 4 is still under construction **
 
 
 
