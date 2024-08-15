@@ -4,38 +4,38 @@ This directory contains a Snakemake pipeline for running the Topyfic automatical
 
 The snakemake will run training (Train) and building model (topModel, Analysis). 
 
-**Note**: Please make sure to install necessary packages and set up your Snakemake appropriately.
+**Note**: Please make sure to install the necessary packages and set up your Snakemake appropriately.
 
 **Note**: pipeline is tested for Snakemake >= 8.X ([more info](https://snakemake.readthedocs.io/en/stable/index.html))
 
 ## Getting started
 
-### 1. setting up environment
+### 1. Setting up environment
 
-Build your environment and install necessary packages
+Build your environment and install the necessary packages
 - [Suggested environment](workflow/envs/Topyfic_env.yml)
 
-### 2. Setting up config file
+### 2. Setting up the config file
 
 Modify the [config file](config/config.yaml) or create a new one with the same structure.
 
 1. **names**
-   - Contains name of the input dataset(s). 
-   - Name will be used as a name of train and topModel models
-   - If there is multiple names, Topyfic will normalize the models across names using [harmony](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6884693/).
+   - Contains the name of the input dataset(s). 
+   - Name will be used as the name of train and topModel models
+   - If there are multiple names, Topyfic will normalize the models across names using [harmony](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6884693/).
    - list of name: `[parse, 10x]`
 
 2. **count_data**
-   - Contains path of each input data
-   - Name of each path should match name in `names`
+   - Contains the path of each input data
+   - Name of each path should match the name in `names`
    - Recommended to use full path rather than relative path
 
 3. **n_topics**
-   - Contains list of number of initial topics you wish to train model base on them
+   - Contains a list of integers of initial topics you wish to train the model based on them
    - list of int: `[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]`
 
 4. **organism**
-   - Indicate spices which will be used for downstream analysis
+   - Indicate spices that will be used for downstream analysis
    - Example: human or mouse
 
 5. **workdir**
@@ -45,22 +45,23 @@ Modify the [config file](config/config.yaml) or create a new one with the same s
 
 6. **train**
    - most of the item is an input of `train_model()`
-   - n_runs: number of run to define rLDA model (default: 100)
-   - random_states: list of random state, we used to run LDA models (default: range(n_runs))
+   - n_runs: number of runs to define the rLDA model (default: 100)
+   - random_states: list of random states, we used to run LDA models (default: range(n_runs))
 
 7. **top_model**
    - n_top_genes (int): Number of highly-variable genes to keep (default: 50)
    - resolution (int): A parameter value controlling the coarseness of the clustering. Higher values lead to more clusters. (default: 1)
-   - max_iter_harmony (int): Number of iteration for running harmony (default: 10)
+   - max_iter_harmony (int): Number of iterations for running harmony (default: 10)
    - min_cell_participation (float): Minimum cell participation across for each topic to keep them, when is `None`, it will keep topics with cell participation more than 1% of #cells (#cells / 100)
 
 8. **merge**
    - Indicate if you want to also get a model for all data together.
+   - Make sure you have write access.
 
 
 ### 3. Run snakemake
 
-First run it with `-n` to make sure the steps that it plans to run are reasonable. 
+First, run it with `-n` to make sure the steps that it plans to run are reasonable. 
 After it finishes, run the same command without the `-n` option.
 
 `snakemake -n`
@@ -85,10 +86,8 @@ snakemake \
 -p \
 --verbose
 ```
-highmem
-standard
 
-Development hints: If you ran to any error `-p --verbose` would give you more detail about each run and will help you to debug your code.
+Development hints: If you run into any error `-p --verbose` would give you more detail about each run and help you to debug your code.
 
 
 ### 4. Further downstream analysis
