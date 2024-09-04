@@ -40,10 +40,10 @@ class Analysis:
         if colors_topics is None:
             colors = sns.color_palette("turbo", self.top_model.N).as_hex()
 
-            def myfunction():
-                return 0.1
+            #def myfunction():
+            #    return 0.1
 
-            random.shuffle(colors, myfunction)
+            random.shuffle(colors)
             index = list(self.top_model.topics.keys())
             self.colors_topics = pd.DataFrame({'colors': colors}, index=index)
         else:

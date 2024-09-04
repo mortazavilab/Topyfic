@@ -15,7 +15,7 @@ Topyfic's full documentation can be found at [here](https://mortazavilab.github.
 
 ## Installation
 
-To install Topyfic, python version 3.8 or greater is required.
+To install Topyfic, python version 3.9 or greater is required.
 
 **IMPORTANT**: If you upgrade Topyfic from any version below 0.4.5 you need to run this
 

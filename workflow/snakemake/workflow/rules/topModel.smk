@@ -11,7 +11,7 @@ rule run_top_model:
             name=config["names"],
             n_topic=config["n_topics"])
     output:
-        f"{config['workdir']}/{{name}}/{{n_topic}}/topmodel/topModel_{{name}}_{{n_topic}}.p",
+        f"{config['workdir']}/{{name}}/{{n_topic}}/topmodel/topModel_{{name}}_{{n_topic}}.p"
     params:
         name=lambda wildcards: wildcards.name,
         n_topic=lambda wildcards: wildcards.n_topic,
@@ -30,6 +30,24 @@ rule run_top_model:
             max_iter_harmony=int(config['top_model']['max_iter_harmony']),
             min_cell_participation=None if config['top_model']['min_cell_participation'] == "None" else float(
                 config['top_model']['min_cell_participation']),
+            topmodel_output=f"{config['workdir']}/{params.name}/{params.n_topic}/topmodel/")
+
+# Rule to run analysis for one input adata
+rule run_analysis:
+    input:
+        expand(f"{config['workdir']}/{{name}}/{{n_topic}}/topmodel/topModel_{{name}}_{{n_topic}}.p",
+            name=config["names"],
+            n_topic=config["n_topics"])
+    output:
+        f"{config['workdir']}/{{name}}/{{n_topic}}/topmodel/analysis_{{name}}_{{n_topic}}.p"
+    params:
+        name=lambda wildcards: wildcards.name,
+        n_topic=lambda wildcards: wildcards.n_topic,
+    run:
+        top_model = Topyfic.read_topModel(f"{config['workdir']}/{params.name}/{params.n_topic}/topmodel/topModel_{params.name}_{params.n_topic}.p")
+
+        make_topmodel.make_analysis(adata_paths=config['count_adata'][params.name],
+            top_model=top_model,
             topmodel_output=f"{config['workdir']}/{params.name}/{params.n_topic}/topmodel/")
 
 # Rule to run topModel for merging multiple input adatas
@@ -74,4 +92,10 @@ if 'merge' in config:
                 max_iter_harmony=int(config['top_model']['max_iter_harmony']),
                 min_cell_participation=None if config['top_model']['min_cell_participation'] == "None" else float(
                     config['top_model']['min_cell_participation']),
+                topmodel_output=f"{config['workdir']}")
+
+            top_model = Topyfic.read_topModel(f"{config['workdir']}/topModel_{'_'.join(config['names'])}.p")
+
+            make_topmodel.make_analysis(adata_paths=adata_paths,
+                top_model=top_model,
                 topmodel_output=f"{config['workdir']}")

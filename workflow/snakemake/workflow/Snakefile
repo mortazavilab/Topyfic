@@ -23,7 +23,8 @@ include: "rules/topModel.smk"
 #### check if merging is necessary ###
 merging = []
 if 'merge' in config:
-    merging = f"{config['workdir']}/topModel_{'_'.join(config['names'])}.p"
+    merging = [f"{config['workdir']}/topModel_{'_'.join(config['names'])}.p",
+               f"{config['workdir']}/analysis_{'_'.join(config['names'])}.p"]
 
 
 ##### target rules #####
@@ -37,6 +38,9 @@ rule all:
             name=config['names'],
             n_topic=config["n_topics"]),
         expand(f"{config['workdir']}/{{name}}/{{n_topic}}/topmodel/topModel_{{name}}_{{n_topic}}.p",
+            name=config['names'],
+            n_topic=config["n_topics"]),
+        expand(f"{config['workdir']}/{{name}}/{{n_topic}}/topmodel/analysis_{{name}}_{{n_topic}}.p",
             name=config['names'],
             n_topic=config["n_topics"]),
         merging,

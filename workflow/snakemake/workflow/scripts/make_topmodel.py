@@ -30,13 +30,13 @@ def find_best_n_topic(n_topics, names, topmodel_outputs):
 
 def make_top_model(trains, adata_paths, n_top_genes=50, resolution=1, max_iter_harmony=10, min_cell_participation=None,
                    topmodel_output=None):
-
     # Check if the file exists
     if not os.path.exists(topmodel_output):
         os.makedirs(topmodel_output, mode=0o777)
 
+    sc.settings.figdir = f"{topmodel_output}/figures/"
+
     adata = None
-    print(adata_paths)
     if isinstance(adata_paths, str):
         adata = sc.read_h5ad(adata_paths)
     else:
@@ -56,9 +56,27 @@ def make_top_model(trains, adata_paths, n_top_genes=50, resolution=1, max_iter_h
 
     print(top_model.name, topmodel_output)
     top_model.save_topModel(save_path=topmodel_output)
+    print(f"{topmodel_output}topModel_{top_model.name}.p")
 
     adata_topmodel.write_h5ad(f"{topmodel_output}/topic_weight_umap.h5ad")
     clustering.to_csv(f"{topmodel_output}/topic_cluster_mapping.csv")
+
+
+def make_analysis(adata_paths, top_model, topmodel_output=None):
+    # Check if the file exists
+    if not os.path.exists(topmodel_output):
+        os.makedirs(topmodel_output, mode=0o777)
+
+    adata = None
+    if isinstance(adata_paths, str):
+        adata = sc.read_h5ad(adata_paths)
+    else:
+        for adata_path in adata_paths:
+            tmp = sc.read_h5ad(adata_path)
+            if adata is None:
+                adata = sc.read_h5ad(adata_path)
+            else:
+                adata = adata.concatenate(tmp)
 
     analysis_top_model = Topyfic.Analysis(Top_model=top_model)
     analysis_top_model.calculate_cell_participation(data=adata)
