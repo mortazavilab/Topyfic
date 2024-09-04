@@ -25,7 +25,7 @@ rule run_top_model:
 
         make_topmodel.make_top_model(trains=[train],
             adata_paths=config['count_adata'][params.name],
-            n_top_genes=int(config['top_model']['n_top_genes']),
+            n_top_genes=None if config['top_model']['n_top_genes'] == "None" else int(config['top_model']['n_top_genes']),
             resolution=float(config['top_model']['resolution']),
             max_iter_harmony=int(config['top_model']['max_iter_harmony']),
             min_cell_participation=None if config['top_model']['min_cell_participation'] == "None" else float(

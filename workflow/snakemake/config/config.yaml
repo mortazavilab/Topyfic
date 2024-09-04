@@ -28,7 +28,7 @@ train:
                   90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
 
 top_model:
-  n_top_genes: 50
+  n_top_genes: None
   resolution: 1
   max_iter_harmony: 10
   min_cell_participation: None

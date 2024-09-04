@@ -145,7 +145,7 @@ def subset_data(data, keep, loc='var'):
 
 def calculate_leiden_clustering(trains,
                                 data,
-                                n_top_genes=50,
+                                n_top_genes=None,
                                 resolution=1,
                                 max_iter_harmony=10,
                                 min_cell_participation=None,

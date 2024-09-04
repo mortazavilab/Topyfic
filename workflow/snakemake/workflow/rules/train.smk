@@ -33,6 +33,6 @@ rule run_train_model:
         make_train.make_train_model(name=params.name,
             adata_path=config['count_adata'][params.name],
             k=int(params.n_topic),
-            n_runs=config['train']['n_runs'],
+            n_runs=int(config['train']['n_runs']),
             random_state=config['train']['random_states'],
             train_output=f"{config['workdir']}/{params.name}/{params.n_topic}/train/")
