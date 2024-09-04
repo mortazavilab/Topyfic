@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Topyfic.topModel &#8212; Topyfic 0.0.11 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <script src="../../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -101,7 +99,18 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for Topyfic.topModel</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -121,8 +130,10 @@
 <span class="kn">from</span> <span class="nn">Topyfic.utilsAnalyseModel</span> <span class="kn">import</span> <span class="n">MA_plot</span>
 
 
-<div class="viewcode-block" id="TopModel"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel">[docs]</a><span class="k">class</span> <span class="nc">TopModel</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TopModel">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel">[docs]</a>
+<span class="k">class</span> <span class="nc">TopModel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class that saved a model</span>
 
 <span class="sd">    :param name: name of class</span>
@@ -155,16 +166,18 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
                 <span class="n">topic_gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
                                                   <span class="n">index</span><span class="o">=</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-                                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="n">topic_id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="n">topic_id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                                                       <span class="n">topic_gene_weights</span><span class="o">=</span><span class="n">topic_gene_weights</span><span class="p">,</span>
                                                       <span class="n">gene_information</span><span class="o">=</span><span class="n">gene_information</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">N</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
 
-<div class="viewcode-block" id="TopModel.get_feature_name"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_feature_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_feature_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TopModel.get_feature_name">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_feature_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_feature_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get feature(gene) name</span>
 
 <span class="sd">        :return: list of feature(gene) name</span>
@@ -173,8 +186,11 @@
         <span class="n">topic1</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="o">.</span><span class="n">items</span><span class="p">()))[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">topic1</span><span class="o">.</span><span class="n">gene_information</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TopModel.save_rLDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.save_rLDA_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_rLDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;rLDA&#39;</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;joblib&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TopModel.save_rLDA_model">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.save_rLDA_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_rLDA_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;rLDA&#39;</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;joblib&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            save rLDA model (instance of LDA model in sklearn) as a joblib/HDF5 file.</span>
 
 <span class="sd">            :param name: name of the joblib file (default: rLDA)</span>
@@ -208,32 +224,38 @@
 
             <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TopModel.get_gene_weights"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_gene_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_gene_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TopModel.get_gene_weights">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_gene_weights">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_gene_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get feature(gene) weights</span>
 
 <span class="sd">        :return: dataframe contains feature(gene) weights; genes are indexes and topics are columns</span>
 <span class="sd">        :rtype: pandas dataframe</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">),</span>
-                                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
                                              <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
                                     <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="n">gene_weights</span></div>
 
-<div class="viewcode-block" id="TopModel.get_ranked_gene_weight"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_ranked_gene_weight">[docs]</a>    <span class="k">def</span> <span class="nf">get_ranked_gene_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TopModel.get_ranked_gene_weight">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_ranked_gene_weight">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_ranked_gene_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get sorted feature(gene) weights. each value is gene and weights on each topics</span>
 
 <span class="sd">        :return: dataframe contains feature(gene) and their weights; ranks are indexes and topics are columns</span>
 <span class="sd">        :rtype: pandas dataframe</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">),</span>
-                                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
                                              <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
                                     <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">())</span>
-        <span class="n">ranked_gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+        <span class="n">ranked_gene_weights</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
                                                     <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
                                            <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">())))</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">gene_weights</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
@@ -243,8 +265,11 @@
             <span class="n">ranked_gene_weights</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
         <span class="k">return</span> <span class="n">ranked_gene_weights</span></div>
 
-<div class="viewcode-block" id="TopModel.get_top_model_attributes"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_top_model_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">get_top_model_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TopModel.get_top_model_attributes">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.get_top_model_attributes">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_top_model_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get top model attributes to be able to make sklearn.decomposition.LatentDirichletAllocation</span>
 
 
@@ -255,15 +280,15 @@
         <span class="n">feature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">()</span>
 
         <span class="n">components</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">,</span>
-                                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
+                                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
                                   <span class="n">columns</span><span class="o">=</span><span class="n">feature</span><span class="p">)</span>
 
         <span class="n">exp_dirichlet_component</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exp_dirichlet_component_</span><span class="p">,</span>
-                                               <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
+                                               <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
                                                <span class="n">columns</span><span class="o">=</span><span class="n">feature</span><span class="p">)</span>
 
         <span class="n">others</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n_batch_iter&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;n_features_in&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;n_iter&quot;</span><span class="p">,</span>
@@ -271,16 +296,19 @@
                      <span class="s2">&quot;doc_topic_prior&quot;</span><span class="p">,</span>
                      <span class="s2">&quot;topic_word_prior&quot;</span><span class="p">])</span>
 
-        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;n_batch_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_batch_iter_</span>
-        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;n_features_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_features_in_</span>
-        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;n_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_iter_</span>
-        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;bound&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">bound_</span>
-        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;doc_topic_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">doc_topic_prior_</span>
-        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;topic_word_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">topic_word_prior_</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;n_batch_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_batch_iter_</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;n_features_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_features_in_</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;n_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n_iter_</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;bound&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">bound_</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;doc_topic_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">doc_topic_prior_</span>
+        <span class="n">others</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span> <span class="s2">&quot;topic_word_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">topic_word_prior_</span>
 
         <span class="k">return</span> <span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span></div>
 
-<div class="viewcode-block" id="TopModel.gene_weight_rank_heatmap"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.gene_weight_rank_heatmap">[docs]</a>    <span class="k">def</span> <span class="nf">gene_weight_rank_heatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="TopModel.gene_weight_rank_heatmap">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.gene_weight_rank_heatmap">[docs]</a>
+    <span class="k">def</span> <span class="nf">gene_weight_rank_heatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                  <span class="n">genes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">topics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">show_rank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -290,7 +318,7 @@
                                  <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                  <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;gene_weight_rank_heatmap&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot selected genes weights and their ranks in selected topics</span>
 
 <span class="sd">        :param genes: list of genes you want to see their weights (default: all genes)</span>
@@ -318,9 +346,9 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;some/all of genes are not part of topModel!&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">topics</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">topics</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="n">topics</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">topics</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span>
-                <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">topics</span><span class="p">):</span>
+                <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">topics</span><span class="p">):</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;some/all of topics are not part of topModel!&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">scale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;log2&quot;</span><span class="p">,</span> <span class="s2">&quot;log10&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
@@ -382,7 +410,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TopModel.MA_plot"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.MA_plot">[docs]</a>    <span class="k">def</span> <span class="nf">MA_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="TopModel.MA_plot">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.MA_plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">MA_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">topic1</span><span class="p">,</span>
                 <span class="n">topic2</span><span class="p">,</span>
                 <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -396,7 +427,7 @@
                 <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                 <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;MA_plot&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot MA based on the gene weights on given topics</span>
 
 <span class="sd">        :param topic1: first topic to be compared</span>
@@ -448,8 +479,11 @@
 
         <span class="k">return</span> <span class="n">gene_zscore</span></div>
 
-<div class="viewcode-block" id="TopModel.save_topModel"><a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.save_topModel">[docs]</a>    <span class="k">def</span> <span class="nf">save_topModel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;pickle&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TopModel.save_topModel">
+<a class="viewcode-back" href="../../api.html#Topyfic.topModel.TopModel.save_topModel">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_topModel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;pickle&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            save TopModel class as a pickle/HDF5 file</span>
 
 <span class="sd">            :param name: name of the file (default: topModel_TopModel.name)</span>
@@ -505,7 +539,9 @@
             <span class="n">f</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">f</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
 
-            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</div>
+
 
 </pre></div>
 
@@ -521,7 +557,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
     </p>
   </div>
 </footer>

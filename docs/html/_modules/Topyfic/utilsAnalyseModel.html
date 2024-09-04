@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Topyfic.utilsAnalyseModel &#8212; Topyfic 0.0.11 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <script src="../../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -101,7 +99,18 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for Topyfic.utilsAnalyseModel</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -137,7 +146,9 @@
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="compare_topModels"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.compare_topModels">[docs]</a><span class="k">def</span> <span class="nf">compare_topModels</span><span class="p">(</span><span class="n">topModels</span><span class="p">,</span>
+<div class="viewcode-block" id="compare_topModels">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.compare_topModels">[docs]</a>
+<span class="k">def</span> <span class="nf">compare_topModels</span><span class="p">(</span><span class="n">topModels</span><span class="p">,</span>
                       <span class="n">comparison_method</span><span class="o">=</span><span class="s2">&quot;Jensen–Shannon divergence&quot;</span><span class="p">,</span>
                       <span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;graph&#39;</span><span class="p">,</span>
                       <span class="n">threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
@@ -149,7 +160,7 @@
                       <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">plot_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                       <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;compare_topics&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    compare topModels using topic gene weights</span>
 
 <span class="sd">    :param topModels: list of topModel class you want to compare to each other</span>
@@ -341,7 +352,10 @@
         <span class="k">return</span> <span class="n">axs</span></div>
 
 
-<div class="viewcode-block" id="MA_plot"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.MA_plot">[docs]</a><span class="k">def</span> <span class="nf">MA_plot</span><span class="p">(</span><span class="n">topic1</span><span class="p">,</span>
+
+<div class="viewcode-block" id="MA_plot">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.MA_plot">[docs]</a>
+<span class="k">def</span> <span class="nf">MA_plot</span><span class="p">(</span><span class="n">topic1</span><span class="p">,</span>
             <span class="n">topic2</span><span class="p">,</span>
             <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">pseudocount</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -354,7 +368,7 @@
             <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;MA_plot&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot MA based on the gene weights on given topics</span>
 
 <span class="sd">        :param topic1: gene weight of first topic to be compared</span>
@@ -477,8 +491,11 @@
     <span class="k">return</span> <span class="n">gene_zscore</span></div>
 
 
-<div class="viewcode-block" id="modified_zscore"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.modified_zscore">[docs]</a><span class="k">def</span> <span class="nf">modified_zscore</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">consistency_correction</span><span class="o">=</span><span class="mf">1.4826</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="modified_zscore">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.modified_zscore">[docs]</a>
+<span class="k">def</span> <span class="nf">modified_zscore</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">consistency_correction</span><span class="o">=</span><span class="mf">1.4826</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the modified z score and Median Absolute Deviation (MAD) from the scores in data.</span>
 <span class="sd">    The consistency_correction factor converts the MAD to the standard deviation for a given</span>
 <span class="sd">    distribution. The default value (1.4826) is the conversion factor if the underlying data</span>
@@ -495,14 +512,17 @@
     <span class="k">return</span> <span class="n">mod_zscore</span><span class="p">,</span> <span class="n">mad</span></div>
 
 
-<div class="viewcode-block" id="functional_enrichment_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.functional_enrichment_analysis">[docs]</a><span class="k">def</span> <span class="nf">functional_enrichment_analysis</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="functional_enrichment_analysis">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.functional_enrichment_analysis">[docs]</a>
+<span class="k">def</span> <span class="nf">functional_enrichment_analysis</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span>
                                    <span class="nb">type</span><span class="p">,</span>
                                    <span class="n">organism</span><span class="p">,</span>
                                    <span class="n">sets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                    <span class="n">p_value</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                                    <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;functional_enrichment_analysis&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Doing functional enrichment analysis including GO, KEGG and REACTOME</span>
 
 <span class="sd">    :param gene_list: list of gene name</span>
@@ -557,14 +577,17 @@
                                       <span class="n">p_value</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">p_value</span><span class="p">))</span>
 
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">numGeneModule</span> <span class="o">-</span> <span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;identifiersNotFound&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="n">numGeneModule</span><span class="si">}</span><span class="s2"> identifiers in the sample were found in Reactome.&quot;</span><span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">numGeneModule</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;identifiersNotFound&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="n">numGeneModule</span><span class="si">}</span><span class="s2"> identifiers in the sample were found in Reactome.&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;resourceSummary&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;pathways&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> pathways were hit by at least one of them, which </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">token_result</span><span class="p">[</span><span class="s1">&#39;pathways&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> of them have p-value more than </span><span class="si">{</span><span class="n">p_value</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Report was saved </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;For more information please visit https://reactome.org/PathwayBrowser/#/DTAB=AN&amp;ANALYSIS=</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="GSEA"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.GSEA">[docs]</a><span class="k">def</span> <span class="nf">GSEA</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span>
+
+<div class="viewcode-block" id="GSEA">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.GSEA">[docs]</a>
+<span class="k">def</span> <span class="nf">GSEA</span><span class="p">(</span><span class="n">gene_list</span><span class="p">,</span>
          <span class="n">gene_sets</span><span class="o">=</span><span class="s1">&#39;GO_Biological_Process_2021&#39;</span><span class="p">,</span>
          <span class="n">p_value</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
          <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -572,7 +595,7 @@
          <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
          <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;GSEA&quot;</span><span class="p">,</span>
          <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Doing Gene Set Enrichment Analysis on based on the topic weights using GSEAPY package.</span>
 
 <span class="sd">    :param gene_list: pandas series with index as a gene names and their ranks/weights as value</span>
@@ -622,11 +645,14 @@
     <span class="k">return</span> <span class="n">pre_res</span><span class="o">.</span><span class="n">res2d</span></div>
 
 
-<div class="viewcode-block" id="summarize_GO_Term"><a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.summarize_GO_Term">[docs]</a><span class="k">def</span> <span class="nf">summarize_GO_Term</span><span class="p">(</span><span class="n">GO_terms</span><span class="p">,</span>
+
+<div class="viewcode-block" id="summarize_GO_Term">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsAnalyseModel.summarize_GO_Term">[docs]</a>
+<span class="k">def</span> <span class="nf">summarize_GO_Term</span><span class="p">(</span><span class="n">GO_terms</span><span class="p">,</span>
                       <span class="n">p_value</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                       <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">,</span>
                       <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;GO_sum&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Summarize long, unintelligible lists of GO terms by finding a representative subset of the terms showing more unique (child) Go terms</span>
 <span class="sd">    We suggest save it as html since it&#39;s gonna be plot by plotly so you can take an advantage of using plotly</span>
 
@@ -704,6 +730,7 @@
 
     <span class="k">return</span> <span class="n">df</span></div>
 
+
 </pre></div>
 
     </div>
@@ -718,7 +745,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
     </p>
   </div>
 </footer>

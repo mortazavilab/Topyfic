@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Topyfic.utilsMakeModel &#8212; Topyfic 0.0.11 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <script src="../../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -101,7 +99,18 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for Topyfic.utilsMakeModel</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -139,14 +148,16 @@
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="train_model"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.train_model">[docs]</a><span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+<div class="viewcode-block" id="train_model">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.train_model">[docs]</a>
+<span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
                 <span class="n">data</span><span class="p">,</span>
                 <span class="n">k</span><span class="p">,</span>
                 <span class="n">n_runs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                 <span class="n">random_state_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">n_thread</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                 <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Training model and save it</span>
 
 <span class="sd">    :param name: name of the Train class</span>
@@ -173,13 +184,16 @@
     <span class="n">train</span><span class="o">.</span><span class="n">save_train</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="make_topModel"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.make_topModel">[docs]</a><span class="k">def</span> <span class="nf">make_topModel</span><span class="p">(</span><span class="n">trains</span><span class="p">,</span>
+
+<div class="viewcode-block" id="make_topModel">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.make_topModel">[docs]</a>
+<span class="k">def</span> <span class="nf">make_topModel</span><span class="p">(</span><span class="n">trains</span><span class="p">,</span>
                   <span class="n">data</span><span class="p">,</span>
                   <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                   <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                   <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                   <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creating topModel base on train data and save it along with clustering information</span>
 
 <span class="sd">    :param trains: list of train class</span>
@@ -205,11 +219,14 @@
     <span class="n">top_model</span><span class="o">.</span><span class="n">save_topModel</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="make_analysis_class"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.make_analysis_class">[docs]</a><span class="k">def</span> <span class="nf">make_analysis_class</span><span class="p">(</span><span class="n">top_model</span><span class="p">,</span>
+
+<div class="viewcode-block" id="make_analysis_class">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.make_analysis_class">[docs]</a>
+<span class="k">def</span> <span class="nf">make_analysis_class</span><span class="p">(</span><span class="n">top_model</span><span class="p">,</span>
                         <span class="n">data</span><span class="p">,</span>
                         <span class="n">colors_topics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creating Analysis object</span>
 
 <span class="sd">    :param top_model: top model that used for analysing topics, gene weights compositions and calculate cell participation</span>
@@ -226,8 +243,11 @@
     <span class="n">analysis_top_model</span><span class="o">.</span><span class="n">save_analysis</span><span class="p">(</span><span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="subset_data"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.subset_data">[docs]</a><span class="k">def</span> <span class="nf">subset_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="subset_data">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.subset_data">[docs]</a>
+<span class="k">def</span> <span class="nf">subset_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">keep</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;var&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Subsetting data</span>
 
 <span class="sd">    :param data: data we want to subset</span>
@@ -249,14 +269,17 @@
     <span class="k">return</span> <span class="n">data</span></div>
 
 
-<div class="viewcode-block" id="calculate_leiden_clustering"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.calculate_leiden_clustering">[docs]</a><span class="k">def</span> <span class="nf">calculate_leiden_clustering</span><span class="p">(</span><span class="n">trains</span><span class="p">,</span>
+
+<div class="viewcode-block" id="calculate_leiden_clustering">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.calculate_leiden_clustering">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_leiden_clustering</span><span class="p">(</span><span class="n">trains</span><span class="p">,</span>
                                 <span class="n">data</span><span class="p">,</span>
-                                <span class="n">n_top_genes</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                                <span class="n">n_top_genes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                                 <span class="n">max_iter_harmony</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                                 <span class="n">min_cell_participation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Do leiden clustering w/o harmony base on number of assays you have and then remove low participation topics</span>
 
 <span class="sd">    :param trains: list of train class</span>
@@ -353,7 +376,7 @@
                                  <span class="n">clusters</span><span class="o">=</span><span class="n">clustering</span><span class="p">)</span>
     <span class="n">lda_output</span> <span class="o">=</span> <span class="n">rlda</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
     <span class="n">cell_participation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">lda_output</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-                                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">)],</span>
+                                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">)],</span>
                                       <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
     <span class="n">keep</span> <span class="o">=</span> <span class="n">cell_participation</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">min_cell_participation</span>
@@ -390,7 +413,10 @@
     <span class="k">return</span> <span class="n">top_model</span><span class="p">,</span> <span class="n">clustering</span><span class="p">,</span> <span class="n">adata</span></div>
 
 
-<div class="viewcode-block" id="plot_cluster_contribution"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.plot_cluster_contribution">[docs]</a><span class="k">def</span> <span class="nf">plot_cluster_contribution</span><span class="p">(</span><span class="n">clustering</span><span class="p">,</span>
+
+<div class="viewcode-block" id="plot_cluster_contribution">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.plot_cluster_contribution">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_cluster_contribution</span><span class="p">(</span><span class="n">clustering</span><span class="p">,</span>
                               <span class="n">feature</span><span class="p">,</span>
                               <span class="n">show_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                               <span class="n">portion</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -398,7 +424,7 @@
                               <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                               <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;cluster_contribution&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    barplot shows number of topics contribute to each cluster</span>
 
 <span class="sd">    :param clustering: dataframe that map each single LDA run to each cluster</span>
@@ -432,7 +458,7 @@
             <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">opt</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">clustering</span><span class="p">[</span><span class="n">clustering</span><span class="p">[</span><span class="s1">&#39;leiden&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span>
-        <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;Topic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;Topic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">res</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;keep&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">keep</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">show_all</span><span class="p">:</span>
@@ -465,8 +491,11 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="initialize_rLDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.initialize_rLDA_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_rLDA_model</span><span class="p">(</span><span class="n">all_components</span><span class="p">,</span> <span class="n">all_exp_dirichlet_component</span><span class="p">,</span> <span class="n">all_others</span><span class="p">,</span> <span class="n">clusters</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="initialize_rLDA_model">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.initialize_rLDA_model">[docs]</a>
+<span class="k">def</span> <span class="nf">initialize_rLDA_model</span><span class="p">(</span><span class="n">all_components</span><span class="p">,</span> <span class="n">all_exp_dirichlet_component</span><span class="p">,</span> <span class="n">all_others</span><span class="p">,</span> <span class="n">clusters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize reproducible LDA model by calculating all necessary attributes using clustering.</span>
 
 <span class="sd">    :param all_components: Variational parameters for topic gene distribution from all single LDA models</span>
@@ -501,18 +530,18 @@
         <span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">components</span><span class="p">),</span>
-                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">)],</span>
+                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">)],</span>
                       <span class="n">index</span><span class="o">=</span><span class="n">all_components</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">):</span>
-        <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">tmp</span> <span class="o">&gt;</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">sum</span><span class="p">()]</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n_rtopics</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n_rtopics</span>
 
     <span class="n">components</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">T</span>
 
     <span class="n">exp_dirichlet_component</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">exp_dirichlet_component</span><span class="p">,</span>
-                                           <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">)],</span>
+                                           <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rtopics</span><span class="p">)],</span>
                                            <span class="n">columns</span><span class="o">=</span><span class="n">all_exp_dirichlet_component</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
     <span class="n">others</span> <span class="o">=</span> <span class="n">all_others</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -521,8 +550,11 @@
     <span class="k">return</span> <span class="n">LDA</span></div>
 
 
-<div class="viewcode-block" id="initialize_lda_model"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.initialize_lda_model">[docs]</a><span class="k">def</span> <span class="nf">initialize_lda_model</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="initialize_lda_model">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.initialize_lda_model">[docs]</a>
+<span class="k">def</span> <span class="nf">initialize_lda_model</span><span class="p">(</span><span class="n">components</span><span class="p">,</span> <span class="n">exp_dirichlet_component</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize LDA model by passing all necessary attributes</span>
 
 <span class="sd">    :param components: Variational parameters for topic gene distribution</span>
@@ -551,8 +583,11 @@
     <span class="k">return</span> <span class="n">LDA</span></div>
 
 
-<div class="viewcode-block" id="filter_LDA_model"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.filter_LDA_model">[docs]</a><span class="k">def</span> <span class="nf">filter_LDA_model</span><span class="p">(</span><span class="n">main_lda</span><span class="p">,</span> <span class="n">keep</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="filter_LDA_model">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.filter_LDA_model">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_LDA_model</span><span class="p">(</span><span class="n">main_lda</span><span class="p">,</span> <span class="n">keep</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    filter LDA based on the topics we want to keep</span>
 
 <span class="sd">    :param main_lda: Latent Dirichlet Allocation with online variational Bayes algorithm.</span>
@@ -569,12 +604,12 @@
     <span class="n">components</span> <span class="o">=</span> <span class="n">main_lda</span><span class="o">.</span><span class="n">components_</span><span class="p">[[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">keep</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">keep</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="p">:]</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">components</span><span class="p">),</span>
-                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">)])</span>
+                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">)])</span>
     <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">):</span>
-        <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">tmp</span> <span class="o">&gt;</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">sum</span><span class="p">()]</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n_topics</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tmp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Topic</span><span class="si">{</span><span class="n">topic</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n_topics</span>
 
     <span class="n">components</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">T</span>
 
@@ -590,8 +625,11 @@
     <span class="k">return</span> <span class="n">lda</span><span class="p">,</span> <span class="n">components</span></div>
 
 
-<div class="viewcode-block" id="read_train"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_train">[docs]</a><span class="k">def</span> <span class="nf">read_train</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="read_train">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_train">[docs]</a>
+<span class="k">def</span> <span class="nf">read_train</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    reading train pickle file</span>
 
 <span class="sd">    :param file: path of the pickle file</span>
@@ -651,8 +689,11 @@
     <span class="k">return</span> <span class="n">train</span></div>
 
 
-<div class="viewcode-block" id="read_topModel"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_topModel">[docs]</a><span class="k">def</span> <span class="nf">read_topModel</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="read_topModel">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_topModel">[docs]</a>
+<span class="k">def</span> <span class="nf">read_topModel</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    reading topModel pickle/HDF5 file</span>
 
 <span class="sd">    :param file: path of the pickle/HDF5 file</span>
@@ -678,7 +719,7 @@
 
         <span class="c1"># topics</span>
         <span class="n">topics</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">topic_ids</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="n">topic_ids</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
         <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topic_ids</span><span class="p">:</span>
             <span class="n">topic_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
             <span class="n">topic_name</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">][</span><span class="n">topic</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
@@ -732,8 +773,11 @@
     <span class="k">return</span> <span class="n">top_model</span></div>
 
 
-<div class="viewcode-block" id="read_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_analysis">[docs]</a><span class="k">def</span> <span class="nf">read_analysis</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="read_analysis">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_analysis">[docs]</a>
+<span class="k">def</span> <span class="nf">read_analysis</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    reading analysis pickle file</span>
 
 <span class="sd">    :param file: path of the pickle file</span>
@@ -752,11 +796,14 @@
     <span class="k">return</span> <span class="n">analysis</span></div>
 
 
-<div class="viewcode-block" id="read_model_yaml"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_model_yaml">[docs]</a><span class="k">def</span> <span class="nf">read_model_yaml</span><span class="p">(</span><span class="n">model_yaml_path</span><span class="o">=</span><span class="s2">&quot;model.yaml&quot;</span><span class="p">,</span>
+
+<div class="viewcode-block" id="read_model_yaml">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.read_model_yaml">[docs]</a>
+<span class="k">def</span> <span class="nf">read_model_yaml</span><span class="p">(</span><span class="n">model_yaml_path</span><span class="o">=</span><span class="s2">&quot;model.yaml&quot;</span><span class="p">,</span>
                     <span class="n">topic_yaml_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">cell_topic_participation_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    read YMAL files and make topmodel object</span>
 <span class="sd">    write topic in YAML format</span>
 
@@ -802,7 +849,7 @@
         <span class="n">topic_information</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="s1">&#39;Topic information&#39;</span> <span class="ow">in</span> <span class="n">topic_yaml</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">topic_information</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">topic_yaml</span><span class="p">[</span><span class="s1">&#39;Topic information&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">topic_gene_weights</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">topics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="n">topic_id</span><span class="o">=</span><span class="n">topic_id</span><span class="p">,</span>
+        <span class="n">topics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="n">topic_id</span><span class="o">=</span><span class="n">topic_id</span><span class="p">,</span>
                                          <span class="n">topic_gene_weights</span><span class="o">=</span><span class="n">topic_gene_weights</span><span class="p">,</span>
                                          <span class="n">gene_information</span><span class="o">=</span><span class="n">gene_information</span><span class="p">,</span>
                                          <span class="n">topic_information</span><span class="o">=</span><span class="n">topic_information</span><span class="p">)</span>
@@ -833,11 +880,14 @@
     <span class="k">return</span> <span class="n">topModel</span><span class="p">,</span> <span class="n">analysis</span></div>
 
 
-<div class="viewcode-block" id="combine_topModels"><a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.combine_topModels">[docs]</a><span class="k">def</span> <span class="nf">combine_topModels</span><span class="p">(</span><span class="n">topModels</span><span class="p">,</span>
+
+<div class="viewcode-block" id="combine_topModels">
+<a class="viewcode-back" href="../../api.html#Topyfic.utilsMakeModel.combine_topModels">[docs]</a>
+<span class="k">def</span> <span class="nf">combine_topModels</span><span class="p">(</span><span class="n">topModels</span><span class="p">,</span>
                       <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Combined_TopModel&quot;</span><span class="p">,</span>
                       <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">min_cell_participation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combine two topmodels. It will not apply any method when we want to combine them, so basically just combine all models without performing any method</span>
 
 <span class="sd">    :param topModels: list of topmodels you want to combine</span>
@@ -865,7 +915,7 @@
         <span class="n">n_topics</span> <span class="o">+=</span> <span class="n">topmodel</span><span class="o">.</span><span class="n">N</span>
 
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">topmodel</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">,</span>
-                           <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">topmodel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                           <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">topmodel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
                                   <span class="nb">range</span><span class="p">(</span><span class="n">topmodel</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
                            <span class="n">columns</span><span class="o">=</span><span class="n">topmodel</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -874,7 +924,7 @@
             <span class="n">components</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">components</span><span class="p">,</span> <span class="n">tmp</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">topmodel</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exp_dirichlet_component_</span><span class="p">,</span>
-                           <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">topmodel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                           <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">topmodel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
                                   <span class="nb">range</span><span class="p">(</span><span class="n">topmodel</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
                            <span class="n">columns</span><span class="o">=</span><span class="n">topmodel</span><span class="o">.</span><span class="n">get_feature_name</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">exp_dirichlet_component</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -913,7 +963,7 @@
 
         <span class="n">lda_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="n">cell_participation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">lda_output</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">)],</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_topics</span><span class="p">)],</span>
                                           <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
         <span class="n">keep</span> <span class="o">=</span> <span class="n">cell_participation</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">min_cell_participation</span>
@@ -922,7 +972,7 @@
         <span class="n">n_topics</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="n">model</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">filter_LDA_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">keep</span><span class="p">)</span>
         <span class="n">components</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="p">,</span>
-                                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                  <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
                                          <span class="nb">range</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
                                   <span class="n">columns</span><span class="o">=</span><span class="n">components</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
 
@@ -932,6 +982,7 @@
                          <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">top_model</span><span class="p">,</span> <span class="n">n_topics</span><span class="p">,</span> <span class="n">components</span><span class="o">.</span><span class="n">T</span></div>
+
 </pre></div>
 
     </div>
@@ -946,7 +997,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
     </p>
   </div>
 </footer>

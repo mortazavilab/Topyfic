@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Topyfic.analysis &#8212; Topyfic 0.0.11 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <script src="../../_static/documentation_options.js?v=0c446633"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -101,7 +99,18 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for Topyfic.analysis</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -125,8 +134,10 @@
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Analysis"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis">[docs]</a><span class="k">class</span> <span class="nc">Analysis</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Analysis">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis">[docs]</a>
+<span class="k">class</span> <span class="nc">Analysis</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class used to investigate the topics and gene weights compositions</span>
 
 <span class="sd">    :param Top_model: top model that used for analysing topics, gene weights compositions and calculate cell participation</span>
@@ -157,8 +168,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span> <span class="o">=</span> <span class="n">cell_participation</span>
 
-<div class="viewcode-block" id="Analysis.calculate_cell_participation"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.calculate_cell_participation">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Analysis.calculate_cell_participation">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.calculate_cell_participation">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate cell participation for give data</span>
 
 <span class="sd">        :param data: processed expression data along with cells and genes/region information</span>
@@ -170,12 +183,15 @@
 
         <span class="n">lda_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
         <span class="n">cell_participation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lda_output</span><span class="p">,</span>
-                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
+                                          <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_model</span><span class="o">.</span><span class="n">N</span><span class="p">)],</span>
                                           <span class="c1"># list(self.top_model.topics.keys())</span>
                                           <span class="n">index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cell_participation</span> <span class="o">=</span> <span class="n">anndata</span><span class="o">.</span><span class="n">AnnData</span><span class="p">(</span><span class="n">cell_participation</span><span class="p">,</span> <span class="n">obs</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Analysis.pie_structure_Chart"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.pie_structure_Chart">[docs]</a>    <span class="k">def</span> <span class="nf">pie_structure_Chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.pie_structure_Chart">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.pie_structure_Chart">[docs]</a>
+    <span class="k">def</span> <span class="nf">pie_structure_Chart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">level</span><span class="p">,</span>
                             <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">ascending</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -185,7 +201,7 @@
                             <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;piechart_topicAvgCell&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot pie charts that shows contribution of each topics to each category (i.e cell type)</span>
 
 <span class="sd">        :param level: name of the column from cell_participation.obs</span>
@@ -276,7 +292,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.structure_plot"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.structure_plot">[docs]</a>    <span class="k">def</span> <span class="nf">structure_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.structure_plot">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.structure_plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">structure_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">level</span><span class="p">,</span>
                        <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">topic_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -291,7 +310,7 @@
                        <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                        <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;structure_topicAvgCell&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot structure which shows contribution of each topics for each cells in given categories</span>
 
 <span class="sd">        :param level: name of the column from cell_participation.obs</span>
@@ -512,9 +531,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.convertDatTraits"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.convertDatTraits">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Analysis.convertDatTraits">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.convertDatTraits">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">convertDatTraits</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get data trait module base on samples information</span>
 
 <span class="sd">        :return: a dataframe contains information in suitable format for plotting module trait relationship heatmap</span>
@@ -541,7 +563,10 @@
 
         <span class="k">return</span> <span class="n">datTraits</span></div>
 
-<div class="viewcode-block" id="Analysis.TopicTraitRelationshipHeatmap"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap">[docs]</a>    <span class="k">def</span> <span class="nf">TopicTraitRelationshipHeatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.TopicTraitRelationshipHeatmap">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.TopicTraitRelationshipHeatmap">[docs]</a>
+    <span class="k">def</span> <span class="nf">TopicTraitRelationshipHeatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                       <span class="n">metaData</span><span class="p">,</span>
                                       <span class="n">alternative</span><span class="o">=</span><span class="s1">&#39;two-sided&#39;</span><span class="p">,</span>
                                       <span class="n">annotation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -549,7 +574,7 @@
                                       <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                       <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                       <span class="n">file_name</span><span class="o">=</span><span class="s1">&#39;topic-traitRelationships&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot topic-trait relationship heatmap</span>
 
 <span class="sd">        :param metaData: traits you would like to see the relationship with topics (must be column name of cell_participation.obs)</span>
@@ -637,7 +662,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.extract_cells"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.extract_cells">[docs]</a>    <span class="k">def</span> <span class="nf">extract_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.extract_cells">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.extract_cells">[docs]</a>
+    <span class="k">def</span> <span class="nf">extract_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                       <span class="n">level</span><span class="p">,</span>
                       <span class="n">category</span><span class="p">,</span>
                       <span class="n">top_cells</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
@@ -645,7 +673,7 @@
                       <span class="n">min_cells</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                       <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">save</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        extract subset of cells and cells participation with specific criteria</span>
 
 <span class="sd">        :param level: name of the column from cell_participation.obs</span>
@@ -707,7 +735,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">selected_cell</span><span class="p">,</span> <span class="n">selected_cell_participation</span></div>
 
-<div class="viewcode-block" id="Analysis.average_cell_participation"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.average_cell_participation">[docs]</a>    <span class="k">def</span> <span class="nf">average_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.average_cell_participation">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.average_cell_participation">[docs]</a>
+    <span class="k">def</span> <span class="nf">average_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                    <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
                                    <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -715,7 +746,7 @@
                                    <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                    <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;average_cell_participation&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        barplot showing average of cell participation in each topic</span>
 
 <span class="sd">        :param label: fill with dictionary contain mapping new name for each topics to name you want to show if you want to change default topic name</span>
@@ -757,7 +788,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.average_cell_participation_line_plot"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.average_cell_participation_line_plot">[docs]</a>    <span class="k">def</span> <span class="nf">average_cell_participation_line_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.average_cell_participation_line_plot">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.average_cell_participation_line_plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">average_cell_participation_line_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                              <span class="n">topic</span><span class="p">,</span>
                                              <span class="n">color</span><span class="p">,</span>
                                              <span class="n">category</span><span class="p">,</span>
@@ -767,7 +801,7 @@
                                              <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                              <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                              <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;line_average_cell_participation&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        line plot showing average of cell participation in topic divided by two features of cells (i.e. cell type and time point)</span>
 
 <span class="sd">        :param topic: name of the topic</span>
@@ -840,7 +874,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.cell_participation_distribution"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.cell_participation_distribution">[docs]</a>    <span class="k">def</span> <span class="nf">cell_participation_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.cell_participation_distribution">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.cell_participation_distribution">[docs]</a>
+    <span class="k">def</span> <span class="nf">cell_participation_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                         <span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;violin&quot;</span><span class="p">,</span>
                                         <span class="n">threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                                         <span class="n">max_topic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -851,7 +888,7 @@
                                         <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                         <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                         <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;dist_cell_participation&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot showing distribution of max/all topics in cell participation for each topic</span>
 
 <span class="sd">        :param plot_type: type of the plot which can be &quot;violin&quot; or &quot;bax&quot;</span>
@@ -907,7 +944,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.plot_topic_composition"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.plot_topic_composition">[docs]</a>    <span class="k">def</span> <span class="nf">plot_topic_composition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.plot_topic_composition">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.plot_topic_composition">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_topic_composition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                <span class="n">category</span><span class="p">,</span>
                                <span class="n">level</span><span class="o">=</span><span class="s2">&quot;topic&quot;</span><span class="p">,</span>
                                <span class="n">biotype</span><span class="o">=</span><span class="s2">&quot;biotype&quot;</span><span class="p">,</span>
@@ -916,7 +956,7 @@
                                <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;gene_composition&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plot gene composition dividing by gene biotype or topics</span>
 
 <span class="sd">        :param category: topic name or gene biotype name you want to see gene composition for</span>
@@ -969,7 +1009,7 @@
                 <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">gene_weights</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic_</span><span class="si">{</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="n">gene_weights</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Topic_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
                                <span class="n">index</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="n">gene_weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
                                <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
@@ -1031,7 +1071,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.max_topic_cell_participation"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.max_topic_cell_participation">[docs]</a>    <span class="k">def</span> <span class="nf">max_topic_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Analysis.max_topic_cell_participation">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.max_topic_cell_participation">[docs]</a>
+    <span class="k">def</span> <span class="nf">max_topic_cell_participation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                      <span class="n">cutoff</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                                      <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
                                      <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Maximum cell topic participation for each cells&quot;</span><span class="p">,</span>
@@ -1040,7 +1083,7 @@
                                      <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                      <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
                                      <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;max_topic_cell_participation&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        step plot showing maximum cell participation</span>
 
 <span class="sd">        :param cutoff: indicate if you want to eliminate any cells with maximum participation less than this</span>
@@ -1093,8 +1136,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Analysis.save_analysis"><a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.save_analysis">[docs]</a>    <span class="k">def</span> <span class="nf">save_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Analysis.save_analysis">
+<a class="viewcode-back" href="../../api.html#Topyfic.analysis.Analysis.save_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        save Analysis class as a pickle file</span>
 
 <span class="sd">        :param name: name of the pickle file (default: analysis_Analysis.top_model.name)</span>
@@ -1108,7 +1154,9 @@
 
         <span class="n">picklefile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}{</span><span class="n">name</span><span class="si">}</span><span class="s2">.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">picklefile</span><span class="p">)</span>
-        <span class="n">picklefile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+        <span class="n">picklefile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</div>
+
 </pre></div>
 
     </div>
@@ -1123,7 +1171,7 @@
     </p>
     <p>
         &copy; Copyright 2022, Narges Rezaie.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.0.2.<br/>
     </p>
   </div>
 </footer>
