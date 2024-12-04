@@ -180,6 +180,7 @@ class Analysis:
                        width=None,
                        n=2,
                        order_cells=['hierarchy'],
+                       subsample=10000,
                        save=True,
                        show=True,
                        figsize=None,
@@ -196,7 +197,7 @@ class Analysis:
         :type topic_order: list of str
         :param ascending: for each structure plot on which order you want to sort your data (default is descending for all structure plot)
         :type ascending: list of bool
-        :param metaData: if you want to add annotation for each cell add column name of that information (make sure you have that inforamtion in your cell_participation.obs)
+        :param metaData: if you want to add annotation for each cell add column name of that information (make sure you have that information in your cell_participation.obs)
         :type metaData: list
         :param metaData_palette: color palette for each metaData you add
         :type metaData_palette: dict
@@ -206,6 +207,8 @@ class Analysis:
         :type n: int
         :param order_cells: determine which kind of sorting options you want to use ('sum', 'hierarchy', sort by metaData); sum: sort cells by sum of top n topics; hierarchy: sort data by doing hierarchical clustring; metaData sort by metaData (default: ['hierarchy'])
         :type order_cells: list
+        :param subsample: number of cells/nuclei to subsample the data to be able to render it in a reasonable time (default: 10000)
+        :type subsample: int
         :param save: indicate if you want to save the plot or not (default: True)
         :type save: bool
         :param show: indicate if you want to show the plot or not (default: True)
@@ -217,6 +220,7 @@ class Analysis:
         :param file_name: name and path of the plot use for save (default: piechart_topicAvgCell)
         :type file_name: str
         """
+
         if category is None:
             category = self.cell_participation.obs[level].unique().tolist()
         if figsize is None:
@@ -231,7 +235,11 @@ class Analysis:
 
         a = []
         for i in range(len(category)):
-            a.append(self.cell_participation.obs[self.cell_participation.obs[level] == category[i]].shape[0])
+            n_cells = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]].shape[0]
+            if n_cells > subsample:
+                a.append(subsample)
+            else:
+                a.append(n_cells)
         a.append(min(a) / 2)
         if width is None:
             width = a
@@ -258,6 +266,14 @@ class Analysis:
         for i in range(len(category)):
             tissue = self.cell_participation.obs[self.cell_participation.obs[level] == category[i]]
             tmp = self.cell_participation.to_df().loc[tissue.index, :]
+
+            if tmp.shape[0] > subsample:
+                print(f"Randomly choose {subsample} out of {tmp.shape[0]} cells/nuclei in {category[i]}")
+                subsample_index = random.sample(list(range(tmp.shape[0])), subsample)
+
+                tmp = tmp.iloc[subsample_index, :]
+                tissue = tissue.iloc[subsample_index, :]
+
             if topic_order is None:
                 order = tmp.mean().sort_values(ascending=False).index.tolist()
             else:
