@@ -17,5 +17,9 @@ Topyfic.egg-info/
 # test
 test/
 
-# for now
-workflow/nextflow
+# nextflow runtime artifacts
+/.nextflow/
+/.nextflow.log*
+/work/
+/work_*/
+/results/

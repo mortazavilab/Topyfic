@@ -12,6 +12,7 @@ import pickle
 from sklearn.decomposition import LatentDirichletAllocation
 import h5py
 
+from Topyfic.backends import create_lda_backend
 from Topyfic.topModel import TopModel
 
 warnings.filterwarnings("ignore")
@@ -37,7 +38,9 @@ class Train:
                  name,
                  k,
                  n_runs=100,
-                 random_state_range=None):
+                 random_state_range=None,
+                 backend_name="sklearn",
+                 backend_kwargs=None):
 
         if random_state_range is None:
             random_state_range = range(n_runs)
@@ -48,7 +51,13 @@ class Train:
         self.k = k
         self.n_runs = n_runs
         self.random_state_range = random_state_range
+        self.backend_name = backend_name
+        self.backend_kwargs = {} if backend_kwargs is None else dict(backend_kwargs)
         self.top_models = []
+
+    @property
+    def backend(self):
+        return create_lda_backend(self.backend_name, **self.backend_kwargs)
 
     def combine_LDA_models(self, data, single_trains=[]):
         """
@@ -66,7 +75,9 @@ class Train:
             TopModel_lda_model = TopModel(name=f"{self.name}_{self.random_state_range[i]}",
                                           N=gene_weights.shape[1],
                                           gene_weights=gene_weights,
-                                          model=single_trains[i].top_models[0].model)
+                                          model=single_trains[i].top_models[0].model,
+                                          backend_name=single_trains[i].top_models[0].backend_name,
+                                          backend_kwargs=single_trains[i].top_models[0].backend_kwargs)
             self.top_models.append(TopModel_lda_model)
 
     def make_single_LDA_model(self, data, random_state, name, learning_method, batch_size, max_iter, n_jobs, kwargs):
@@ -92,15 +103,16 @@ class Train:
         :return: LDA model embedded in TopModel class
         :rtype: TopModel
         """
-        lda_model = LatentDirichletAllocation(n_components=self.k,
-                                              random_state=random_state,
-                                              learning_method=learning_method,
-                                              batch_size=batch_size,
-                                              max_iter=max_iter,
-                                              n_jobs=n_jobs,
-                                              **kwargs)
+        fit_result = self.backend.fit(data_matrix=data.to_df().to_numpy(),
+                          n_components=self.k,
+                          random_state=random_state,
+                          learning_method=learning_method,
+                          batch_size=batch_size,
+                          max_iter=max_iter,
+                          n_jobs=n_jobs,
+                          **kwargs)
 
-        lda_model.fit_transform(data.to_df().to_numpy())
+        lda_model = fit_result.model
 
         gene_weights = pd.DataFrame(np.transpose(lda_model.components_),
                                     columns=[f'Topic{i + 1}_R{random_state}' for i in range(self.k)],
@@ -109,7 +121,9 @@ class Train:
         TopModel_lda_model = TopModel(name=f"{name}_{random_state}",
                                       N=gene_weights.shape[1],
                                       gene_weights=gene_weights,
-                                      model=lda_model)
+                                      model=lda_model,
+                                      backend_name=self.backend_name,
+                                      backend_kwargs=self.backend_kwargs)
 
         return TopModel_lda_model
 
@@ -140,11 +154,11 @@ class Train:
             self.top_models = []
             for random_state in self.random_state_range:
                 self.top_models.append(self.make_single_LDA_model(data, random_state, self.name, learning_method, batch_size, max_iter, n_jobs, kwargs))
-
-        self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
-                                                           zip(repeat(data), self.random_state_range, repeat(self.name),
-                                                               repeat(learning_method), repeat(batch_size),
-                                                               repeat(max_iter), repeat(n_jobs), repeat(kwargs)))
+        else:
+            self.top_models = Pool(processes=n_thread).starmap(self.make_single_LDA_model,
+                                                               zip(repeat(data), self.random_state_range, repeat(self.name),
+                                                                   repeat(learning_method), repeat(batch_size),
+                                                                   repeat(max_iter), repeat(n_jobs), repeat(kwargs)))
         print(f"{self.n_runs} LDA models with {self.k} topics learned\n")
 
     def make_LDA_models_attributes(self):
@@ -222,24 +236,26 @@ class Train:
         if file_format == "HDF5":
             print(f"Saving train as {name}.h5")
 
-            f = h5py.File(f"{name}.h5", "w")
+            f = h5py.File(os.path.join(save_path, f"{name}.h5"), "w")
 
             # models
             models = f.create_group("models")
             for i in range(len(self.top_models)):
-                model = models.create_group(str(i))
+                random_state = self.random_state_range[i]
+                model = models.create_group(str(random_state))
                 model['components_'] = self.top_models[i].model.components_
                 model['exp_dirichlet_component_'] = self.top_models[i].model.exp_dirichlet_component_
-                model['n_batch_iter_'] = np.int_(self.top_models[i].model.n_batch_iter_)
+                model['n_batch_iter_'] = int(self.top_models[i].model.n_batch_iter_)
                 model['n_features_in_'] = self.top_models[i].model.n_features_in_
-                model['n_iter_'] = np.int_(self.top_models[i].model.n_iter_)
-                model['bound_'] = np.float_(self.top_models[i].model.bound_)
-                model['doc_topic_prior_'] = np.float_(self.top_models[i].model.doc_topic_prior_)
-                model['topic_word_prior_'] = np.float_(self.top_models[i].model.topic_word_prior_)
+                model['n_iter_'] = int(self.top_models[i].model.n_iter_)
+                model['bound_'] = float(self.top_models[i].model.bound_)
+                model['doc_topic_prior_'] = float(self.top_models[i].model.doc_topic_prior_)
+                model['topic_word_prior_'] = float(self.top_models[i].model.topic_word_prior_)
 
-            f['name'] = np.string_(self.name)
-            f['k'] = np.int_(self.k)
-            f['n_runs'] = np.int_(self.n_runs)
+            f['backend_name'] = self.backend_name.encode('utf-8')
+            f['name'] = self.name.encode('utf-8')
+            f['k'] = int(self.k)
+            f['n_runs'] = int(self.n_runs)
             f['random_state_range'] = np.array(list(self.random_state_range))
 
             f.close()

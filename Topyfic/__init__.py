@@ -1,4 +1,6 @@
 from Topyfic.utilsAnalyseModel import *
+from Topyfic.backends import *
+from Topyfic.lda_state import *
 from Topyfic.train import *
 from Topyfic.topic import *
 from Topyfic.topModel import *

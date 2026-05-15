@@ -1,4 +1,5 @@
 import sys
+import os
 import warnings
 import joblib
 import pickle
@@ -11,6 +12,8 @@ import h5py
 sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
+from Topyfic.backends import create_lda_backend, infer_backend_name
+from Topyfic.lda_state import LDAState
 from Topyfic.topic import Topic
 from Topyfic.utilsAnalyseModel import MA_plot
 
@@ -38,7 +41,9 @@ class TopModel:
                  topics=None,
                  gene_weights=None,
                  gene_information=None,
-                 model=None):
+                 model=None,
+                 backend_name=None,
+                 backend_kwargs=None):
         if gene_weights is None and topics is None:
             sys.exit("Both gene weights and topics can not be empty at the same time!")
 
@@ -56,6 +61,24 @@ class TopModel:
         self.name = name
         self.N = N
         self.model = model
+        if backend_name is None:
+            backend_name = infer_backend_name(model)
+        self.backend_name = backend_name
+        self.backend_kwargs = {} if backend_kwargs is None else dict(backend_kwargs)
+
+    @property
+    def backend(self):
+        return create_lda_backend(self.backend_name, **self.backend_kwargs)
+
+    def transform(self, data_matrix):
+        return self.backend.transform(self.model, data_matrix)
+
+    def get_backend_state(self):
+        return self.backend.get_state(
+            self.model,
+            feature_names=self.get_feature_name(),
+            topic_names=[f"Topic_{i + 1}" for i in range(self.N)],
+        )
 
     def get_feature_name(self):
         """
@@ -89,16 +112,17 @@ class TopModel:
         if file_format == "HDF5":
             print(f"Saving rLDA model as {name}_{self.N}topics.h5")
 
-            f = h5py.File(f"{name}_{self.N}topics.h5", "a")
+            f = h5py.File(os.path.join(save_path, f"{name}_{self.N}topics.h5"), "a")
 
             f['components_'] = self.model.components_
             f['exp_dirichlet_component_'] = self.model.exp_dirichlet_component_
-            f['n_batch_iter_'] = np.int_(self.model.n_batch_iter_)
+            f['n_batch_iter_'] = int(self.model.n_batch_iter_)
             f['n_features_in_'] = self.model.n_features_in_
-            f['n_iter_'] = np.int_(self.model.n_iter_)
-            f['bound_'] = np.float_(self.model.bound_)
-            f['doc_topic_prior_'] = np.float_(self.model.doc_topic_prior_)
-            f['topic_word_prior_'] = np.float_(self.model.topic_word_prior_)
+            f['n_iter_'] = int(self.model.n_iter_)
+            f['bound_'] = float(self.model.bound_)
+            f['doc_topic_prior_'] = float(self.model.doc_topic_prior_)
+            f['topic_word_prior_'] = float(self.model.topic_word_prior_)
+            f['backend_name'] = self.backend_name.encode('utf-8')
 
             f.close()
 
@@ -146,33 +170,7 @@ class TopModel:
         the last one is combining the rest of LDA attributes which put them to gather as a dataframe
         :rtype: pandas dataframe, pandas dataframe, pandas dataframe
         """
-        feature = self.get_feature_name()
-
-        components = pd.DataFrame(self.model.components_,
-                                  index=[f"Topic_{i + 1}" for i in range(self.N)],
-                                  columns=feature)
-
-        exp_dirichlet_component = pd.DataFrame(self.model.exp_dirichlet_component_,
-                                               index=[f"Topic_{i + 1}" for i in range(self.N)],
-                                               columns=feature)
-
-        others = pd.DataFrame(
-            index=[f"Topic_{i + 1}" for i in range(self.N)],
-            columns=["n_batch_iter",
-                     "n_features_in",
-                     "n_iter",
-                     "bound",
-                     "doc_topic_prior",
-                     "topic_word_prior"])
-
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_batch_iter"] = self.model.n_batch_iter_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_features_in"] = self.model.n_features_in_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "n_iter"] = self.model.n_iter_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "bound"] = self.model.bound_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "doc_topic_prior"] = self.model.doc_topic_prior_
-        others.loc[[f"Topic_{i + 1}" for i in range(self.N)], "topic_word_prior"] = self.model.topic_word_prior_
-
-        return components, exp_dirichlet_component, others
+        return self.get_backend_state().to_frames()
 
     def gene_weight_rank_heatmap(self,
                                  genes=None,
@@ -368,24 +366,24 @@ class TopModel:
         if file_format == "HDF5":
             print(f"Saving topModel as {name}.h5")
 
-            f = h5py.File(f"{name}.h5", "w")
+            f = h5py.File(os.path.join(save_path, f"{name}.h5"), "w")
             # model
             model = f.create_group("model")
             model['components_'] = self.model.components_
             model['exp_dirichlet_component_'] = self.model.exp_dirichlet_component_
-            model['n_batch_iter_'] = np.int_(self.model.n_batch_iter_)
+            model['n_batch_iter_'] = int(self.model.n_batch_iter_)
             model['n_features_in_'] = self.model.n_features_in_
-            model['n_iter_'] = np.int_(self.model.n_iter_)
-            model['bound_'] = np.float_(self.model.bound_)
-            model['doc_topic_prior_'] = np.float_(self.model.doc_topic_prior_)
-            model['topic_word_prior_'] = np.float_(self.model.topic_word_prior_)
+            model['n_iter_'] = int(self.model.n_iter_)
+            model['bound_'] = float(self.model.bound_)
+            model['doc_topic_prior_'] = float(self.model.doc_topic_prior_)
+            model['topic_word_prior_'] = float(self.model.topic_word_prior_)
 
             # topics
             topics = f.create_group("topics")
             for topic in self.topics.keys():
                 topic_gp = topics.create_group(self.topics[topic].id)
-                topic_gp['id'] = np.string_(self.topics[topic].id)
-                topic_gp['name'] = np.string_(self.topics[topic].name)
+                topic_gp['id'] = self.topics[topic].id.encode('utf-8')
+                topic_gp['name'] = self.topics[topic].name.encode('utf-8')
                 topic_gp['gene_weights'] = self.topics[topic].gene_weights
                 gene_information = self.topics[topic].gene_information.copy(deep=True)
                 gene_information.reset_index(inplace=True)
@@ -396,8 +394,9 @@ class TopModel:
                 topic_information = topic_information.T.reset_index().T
                 topic_gp['topic_information'] = np.array(topic_information)
 
-            f['name'] = np.string_(self.name)
-            f['N'] = np.int_(self.N)
+            f['backend_name'] = self.backend_name.encode('utf-8')
+            f['name'] = self.name.encode('utf-8')
+            f['N'] = int(self.N)
 
             f.close()
 

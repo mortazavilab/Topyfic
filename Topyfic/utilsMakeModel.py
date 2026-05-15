@@ -25,12 +25,21 @@ import yaml
 from yaml.loader import SafeLoader
 import h5py
 
+from Topyfic.backends import create_lda_backend
 from Topyfic.train import Train
 from Topyfic.analysis import Analysis
+from Topyfic.lda_state import LDAState
 from Topyfic.topModel import TopModel
 from Topyfic.topic import Topic
 
 warnings.filterwarnings("ignore")
+
+
+def _neighbors_kwargs_for_adata(adata):
+    max_pcs = min(50, adata.n_obs - 1, adata.n_vars - 1)
+    if max_pcs < 1:
+        return {"use_rep": "X"}
+    return {"n_pcs": max_pcs}
 
 
 def train_model(name,
@@ -200,7 +209,8 @@ def calculate_leiden_clustering(trains,
         adata = anndata.AnnData(all_components)
         sc.pp.log1p(adata)
         sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
-        sc.pp.neighbors(adata)
+        neighbors_kwargs = _neighbors_kwargs_for_adata(adata)
+        sc.pp.neighbors(adata, **neighbors_kwargs)
         sc.tl.umap(adata)
         sc.tl.leiden(adata, resolution=resolution)
         adata.obs["topics"] = adata.obs["leiden"].astype(int) + 1
@@ -218,10 +228,11 @@ def calculate_leiden_clustering(trains,
         adata.obs['assays'] = all_batches
         sc.pp.log1p(adata)
         sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes)
-        sc.pp.neighbors(adata)
+        neighbors_kwargs = _neighbors_kwargs_for_adata(adata)
+        sc.pp.neighbors(adata, **neighbors_kwargs)
         sce.pp.harmony_integrate(adata, 'assays', max_iter_harmony=max_iter_harmony)
         adata.obsm['X_pca'] = adata.obsm['X_pca_harmony']
-        sc.pp.neighbors(adata)
+        sc.pp.neighbors(adata, **neighbors_kwargs)
         sc.tl.umap(adata)
         sc.tl.leiden(adata, resolution=resolution)
         adata.obs["topics"] = adata.obs["leiden"].astype(int) + 1
@@ -415,7 +426,7 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
     return LDA
 
 
-def initialize_lda_model(components, exp_dirichlet_component, others):
+def initialize_lda_model(components, exp_dirichlet_component, others, backend_name="sklearn", backend_kwargs=None):
     """
     Initialize LDA model by passing all necessary attributes
 
@@ -429,20 +440,16 @@ def initialize_lda_model(components, exp_dirichlet_component, others):
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm.
     :rtype: sklearn.decomposition.LatentDirichletAllocation
     """
-    n_topics = components.shape[0]
+    state = LDAState.from_frames(
+        components=components,
+        exp_dirichlet_component=exp_dirichlet_component,
+        others=others,
+    )
 
-    LDA = LatentDirichletAllocation(n_components=n_topics)
+    if backend_kwargs is None:
+        backend_kwargs = {}
 
-    LDA.components_ = components.values
-    LDA.exp_dirichlet_component_ = exp_dirichlet_component.values
-    LDA.n_batch_iter_ = int(others['n_batch_iter'])
-    LDA.n_features_in_ = int(others['n_features_in'])
-    LDA.n_iter_ = int(others['n_iter'])
-    LDA.bound_ = others['bound']
-    LDA.doc_topic_prior_ = others['doc_topic_prior']
-    LDA.topic_word_prior_ = others['topic_word_prior']
-
-    return LDA
+    return create_lda_backend(backend_name, **backend_kwargs).model_from_state(state)
 
 
 def filter_LDA_model(main_lda, keep):
@@ -506,9 +513,15 @@ def read_train(file):
     if file.endswith('.h5'):
         f = h5py.File(file, 'r')
 
-        name = np.string_(f['name']).decode('ascii')
-        k = np.int_(f['k'])
-        n_runs = np.int_(f['n_runs'])
+        backend_name = f['backend_name'][()] if 'backend_name' in f else b'sklearn'
+        if isinstance(backend_name, bytes):
+            backend_name = backend_name.decode('utf-8')
+
+        name = f['name'][()]
+        if isinstance(name, bytes):
+            name = name.decode('utf-8')
+        k = int(f['k'][()])
+        n_runs = int(f['n_runs'][()])
         random_state_range = list(f['random_state_range'])
 
         # models
@@ -518,25 +531,27 @@ def read_train(file):
             exp_dirichlet_component = pd.DataFrame(np.array(f[f"models/{random_state}/exp_dirichlet_component_"]))
 
             others = pd.DataFrame()
-            others.loc[0, 'n_batch_iter'] = np.int_(f[f"models/{random_state}/n_batch_iter_"])
+            others.loc[0, 'n_batch_iter'] = int(f[f"models/{random_state}/n_batch_iter_"][()])
             others.loc[0, 'n_features_in'] = np.array(f[f"models/{random_state}/n_features_in_"])
-            others.loc[0, 'n_iter'] = np.int_(f[f"models/{random_state}/n_iter_"])
-            others.loc[0, 'bound'] = np.float_(f[f"models/{random_state}/bound_"])
-            others.loc[0, 'doc_topic_prior'] = np.array(f[f"models/{random_state}/doc_topic_prior_"])
-            others.loc[0, 'topic_word_prior'] = np.array(f[f"models/{random_state}/topic_word_prior_"])
+            others.loc[0, 'n_iter'] = int(f[f"models/{random_state}/n_iter_"][()])
+            others.loc[0, 'bound'] = float(f[f"models/{random_state}/bound_"][()])
+            others.loc[0, 'doc_topic_prior'] = float(f[f"models/{random_state}/doc_topic_prior_"][()])
+            others.loc[0, 'topic_word_prior'] = float(f[f"models/{random_state}/topic_word_prior_"][()])
 
-            model = initialize_lda_model(components, exp_dirichlet_component, others)
+            model = initialize_lda_model(components, exp_dirichlet_component, others, backend_name=backend_name)
 
             top_model = TopModel(name=f"{name}_{random_state}",
                                  N=k,
                                  gene_weights=components,
-                                 model=model)
+                                 model=model,
+                                 backend_name=backend_name)
             top_models.append(top_model)
 
         train = Train(name=name,
                       k=k,
                       n_runs=n_runs,
-                      random_state_range=random_state_range)
+                      random_state_range=random_state_range,
+                      backend_name=backend_name)
         train.top_models = top_models
 
         f.close()
@@ -567,15 +582,25 @@ def read_topModel(file):
     if file.endswith('.h5'):
         f = h5py.File(file, 'r')
 
-        name = np.string_(f['name']).decode('ascii')
-        N = np.int_(f['N'])
+        backend_name = f['backend_name'][()] if 'backend_name' in f else b'sklearn'
+        if isinstance(backend_name, bytes):
+            backend_name = backend_name.decode('utf-8')
+
+        name = f['name'][()]
+        if isinstance(name, bytes):
+            name = name.decode('utf-8')
+        N = int(f['N'][()])
 
         # topics
         topics = dict()
         topic_ids = [f'Topic_{i + 1}' for i in range(N)]
         for topic in topic_ids:
-            topic_id = np.string_(f['topics'][topic]['id']).decode('ascii')
-            topic_name = np.string_(f['topics'][topic]['name']).decode('ascii')
+            topic_id = f['topics'][topic]['id'][()]
+            if isinstance(topic_id, bytes):
+                topic_id = topic_id.decode('utf-8')
+            topic_name = f['topics'][topic]['name'][()]
+            if isinstance(topic_name, bytes):
+                topic_name = topic_name.decode('utf-8')
             gene_weights = pd.DataFrame(np.array(f['topics'][topic]['gene_weights']))
             gene_information = pd.DataFrame(np.array(f['topics'][topic]['gene_information']), dtype=str)
             gene_information.columns = gene_information.iloc[0, :]
@@ -606,19 +631,20 @@ def read_topModel(file):
         exp_dirichlet_component = pd.DataFrame(np.array(f['model']['exp_dirichlet_component_']))
 
         others = pd.DataFrame()
-        others.loc[0, 'n_batch_iter'] = np.int_(f['model']['n_batch_iter_'])
+        others.loc[0, 'n_batch_iter'] = int(f['model']['n_batch_iter_'][()])
         others.loc[0, 'n_features_in'] = np.array(f['model']['n_features_in_'])
-        others.loc[0, 'n_iter'] = np.int_(f['model']['n_iter_'])
-        others.loc[0, 'bound'] = np.float_(f['model']['bound_'])
-        others.loc[0, 'doc_topic_prior'] = np.array(f['model']['doc_topic_prior_'])
-        others.loc[0, 'topic_word_prior'] = np.array(f['model']['topic_word_prior_'])
+        others.loc[0, 'n_iter'] = int(f['model']['n_iter_'][()])
+        others.loc[0, 'bound'] = float(f['model']['bound_'][()])
+        others.loc[0, 'doc_topic_prior'] = float(f['model']['doc_topic_prior_'][()])
+        others.loc[0, 'topic_word_prior'] = float(f['model']['topic_word_prior_'][()])
 
-        model = initialize_lda_model(components, exp_dirichlet_component, others)
+        model = initialize_lda_model(components, exp_dirichlet_component, others, backend_name=backend_name)
 
         top_model = TopModel(name=name,
                              N=N,
                              topics=topics,
-                             model=model)
+                     model=model,
+                     backend_name=backend_name)
 
         f.close()
 

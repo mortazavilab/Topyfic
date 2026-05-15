@@ -62,7 +62,7 @@ class Analysis:
             print("cell participation is not empty!")
             print("new cell participation will be replaced!")
 
-        lda_output = self.top_model.model.transform(data.X)
+        lda_output = self.top_model.transform(data.X)
         cell_participation = pd.DataFrame(lda_output,
                                           columns=[f"Topic_{i + 1}" for i in range(self.top_model.N)],
                                           # list(self.top_model.topics.keys())
