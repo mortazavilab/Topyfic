@@ -55,10 +55,16 @@ class Train:
         self.backend_name = backend_name
         self.backend_kwargs = {} if backend_kwargs is None else dict(backend_kwargs)
         self.top_models = []
+        self._backend = None
+        self._backend_cache_key = None
 
     @property
     def backend(self):
-        return create_lda_backend(self.backend_name, **self.backend_kwargs)
+        cache_key = (self.backend_name, tuple(sorted(self.backend_kwargs.items())))
+        if getattr(self, "_backend", None) is None or getattr(self, "_backend_cache_key", None) != cache_key:
+            self._backend = create_lda_backend(self.backend_name, **self.backend_kwargs)
+            self._backend_cache_key = cache_key
+        return self._backend
 
     def combine_LDA_models(self, data, single_trains=[]):
         """
@@ -75,6 +81,8 @@ class Train:
                 raise ValueError("single_trains must share the same backend before they can be combined")
             self.backend_name = single_trains[0].top_models[0].backend_name
             self.backend_kwargs = dict(single_trains[0].top_models[0].backend_kwargs)
+            self._backend = None
+            self._backend_cache_key = None
 
         for i in range(len(single_trains)):
             gene_weights = pd.DataFrame(np.transpose(single_trains[i].top_models[0].model.components_),
@@ -111,7 +119,7 @@ class Train:
         :return: LDA model embedded in TopModel class
         :rtype: TopModel
         """
-        fit_result = self.backend.fit(data_matrix=data.to_df().to_numpy(),
+        fit_result = self.backend.fit(data_matrix=data.X,
                           n_components=self.k,
                           random_state=random_state,
                           learning_method=learning_method,

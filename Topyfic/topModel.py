@@ -66,10 +66,16 @@ class TopModel:
             backend_name = infer_backend_name(model)
         self.backend_name = backend_name
         self.backend_kwargs = {} if backend_kwargs is None else dict(backend_kwargs)
+        self._backend = None
+        self._backend_cache_key = None
 
     @property
     def backend(self):
-        return create_lda_backend(self.backend_name, **self.backend_kwargs)
+        cache_key = (self.backend_name, tuple(sorted(self.backend_kwargs.items())))
+        if getattr(self, "_backend", None) is None or getattr(self, "_backend_cache_key", None) != cache_key:
+            self._backend = create_lda_backend(self.backend_name, **self.backend_kwargs)
+            self._backend_cache_key = cache_key
+        return self._backend
 
     def transform(self, data_matrix):
         return self.backend.transform(self.model, data_matrix)

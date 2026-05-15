@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
+from scipy import sparse as sp
 
 from Topyfic.backends.base import LDABackend
 from Topyfic.lda_state import LDAState
@@ -35,6 +36,22 @@ class TorchLDAModel:
     @property
     def exp_dirichlet_component_(self):
         return self.exp_dirichlet_component_tensor.detach().cpu().numpy()
+
+
+@dataclass(frozen=True)
+class TorchSparseBatch:
+    rows: "torch.Tensor"
+    cols: "torch.Tensor"
+    counts: "torch.Tensor"
+    row_sums: "torch.Tensor"
+    n_docs: int
+
+
+@dataclass(frozen=True)
+class TorchPreparedMatrix:
+    batches: list[TorchSparseBatch]
+    n_docs: int
+    n_features: int
 
 
 class TorchLDABackend(LDABackend):
@@ -72,18 +89,20 @@ class TorchLDABackend(LDABackend):
             return torch.float64
         return torch.float32
 
-    def _to_torch_matrix(self, data_matrix):
-        self._require_torch()
-        if hasattr(data_matrix, "toarray"):
-            data_matrix = data_matrix.toarray()
-        elif hasattr(data_matrix, "A"):
-            data_matrix = data_matrix.A
+    def _document_batch_size(self, n_docs, requested=None):
+        if requested is None:
+            requested = self.options.get("batch_size", 256)
+        return max(1, min(int(requested), int(n_docs)))
 
-        return torch.tensor(
-            np.asarray(data_matrix),
-            device=self.device,
-            dtype=self._torch_dtype(),
-        )
+    @staticmethod
+    def _prepared_matrix_cache_key(data_matrix, batch_size, dtype):
+        sparse_nnz = getattr(data_matrix, "nnz", None)
+        return (id(data_matrix), tuple(getattr(data_matrix, "shape", ())), sparse_nnz, int(batch_size), dtype)
+
+    def _to_csr_matrix(self, data_matrix):
+        if sp.issparse(data_matrix):
+            return data_matrix.tocsr()
+        return sp.csr_matrix(np.asarray(data_matrix))
 
     @staticmethod
     def _resolve_prior(value, n_components):
@@ -96,68 +115,205 @@ class TorchLDABackend(LDABackend):
         row_sums = matrix.sum(dim=1, keepdim=True).clamp_min(1e-12)
         return matrix / row_sums
 
+    def _prepare_sparse_batches(self, data_matrix, batch_size=None):
+        matrix_csr = self._to_csr_matrix(data_matrix)
+        n_docs = int(matrix_csr.shape[0])
+        batch_size = self._document_batch_size(n_docs=n_docs, requested=batch_size)
+        cache_key = self._prepared_matrix_cache_key(data_matrix, batch_size, self.dtype)
+        cached = self._prepared_matrix_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        numpy_dtype = np.float32 if self.dtype == "float32" else np.float64
+        batches = []
+
+        for batch_start in range(0, n_docs, batch_size):
+            batch_end = min(batch_start + batch_size, n_docs)
+            batch_csr = matrix_csr[batch_start:batch_end]
+            row_lengths = np.diff(batch_csr.indptr)
+            rows = np.repeat(np.arange(batch_csr.shape[0], dtype=np.int64), row_lengths)
+            cols = batch_csr.indices.astype(np.int64, copy=False)
+            counts = batch_csr.data.astype(numpy_dtype, copy=False)
+            row_sums = np.asarray(batch_csr.sum(axis=1)).reshape(-1).astype(numpy_dtype, copy=False)
+            batches.append(
+                TorchSparseBatch(
+                    rows=torch.tensor(rows, device=self.device, dtype=torch.long),
+                    cols=torch.tensor(cols, device=self.device, dtype=torch.long),
+                    counts=torch.tensor(counts, device=self.device, dtype=self._torch_dtype()),
+                    row_sums=torch.tensor(row_sums, device=self.device, dtype=self._torch_dtype()),
+                    n_docs=int(batch_csr.shape[0]),
+                )
+            )
+
+        prepared_matrix = TorchPreparedMatrix(
+            batches=batches,
+            n_docs=n_docs,
+            n_features=int(matrix_csr.shape[1]),
+        )
+        self._prepared_matrix_cache = {cache_key: prepared_matrix}
+        return prepared_matrix
+
+    def _finalize_batch(self,
+                        doc_topic_prior,
+                        gamma_batch,
+                        rows,
+                        cols,
+                        counts,
+                        exp_e_log_beta,
+                        collect_sufficient_stats,
+                        exp_beta_cols=None):
+        exp_e_log_theta = torch.exp(
+            torch.special.digamma(gamma_batch) - torch.special.digamma(gamma_batch.sum(dim=1, keepdim=True))
+        )
+
+        if rows.numel() == 0:
+            sufficient_stats = None
+            if collect_sufficient_stats:
+                sufficient_stats = torch.zeros_like(exp_e_log_beta)
+            return gamma_batch, exp_e_log_theta, sufficient_stats
+
+        exp_theta_rows = exp_e_log_theta.index_select(0, rows)
+        if exp_beta_cols is None:
+            exp_beta_cols = exp_e_log_beta.index_select(1, cols).transpose(0, 1)
+        norm_phi = (exp_theta_rows * exp_beta_cols).sum(dim=1).clamp_min(1e-12)
+        weighted_counts = counts / norm_phi
+
+        sufficient_stats = None
+        if collect_sufficient_stats:
+            sufficient_stats = torch.zeros_like(exp_e_log_beta)
+            topic_word_contrib = weighted_counts.unsqueeze(1) * exp_theta_rows * exp_beta_cols
+            for topic_index in range(exp_e_log_beta.shape[0]):
+                sufficient_stats[topic_index].index_add_(0, cols, topic_word_contrib[:, topic_index])
+
+        return gamma_batch, exp_e_log_theta, sufficient_stats
+
+    def _infer_gamma_batch(self,
+                           prepared_batch,
+                           exp_e_log_beta,
+                           doc_topic_prior,
+                           max_doc_update_iter,
+                           mean_change_tol,
+                           collect_sufficient_stats):
+        n_docs = prepared_batch.n_docs
+        n_components = exp_e_log_beta.shape[0]
+        if n_docs == 0:
+            empty_gamma = torch.empty((0, n_components), device=self.device, dtype=self._torch_dtype())
+            empty_stats = None
+            if collect_sufficient_stats:
+                empty_stats = torch.zeros_like(exp_e_log_beta)
+            return empty_gamma, empty_stats
+
+        gamma_batch = torch.full(
+            (n_docs, n_components),
+            fill_value=float(doc_topic_prior),
+            device=self.device,
+            dtype=self._torch_dtype(),
+        )
+        gamma_batch = gamma_batch + prepared_batch.row_sums.unsqueeze(1) / float(n_components)
+
+        rows = prepared_batch.rows
+        cols = prepared_batch.cols
+        counts = prepared_batch.counts
+        exp_beta_cols = exp_e_log_beta.index_select(1, cols).transpose(0, 1) if rows.numel() != 0 else None
+
+        if rows.numel() == 0:
+            sufficient_stats = None
+            if collect_sufficient_stats:
+                sufficient_stats = torch.zeros_like(exp_e_log_beta)
+            return gamma_batch, sufficient_stats
+
+        for _ in range(max_doc_update_iter):
+            exp_e_log_theta = torch.exp(
+                torch.special.digamma(gamma_batch) - torch.special.digamma(gamma_batch.sum(dim=1, keepdim=True))
+            )
+            exp_theta_rows = exp_e_log_theta.index_select(0, rows)
+            norm_phi = (exp_theta_rows * exp_beta_cols).sum(dim=1).clamp_min(1e-12)
+            weighted_counts = counts / norm_phi
+            doc_topic_contrib = weighted_counts.unsqueeze(1) * exp_beta_cols
+
+            per_doc_topic = torch.zeros_like(gamma_batch)
+            per_doc_topic.index_add_(0, rows, doc_topic_contrib)
+            next_gamma = float(doc_topic_prior) + exp_e_log_theta * per_doc_topic
+
+            if torch.mean(torch.abs(next_gamma - gamma_batch)) < mean_change_tol:
+                gamma_batch = next_gamma
+                break
+            gamma_batch = next_gamma
+
+        gamma_batch, _, sufficient_stats = self._finalize_batch(
+            doc_topic_prior=doc_topic_prior,
+            gamma_batch=gamma_batch,
+            rows=rows,
+            cols=cols,
+            counts=counts,
+            exp_e_log_beta=exp_e_log_beta,
+            collect_sufficient_stats=collect_sufficient_stats,
+            exp_beta_cols=exp_beta_cols,
+        )
+
+        return gamma_batch, sufficient_stats
+
     def _infer_gamma(self,
-                     matrix,
+                     prepared_matrix,
                      lambda_parameter,
                      doc_topic_prior,
                      max_doc_update_iter,
                      mean_change_tol,
-                     collect_sufficient_stats):
-        n_docs = matrix.shape[0]
+                     collect_sufficient_stats,
+                     batch_size=None,
+                     exp_e_log_beta=None):
+        n_docs = prepared_matrix.n_docs
         n_components = lambda_parameter.shape[0]
-        elogbeta = torch.special.digamma(lambda_parameter) - torch.special.digamma(
-            lambda_parameter.sum(dim=1, keepdim=True)
-        )
         gamma = torch.empty((n_docs, n_components), device=self.device, dtype=self._torch_dtype())
         sufficient_stats = None
         if collect_sufficient_stats:
             sufficient_stats = torch.zeros_like(lambda_parameter)
 
-        for doc_index in range(n_docs):
-            counts = matrix[doc_index]
-            nonzero = torch.nonzero(counts > 0, as_tuple=False).squeeze(1)
-            total_count = counts.sum()
-
-            if nonzero.numel() == 0:
-                gamma_doc = torch.full(
-                    (n_components,),
-                    fill_value=float(doc_topic_prior),
-                    device=self.device,
-                    dtype=self._torch_dtype(),
-                )
-                gamma[doc_index] = gamma_doc
-                continue
-
-            counts_nonzero = counts.index_select(0, nonzero)
-            gamma_doc = torch.full(
-                (n_components,),
-                fill_value=float(doc_topic_prior) + float(total_count.detach().cpu().item()) / n_components,
-                device=self.device,
-                dtype=self._torch_dtype(),
+        if exp_e_log_beta is None:
+            exp_e_log_beta = torch.exp(
+                torch.special.digamma(lambda_parameter) - torch.special.digamma(lambda_parameter.sum(dim=1, keepdim=True))
             )
 
-            for _ in range(max_doc_update_iter):
-                elogtheta = torch.special.digamma(gamma_doc) - torch.special.digamma(gamma_doc.sum())
-                log_phi = elogtheta[:, None] + elogbeta.index_select(1, nonzero)
-                log_phi = log_phi - torch.logsumexp(log_phi, dim=0, keepdim=True)
-                phi = torch.exp(log_phi)
-                next_gamma = float(doc_topic_prior) + (phi * counts_nonzero.unsqueeze(0)).sum(dim=1)
-                if torch.mean(torch.abs(next_gamma - gamma_doc)) < mean_change_tol:
-                    gamma_doc = next_gamma
-                    break
-                gamma_doc = next_gamma
-
-            gamma[doc_index] = gamma_doc
-
+        batch_start = 0
+        for prepared_batch in prepared_matrix.batches:
+            batch_end = batch_start + prepared_batch.n_docs
+            batch_gamma, batch_stats = self._infer_gamma_batch(
+                prepared_batch=prepared_batch,
+                exp_e_log_beta=exp_e_log_beta,
+                doc_topic_prior=doc_topic_prior,
+                max_doc_update_iter=max_doc_update_iter,
+                mean_change_tol=mean_change_tol,
+                collect_sufficient_stats=collect_sufficient_stats,
+            )
+            gamma[batch_start:batch_end] = batch_gamma
             if collect_sufficient_stats:
-                sufficient_stats[:, nonzero] += phi * counts_nonzero.unsqueeze(0)
+                sufficient_stats += batch_stats
+            batch_start = batch_end
 
         return gamma, sufficient_stats
 
-    def _estimate_bound(self, matrix, document_topic_matrix, lambda_parameter):
+    def _estimate_bound(self, prepared_matrix, document_topic_matrix, lambda_parameter):
         beta = self._normalize_rows(lambda_parameter)
-        word_probabilities = torch.matmul(document_topic_matrix, beta).clamp_min(1e-12)
-        return float((matrix * torch.log(word_probabilities)).sum().detach().cpu().item())
+        total = torch.tensor(0.0, device=self.device, dtype=self._torch_dtype())
+        batch_start = 0
+
+        for prepared_batch in prepared_matrix.batches:
+            batch_end = batch_start + prepared_batch.n_docs
+            rows = prepared_batch.rows
+            cols = prepared_batch.cols
+            counts = prepared_batch.counts
+            if rows.numel() == 0:
+                batch_start = batch_end
+                continue
+
+            doc_topic_batch = document_topic_matrix[batch_start:batch_end]
+            doc_topic_rows = doc_topic_batch.index_select(0, rows)
+            beta_cols = beta.index_select(1, cols).transpose(0, 1)
+            word_probabilities = (doc_topic_rows * beta_cols).sum(dim=1).clamp_min(1e-12)
+            total = total + (counts * torch.log(word_probabilities)).sum()
+            batch_start = batch_end
+
+        return float(total.detach().cpu().item())
 
     def fit(self,
             *,
@@ -174,9 +330,9 @@ class TorchLDABackend(LDABackend):
         if learning_method not in {"batch", "online"}:
             raise ValueError("learning_method must be 'batch' or 'online'")
 
-        matrix = self._to_torch_matrix(data_matrix)
+        prepared_matrix = self._prepare_sparse_batches(data_matrix, batch_size=batch_size)
         n_components = int(n_components)
-        n_features = int(matrix.shape[1])
+        n_features = prepared_matrix.n_features
         doc_topic_prior = self._resolve_prior(kwargs.pop("doc_topic_prior", None), n_components)
         topic_word_prior = self._resolve_prior(kwargs.pop("topic_word_prior", None), n_components)
         max_doc_update_iter = int(kwargs.pop("max_doc_update_iter", 50))
@@ -192,9 +348,13 @@ class TorchLDABackend(LDABackend):
 
         gamma = None
         for _ in range(int(max_iter)):
+            exp_e_log_beta = torch.exp(
+                torch.special.digamma(lambda_parameter) - torch.special.digamma(lambda_parameter.sum(dim=1, keepdim=True))
+            )
             gamma, sufficient_stats = self._infer_gamma(
-                matrix=matrix,
+                prepared_matrix=prepared_matrix,
                 lambda_parameter=lambda_parameter,
+                exp_e_log_beta=exp_e_log_beta,
                 doc_topic_prior=doc_topic_prior,
                 max_doc_update_iter=max_doc_update_iter,
                 mean_change_tol=mean_change_tol,
@@ -206,7 +366,7 @@ class TorchLDABackend(LDABackend):
             torch.special.digamma(lambda_parameter) - torch.special.digamma(lambda_parameter.sum(dim=1, keepdim=True))
         )
         document_topic_matrix = self._normalize_rows(gamma)
-        bound = self._estimate_bound(matrix, document_topic_matrix, lambda_parameter)
+        bound = self._estimate_bound(prepared_matrix, document_topic_matrix, lambda_parameter)
 
         model = TorchLDAModel(
             lambda_parameter=lambda_parameter,
@@ -224,10 +384,14 @@ class TorchLDABackend(LDABackend):
         return self._fit_result_type()(model=model, document_topic_matrix=document_topic_matrix.detach().cpu().numpy())
 
     def transform(self, model, data_matrix):
-        matrix = self._to_torch_matrix(data_matrix)
+        prepared_matrix = self._prepare_sparse_batches(
+            data_matrix,
+            batch_size=self.options.get("batch_size", 256),
+        )
         gamma, _ = self._infer_gamma(
-            matrix=matrix,
+            prepared_matrix=prepared_matrix,
             lambda_parameter=model.lambda_parameter,
+            exp_e_log_beta=model.exp_dirichlet_component_tensor,
             doc_topic_prior=model.doc_topic_prior_,
             max_doc_update_iter=int(self.options.get("max_doc_update_iter", 50)),
             mean_change_tol=float(self.options.get("mean_change_tol", 1e-3)),

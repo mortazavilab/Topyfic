@@ -1,5 +1,7 @@
 import pytest
 import numpy as np
+from anndata import AnnData
+from scipy import sparse as sp
 from scipy.optimize import linear_sum_assignment
 
 from Topyfic.backends import TorchLDABackend, create_lda_backend
@@ -32,6 +34,45 @@ def test_train_defaults_to_sklearn_backend(synthetic_adata):
 
     assert train.backend_name == "sklearn"
     assert train.top_models[0].backend_name == "sklearn"
+
+
+def test_backend_property_reuses_backend_instance(synthetic_adata):
+    train = Train(
+        name="demo",
+        k=2,
+        n_runs=1,
+        random_state_range=[0],
+        backend_name="torch",
+        backend_kwargs={"device": "cpu", "dtype": "float32"},
+    )
+
+    assert train.backend is train.backend
+
+    train.run_LDA_models(
+        synthetic_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=5,
+        n_jobs=1,
+        n_thread=1,
+    )
+
+    assert train.top_models[0].backend is train.top_models[0].backend
+
+
+def test_train_sklearn_backend_accepts_sparse_input(synthetic_adata):
+    sparse_adata = AnnData(sp.csr_matrix(synthetic_adata.X), obs=synthetic_adata.obs.copy(), var=synthetic_adata.var.copy())
+    train = Train(name="demo", k=2, n_runs=1, random_state_range=[0])
+    train.run_LDA_models(
+        sparse_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=5,
+        n_jobs=1,
+        n_thread=1,
+    )
+
+    assert train.top_models[0].model.components_.shape == (2, synthetic_adata.n_vars)
 
 
 def test_torch_backend_resolves_cpu_without_torch():
@@ -132,6 +173,32 @@ def test_train_can_use_torch_backend_on_cpu(synthetic_adata):
     assert train.top_models[0].backend_name == "torch"
     transformed = train.top_models[0].transform(synthetic_adata.X)
     assert transformed.shape == (synthetic_adata.n_obs, train.k)
+    np.testing.assert_allclose(transformed.sum(axis=1), 1.0, atol=1e-5)
+
+
+@pytest.mark.skipif(not TorchLDABackend.is_available(), reason="torch is not installed")
+def test_train_can_use_torch_backend_with_sparse_input(synthetic_adata):
+    sparse_adata = AnnData(sp.csr_matrix(synthetic_adata.X), obs=synthetic_adata.obs.copy(), var=synthetic_adata.var.copy())
+    train = Train(
+        name="demo",
+        k=2,
+        n_runs=1,
+        random_state_range=[0],
+        backend_name="torch",
+        backend_kwargs={"device": "cpu", "dtype": "float32"},
+    )
+
+    train.run_LDA_models(
+        sparse_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=10,
+        n_jobs=1,
+        n_thread=1,
+    )
+
+    transformed = train.top_models[0].transform(sparse_adata.X)
+    assert transformed.shape == (sparse_adata.n_obs, train.k)
     np.testing.assert_allclose(transformed.sum(axis=1), 1.0, atol=1e-5)
 
 

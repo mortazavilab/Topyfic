@@ -20,6 +20,10 @@ class LDABackend(ABC):
 
     def __init__(self, **options):
         self.options = dict(options)
+        self._prepared_matrix_cache = {}
+
+    def clear_runtime_caches(self):
+        self._prepared_matrix_cache.clear()
 
     @abstractmethod
     def fit(self,
