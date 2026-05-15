@@ -25,7 +25,8 @@ import yaml
 from yaml.loader import SafeLoader
 import h5py
 
-from Topyfic.backends import create_lda_backend
+from Topyfic.backends import create_lda_backend, infer_backend_name
+from Topyfic.persistence import read_backend_metadata, read_lda_state
 from Topyfic.train import Train
 from Topyfic.analysis import Analysis
 from Topyfic.lda_state import LDAState
@@ -42,13 +43,47 @@ def _neighbors_kwargs_for_adata(adata):
     return {"n_pcs": max_pcs}
 
 
+def _shared_backend_configuration(items, label):
+    if not items:
+        raise ValueError(f"At least one {label} is required")
+
+    backend_name = items[0].backend_name
+    backend_kwargs = dict(items[0].backend_kwargs)
+    for item in items[1:]:
+        if item.backend_name != backend_name or dict(item.backend_kwargs) != backend_kwargs:
+            raise ValueError(f"All {label} must share the same backend configuration")
+
+    return backend_name, backend_kwargs
+
+
+def _renormalize_topic_components(components):
+    n_topics = components.shape[0]
+    if n_topics < 1:
+        raise ValueError("At least one topic must be kept")
+
+    df = components.T.copy(deep=True)
+    for topic_name in df.columns:
+        df_sorted = df.sort_values([topic_name], axis=0, ascending=False)[topic_name]
+        tmp = df_sorted.cumsum()
+        tmp = tmp[tmp > 0.9 * df_sorted.sum()]
+        df.loc[tmp.index, topic_name] = 1 / n_topics
+
+    return df.T
+
+
 def train_model(name,
                 data,
                 k,
                 n_runs=100,
                 random_state_range=None,
                 n_thread=5,
-                save_path=""):
+                save_path="",
+                learning_method="online",
+                batch_size=1000,
+                max_iter=10,
+                n_jobs=None,
+                backend_name="sklearn",
+                backend_kwargs=None):
     """
     Training model and save it
 
@@ -66,13 +101,34 @@ def train_model(name,
     :type n_thread: int
     :param save_path: directory you want to use to save pickle file (default is saving near script)
     :type save_path: str
+    :param learning_method: Method used to update topic weights. {'batch', 'online'} (default='online')
+    :type learning_method: str
+    :param batch_size: Number of documents to use in each iteration.
+    :type batch_size: int
+    :param max_iter: The maximum number of passes over the training data.
+    :type max_iter: int
+    :param n_jobs: number of jobs to use during training when supported by the backend.
+    :type n_jobs: int
+    :param backend_name: internal LDA backend to use for training.
+    :type backend_name: str
+    :param backend_kwargs: backend-specific configuration such as device or dtype.
+    :type backend_kwargs: dict
 
     """
     train = Train(name=name,
                   k=k,
                   n_runs=n_runs,
-                  random_state_range=random_state_range)
-    train.run_LDA_models(data, n_thread=n_thread)
+                  random_state_range=random_state_range,
+                  backend_name=backend_name,
+                  backend_kwargs=backend_kwargs)
+    train.run_LDA_models(
+        data,
+        learning_method=learning_method,
+        batch_size=batch_size,
+        max_iter=max_iter,
+        n_jobs=n_jobs,
+        n_thread=n_thread,
+    )
     train.save_train(save_path=save_path)
 
 
@@ -180,6 +236,9 @@ def calculate_leiden_clustering(trains,
     :return: final TopModel instance after clustering and trimming, dataframe containing which run goes to which topic
     :rtype: TopModel, pandas dataframe
     """
+    backend_name, backend_kwargs = _shared_backend_configuration(trains, "trains")
+    backend = create_lda_backend(backend_name, **backend_kwargs)
+
     all_batches = None
     all_components = None
     all_exp_dirichlet_component = None
@@ -255,8 +314,10 @@ def calculate_leiden_clustering(trains,
     rlda = initialize_rLDA_model(all_components,
                                  all_exp_dirichlet_component,
                                  all_others,
-                                 clusters=clustering)
-    lda_output = rlda.transform(data.X)
+                                 clusters=clustering,
+                                 backend_name=backend_name,
+                                 backend_kwargs=backend_kwargs)
+    lda_output = backend.transform(rlda, data.X)
     cell_participation = pd.DataFrame(np.round(lda_output, 2),
                                       columns=[f"Topic{i + 1}" for i in range(n_rtopics)],
                                       index=data.obs.index)
@@ -272,7 +333,13 @@ def calculate_leiden_clustering(trains,
     clustering["keep"] = "Topic" + clustering["keep"].astype(str)
     clustering["keep"] = clustering["keep"].replace(tmp)
     n_rtopics = keep.sum()
-    rlda, gene_weights_T = filter_LDA_model(rlda, keep)
+    rlda, gene_weights_T = filter_LDA_model(
+        rlda,
+        keep,
+        backend_name=backend_name,
+        backend_kwargs=backend_kwargs,
+        feature_names=data.var.index.tolist(),
+    )
 
     gene_weights = gene_weights_T.T
     gene_weights.index = data.var.index
@@ -281,7 +348,9 @@ def calculate_leiden_clustering(trains,
         top_model = TopModel(name=trains[0].name,
                              N=n_rtopics,
                              gene_weights=gene_weights,
-                             model=rlda)
+                             model=rlda,
+                             backend_name=backend_name,
+                             backend_kwargs=backend_kwargs)
 
     else:
         name = np.unique(all_batches).tolist()
@@ -290,7 +359,9 @@ def calculate_leiden_clustering(trains,
         top_model = TopModel(name=name,
                              N=n_rtopics,
                              gene_weights=gene_weights,
-                             model=rlda)
+                             model=rlda,
+                             backend_name=backend_name,
+                             backend_kwargs=backend_kwargs)
 
     return top_model, clustering, adata
 
@@ -370,7 +441,12 @@ def plot_cluster_contribution(clustering,
         plt.close()
 
 
-def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_others, clusters):
+def initialize_rLDA_model(all_components,
+                          all_exp_dirichlet_component,
+                          all_others,
+                          clusters,
+                          backend_name="sklearn",
+                          backend_kwargs=None):
     """
     Initialize reproducible LDA model by calculating all necessary attributes using clustering.
 
@@ -421,7 +497,13 @@ def initialize_rLDA_model(all_components, all_exp_dirichlet_component, all_other
                                            columns=all_exp_dirichlet_component.columns)
     others = all_others.mean(axis=0)
 
-    LDA = initialize_lda_model(components, exp_dirichlet_component, others)
+    LDA = initialize_lda_model(
+        components,
+        exp_dirichlet_component,
+        others,
+        backend_name=backend_name,
+        backend_kwargs=backend_kwargs,
+    )
 
     return LDA
 
@@ -452,7 +534,7 @@ def initialize_lda_model(components, exp_dirichlet_component, others, backend_na
     return create_lda_backend(backend_name, **backend_kwargs).model_from_state(state)
 
 
-def filter_LDA_model(main_lda, keep):
+def filter_LDA_model(main_lda, keep, backend_name=None, backend_kwargs=None, feature_names=None):
     """
     filter LDA based on the topics we want to keep
 
@@ -464,29 +546,47 @@ def filter_LDA_model(main_lda, keep):
     :return: Latent Dirichlet Allocation with online variational Bayes algorithm, weights of genes in each topics (indexes are topics and columns are genes)
     :rtype: sklearn.decomposition.LatentDirichletAllocation, pandas dataframe
     """
-    n_topics = keep.sum()
-    lda = LatentDirichletAllocation(n_components=n_topics)
+    keep = np.asarray(keep, dtype=bool)
+    n_topics = int(keep.sum())
+    if n_topics < 1:
+        raise ValueError("At least one topic must be kept")
 
-    components = main_lda.components_[[i for i in range(keep.shape[0]) if keep[i]], :]
+    if backend_name is None:
+        backend_name = infer_backend_name(main_lda)
+    if backend_kwargs is None:
+        backend_kwargs = dict(getattr(main_lda, 'backend_kwargs', {}) or {})
+    if feature_names is None:
+        feature_names = list(range(main_lda.components_.shape[1]))
 
-    df = pd.DataFrame(np.transpose(components),
-                      columns=[f'Topic{i + 1}' for i in range(n_topics)])
-    for topic in range(n_topics):
-        df_sorted = df.sort_values([f'Topic{topic + 1}'], axis=0, ascending=False)[f'Topic{topic + 1}']
-        tmp = df_sorted.cumsum()
-        tmp = tmp[tmp > 0.9 * df_sorted.sum()]
-        df.loc[tmp.index, f'Topic{topic + 1}'] = 1 / n_topics
-
-    components = df.T
-
-    lda.components_ = components.values
-    lda.exp_dirichlet_component_ = main_lda.exp_dirichlet_component_[[i for i in range(keep.shape[0]) if keep[i]], :]
-    lda.n_batch_iter_ = main_lda.n_batch_iter_
-    lda.n_features_in_ = main_lda.n_features_in_
-    lda.n_iter_ = main_lda.n_iter_
-    lda.bound_ = main_lda.bound_
-    lda.doc_topic_prior_ = main_lda.doc_topic_prior_
-    lda.topic_word_prior_ = main_lda.topic_word_prior_
+    topic_names = [f'Topic{i + 1}' for i in range(n_topics)]
+    components = pd.DataFrame(
+        main_lda.components_[keep, :],
+        index=topic_names,
+        columns=feature_names,
+    )
+    components = _renormalize_topic_components(components)
+    exp_dirichlet_component = pd.DataFrame(
+        main_lda.exp_dirichlet_component_[keep, :],
+        index=topic_names,
+        columns=feature_names,
+    )
+    others = pd.DataFrame(
+        {
+            'n_batch_iter': [int(main_lda.n_batch_iter_)],
+            'n_features_in': [int(main_lda.n_features_in_)],
+            'n_iter': [int(main_lda.n_iter_)],
+            'bound': [float(main_lda.bound_)],
+            'doc_topic_prior': [float(main_lda.doc_topic_prior_)],
+            'topic_word_prior': [float(main_lda.topic_word_prior_)],
+        }
+    )
+    lda = initialize_lda_model(
+        components,
+        exp_dirichlet_component,
+        others,
+        backend_name=backend_name,
+        backend_kwargs=backend_kwargs,
+    )
 
     return lda, components
 
@@ -509,13 +609,20 @@ def read_train(file):
     if file.endswith('.p'):
         picklefile = open(file, 'rb')
         train = pickle.load(picklefile)
+        if not hasattr(train, 'backend_name'):
+            train.backend_name = 'sklearn'
+        if not hasattr(train, 'backend_kwargs'):
+            train.backend_kwargs = {}
+        for top_model in getattr(train, 'top_models', []):
+            if not hasattr(top_model, 'backend_name'):
+                top_model.backend_name = 'sklearn'
+            if not hasattr(top_model, 'backend_kwargs'):
+                top_model.backend_kwargs = {}
 
     if file.endswith('.h5'):
         f = h5py.File(file, 'r')
 
-        backend_name = f['backend_name'][()] if 'backend_name' in f else b'sklearn'
-        if isinstance(backend_name, bytes):
-            backend_name = backend_name.decode('utf-8')
+        backend_name, backend_kwargs, _ = read_backend_metadata(f)
 
         name = f['name'][()]
         if isinstance(name, bytes):
@@ -527,31 +634,36 @@ def read_train(file):
         # models
         top_models = []
         for random_state in random_state_range:
-            components = pd.DataFrame(np.array(f[f"models/{random_state}/components_"]))
-            exp_dirichlet_component = pd.DataFrame(np.array(f[f"models/{random_state}/exp_dirichlet_component_"]))
-
-            others = pd.DataFrame()
-            others.loc[0, 'n_batch_iter'] = int(f[f"models/{random_state}/n_batch_iter_"][()])
-            others.loc[0, 'n_features_in'] = np.array(f[f"models/{random_state}/n_features_in_"])
-            others.loc[0, 'n_iter'] = int(f[f"models/{random_state}/n_iter_"][()])
-            others.loc[0, 'bound'] = float(f[f"models/{random_state}/bound_"][()])
-            others.loc[0, 'doc_topic_prior'] = float(f[f"models/{random_state}/doc_topic_prior_"][()])
-            others.loc[0, 'topic_word_prior'] = float(f[f"models/{random_state}/topic_word_prior_"][()])
-
-            model = initialize_lda_model(components, exp_dirichlet_component, others, backend_name=backend_name)
+            model_group = f[f"models/{random_state}"]
+            model_backend_name, model_backend_kwargs, _ = read_backend_metadata(
+                model_group,
+                default_name=backend_name,
+                default_kwargs=backend_kwargs,
+            )
+            state = read_lda_state(model_group)
+            components, exp_dirichlet_component, others = state.to_frames()
+            model = initialize_lda_model(
+                components,
+                exp_dirichlet_component,
+                others,
+                backend_name=model_backend_name,
+                backend_kwargs=model_backend_kwargs,
+            )
 
             top_model = TopModel(name=f"{name}_{random_state}",
                                  N=k,
-                                 gene_weights=components,
+                                 gene_weights=components.T,
                                  model=model,
-                                 backend_name=backend_name)
+                                 backend_name=model_backend_name,
+                                 backend_kwargs=model_backend_kwargs)
             top_models.append(top_model)
 
         train = Train(name=name,
                       k=k,
                       n_runs=n_runs,
                       random_state_range=random_state_range,
-                      backend_name=backend_name)
+                      backend_name=backend_name,
+                      backend_kwargs=backend_kwargs)
         train.top_models = top_models
 
         f.close()
@@ -578,13 +690,15 @@ def read_topModel(file):
     if file.endswith('.p'):
         picklefile = open(file, 'rb')
         top_model = pickle.load(picklefile)
+        if not hasattr(top_model, 'backend_name'):
+            top_model.backend_name = 'sklearn'
+        if not hasattr(top_model, 'backend_kwargs'):
+            top_model.backend_kwargs = {}
 
     if file.endswith('.h5'):
         f = h5py.File(file, 'r')
 
-        backend_name = f['backend_name'][()] if 'backend_name' in f else b'sklearn'
-        if isinstance(backend_name, bytes):
-            backend_name = backend_name.decode('utf-8')
+        backend_name, backend_kwargs, _ = read_backend_metadata(f)
 
         name = f['name'][()]
         if isinstance(name, bytes):
@@ -627,24 +741,27 @@ def read_topModel(file):
             topics[topic_id] = topic
 
         # model
-        components = pd.DataFrame(np.array(f['model']['components_']))
-        exp_dirichlet_component = pd.DataFrame(np.array(f['model']['exp_dirichlet_component_']))
-
-        others = pd.DataFrame()
-        others.loc[0, 'n_batch_iter'] = int(f['model']['n_batch_iter_'][()])
-        others.loc[0, 'n_features_in'] = np.array(f['model']['n_features_in_'])
-        others.loc[0, 'n_iter'] = int(f['model']['n_iter_'][()])
-        others.loc[0, 'bound'] = float(f['model']['bound_'][()])
-        others.loc[0, 'doc_topic_prior'] = float(f['model']['doc_topic_prior_'][()])
-        others.loc[0, 'topic_word_prior'] = float(f['model']['topic_word_prior_'][()])
-
-        model = initialize_lda_model(components, exp_dirichlet_component, others, backend_name=backend_name)
+        model_backend_name, model_backend_kwargs, _ = read_backend_metadata(
+            f['model'],
+            default_name=backend_name,
+            default_kwargs=backend_kwargs,
+        )
+        state = read_lda_state(f['model'])
+        components, exp_dirichlet_component, others = state.to_frames()
+        model = initialize_lda_model(
+            components,
+            exp_dirichlet_component,
+            others,
+            backend_name=model_backend_name,
+            backend_kwargs=model_backend_kwargs,
+        )
 
         top_model = TopModel(name=name,
                              N=N,
                              topics=topics,
-                     model=model,
-                     backend_name=backend_name)
+                             model=model,
+                             backend_name=model_backend_name,
+                             backend_kwargs=model_backend_kwargs)
 
         f.close()
 
@@ -772,6 +889,9 @@ def combine_topModels(topModels,
     :return: return the combined TopModel, number of topics, gene weights
     :rtype: TopModel, int, pandas DataFrame
     """
+    backend_name, backend_kwargs = _shared_backend_configuration(topModels, "topModels")
+    backend = create_lda_backend(backend_name, **backend_kwargs)
+
     n_topics = 0
     components = None
     exp_dirichlet_component = None
@@ -781,33 +901,38 @@ def combine_topModels(topModels,
     bound = 0.0
     doc_topic_prior = 0.0
     topic_word_prior = 0.0
+    feature_names = topModels[0].get_feature_name()
     for topmodel in topModels:
-        n_topics += topmodel.N
+        if topmodel.get_feature_name() != feature_names:
+            raise ValueError("All topModels must share the same feature ordering before they can be combined")
 
-        tmp = pd.DataFrame(topmodel.model.components_,
+        n_topics += topmodel.N
+        state = topmodel.get_backend_state()
+
+        tmp = pd.DataFrame(state.components.values,
                            index=[f'{topmodel.name}_Topic_{i + 1}' for i in
-                                  range(topmodel.model.components_.shape[0])],
-                           columns=topmodel.get_feature_name())
+                                  range(state.components.shape[0])],
+                           columns=feature_names)
         if components is None:
             components = tmp
         else:
             components = pd.concat([components, tmp], axis=0)
 
-        tmp = pd.DataFrame(topmodel.model.exp_dirichlet_component_,
+        tmp = pd.DataFrame(state.exp_dirichlet_component.values,
                            index=[f'{topmodel.name}_Topic_{i + 1}' for i in
-                                  range(topmodel.model.components_.shape[0])],
-                           columns=topmodel.get_feature_name())
+                                  range(state.exp_dirichlet_component.shape[0])],
+                           columns=feature_names)
         if exp_dirichlet_component is None:
             exp_dirichlet_component = tmp
         else:
             exp_dirichlet_component = pd.concat([exp_dirichlet_component, tmp], axis=0)
 
-        n_batch_iter += topmodel.N * topmodel.model.n_batch_iter_
-        n_features_in += topmodel.N * topmodel.model.n_features_in_
-        n_iter += topmodel.N * topmodel.model.n_iter_
-        bound += topmodel.N * topmodel.model.bound_
-        doc_topic_prior += topmodel.N * topmodel.model.doc_topic_prior_
-        topic_word_prior += topmodel.N * topmodel.model.topic_word_prior_
+        n_batch_iter += topmodel.N * state.n_batch_iter
+        n_features_in += topmodel.N * state.n_features_in
+        n_iter += topmodel.N * state.n_iter
+        bound += topmodel.N * state.bound
+        doc_topic_prior += topmodel.N * state.doc_topic_prior
+        topic_word_prior += topmodel.N * state.topic_word_prior
 
     n_batch_iter /= n_topics
     n_features_in /= n_topics
@@ -816,22 +941,29 @@ def combine_topModels(topModels,
     doc_topic_prior /= n_topics
     topic_word_prior /= n_topics
 
-    model = LatentDirichletAllocation(n_components=n_topics)
-
-    model.components_ = components.values
-    model.exp_dirichlet_component_ = exp_dirichlet_component.values
-    model.n_batch_iter_ = int(n_batch_iter)
-    model.n_features_in_ = int(n_features_in)
-    model.n_iter_ = int(n_iter)
-    model.bound_ = bound
-    model.doc_topic_prior_ = doc_topic_prior
-    model.topic_word_prior_ = topic_word_prior
+    others = pd.DataFrame(
+        {
+            'n_batch_iter': [int(n_batch_iter)],
+            'n_features_in': [int(n_features_in)],
+            'n_iter': [int(n_iter)],
+            'bound': [float(bound)],
+            'doc_topic_prior': [float(doc_topic_prior)],
+            'topic_word_prior': [float(topic_word_prior)],
+        }
+    )
+    model = initialize_lda_model(
+        components,
+        exp_dirichlet_component,
+        others,
+        backend_name=backend_name,
+        backend_kwargs=backend_kwargs,
+    )
 
     if data is not None:
         if min_cell_participation is None:
             min_cell_participation = data.shape[0] / 100
 
-        lda_output = model.transform(data.X)
+        lda_output = backend.transform(model, data.X)
         cell_participation = pd.DataFrame(np.round(lda_output, 2),
                                           columns=[f"Topic{i + 1}" for i in range(n_topics)],
                                           index=data.obs.index)
@@ -840,7 +972,13 @@ def combine_topModels(topModels,
         print(
             f"{keep.sum()} topics out of {keep.shape[0]} topics have participation more than {min_cell_participation}")
         n_topics = keep.sum()
-        model, tmp = filter_LDA_model(model, keep)
+        model, tmp = filter_LDA_model(
+            model,
+            keep,
+            backend_name=backend_name,
+            backend_kwargs=backend_kwargs,
+            feature_names=components.columns.tolist(),
+        )
         components = pd.DataFrame(model.components_,
                                   index=[f'{name}_Topic_{i + 1}' for i in
                                          range(model.components_.shape[0])],
@@ -849,6 +987,8 @@ def combine_topModels(topModels,
     top_model = TopModel(name=name,
                          N=n_topics,
                          gene_weights=components.T,
-                         model=model)
+                         model=model,
+                         backend_name=backend_name,
+                         backend_kwargs=backend_kwargs)
 
     return top_model, n_topics, components.T

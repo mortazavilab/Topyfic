@@ -11,6 +11,9 @@ def parse_args():
     parser.add_argument('--adata-path', required=True)
     parser.add_argument('--k', required=True, type=int)
     parser.add_argument('--random-state', required=True, type=int)
+    parser.add_argument('--backend', default='sklearn')
+    parser.add_argument('--device', default='auto')
+    parser.add_argument('--dtype', default='float32')
     parser.add_argument('--batch-size', default=128, type=int)
     parser.add_argument('--max-iter', default=5, type=int)
     parser.add_argument('--n-jobs', default=1, type=int)
@@ -28,6 +31,11 @@ def main():
         k=args.k,
         n_runs=1,
         random_state_range=[args.random_state],
+        backend_name=args.backend,
+        backend_kwargs={} if args.backend != 'torch' else {
+            'device': args.device,
+            'dtype': args.dtype,
+        },
     )
     train.run_LDA_models(
         adata,

@@ -144,7 +144,9 @@ def test_train_hdf5_round_trip(tmp_path, synthetic_adata):
 
     assert reloaded.name == train.name
     assert reloaded.k == train.k
+    assert reloaded.backend_name == "sklearn"
     assert len(reloaded.top_models) == len(train.top_models)
+    assert reloaded.top_models[0].get_feature_name() == synthetic_adata.var_names.tolist()
     np.testing.assert_allclose(
         reloaded.top_models[0].model.components_,
         train.top_models[0].model.components_,
@@ -172,6 +174,7 @@ def test_topmodel_hdf5_round_trip(tmp_path, synthetic_adata):
 
     assert reloaded.name == top_model.name
     assert reloaded.N == top_model.N
+    assert reloaded.backend_name == "sklearn"
     assert reloaded.get_feature_name() == top_model.get_feature_name()
     np.testing.assert_allclose(reloaded.model.components_, top_model.model.components_)
 

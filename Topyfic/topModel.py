@@ -14,6 +14,7 @@ warnings.filterwarnings('ignore')
 
 from Topyfic.backends import create_lda_backend, infer_backend_name
 from Topyfic.lda_state import LDAState
+from Topyfic.persistence import write_backend_metadata, write_lda_state
 from Topyfic.topic import Topic
 from Topyfic.utilsAnalyseModel import MA_plot
 
@@ -112,17 +113,9 @@ class TopModel:
         if file_format == "HDF5":
             print(f"Saving rLDA model as {name}_{self.N}topics.h5")
 
-            f = h5py.File(os.path.join(save_path, f"{name}_{self.N}topics.h5"), "a")
-
-            f['components_'] = self.model.components_
-            f['exp_dirichlet_component_'] = self.model.exp_dirichlet_component_
-            f['n_batch_iter_'] = int(self.model.n_batch_iter_)
-            f['n_features_in_'] = self.model.n_features_in_
-            f['n_iter_'] = int(self.model.n_iter_)
-            f['bound_'] = float(self.model.bound_)
-            f['doc_topic_prior_'] = float(self.model.doc_topic_prior_)
-            f['topic_word_prior_'] = float(self.model.topic_word_prior_)
-            f['backend_name'] = self.backend_name.encode('utf-8')
+            f = h5py.File(os.path.join(save_path, f"{name}_{self.N}topics.h5"), "w")
+            write_backend_metadata(f, self.backend_name, self.backend_kwargs)
+            write_lda_state(f, self.get_backend_state())
 
             f.close()
 
@@ -367,16 +360,11 @@ class TopModel:
             print(f"Saving topModel as {name}.h5")
 
             f = h5py.File(os.path.join(save_path, f"{name}.h5"), "w")
+            write_backend_metadata(f, self.backend_name, self.backend_kwargs)
             # model
             model = f.create_group("model")
-            model['components_'] = self.model.components_
-            model['exp_dirichlet_component_'] = self.model.exp_dirichlet_component_
-            model['n_batch_iter_'] = int(self.model.n_batch_iter_)
-            model['n_features_in_'] = self.model.n_features_in_
-            model['n_iter_'] = int(self.model.n_iter_)
-            model['bound_'] = float(self.model.bound_)
-            model['doc_topic_prior_'] = float(self.model.doc_topic_prior_)
-            model['topic_word_prior_'] = float(self.model.topic_word_prior_)
+            write_backend_metadata(model, self.backend_name, self.backend_kwargs)
+            write_lda_state(model, self.get_backend_state())
 
             # topics
             topics = f.create_group("topics")
@@ -394,7 +382,6 @@ class TopModel:
                 topic_information = topic_information.T.reset_index().T
                 topic_gp['topic_information'] = np.array(topic_information)
 
-            f['backend_name'] = self.backend_name.encode('utf-8')
             f['name'] = self.name.encode('utf-8')
             f['N'] = int(self.N)
 

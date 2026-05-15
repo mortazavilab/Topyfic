@@ -55,6 +55,9 @@ process SINGLE_TRAIN {
         --adata-path '${adata_path}' \
         --k ${topic} \
         --random-state ${random_state} \
+        --backend ${params.train.backend ?: 'sklearn'} \
+        --device ${params.train.device ?: 'auto'} \
+        --dtype ${params.train.dtype ?: 'float32'} \
         --batch-size ${params.train.batch_size ?: 128} \
         --max-iter ${params.train.max_iter ?: 5} \
         --n-jobs ${params.train.n_jobs ?: 1} \

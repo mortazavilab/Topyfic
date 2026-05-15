@@ -13,6 +13,7 @@ from sklearn.decomposition import LatentDirichletAllocation
 import h5py
 
 from Topyfic.backends import create_lda_backend
+from Topyfic.persistence import write_backend_metadata, write_lda_state
 from Topyfic.topModel import TopModel
 
 warnings.filterwarnings("ignore")
@@ -68,6 +69,13 @@ class Train:
         :param single_trains: list of single train object
         :type single_trains: list
         """
+        if single_trains:
+            backend_names = {single_train.top_models[0].backend_name for single_train in single_trains}
+            if len(backend_names) > 1:
+                raise ValueError("single_trains must share the same backend before they can be combined")
+            self.backend_name = single_trains[0].top_models[0].backend_name
+            self.backend_kwargs = dict(single_trains[0].top_models[0].backend_kwargs)
+
         for i in range(len(single_trains)):
             gene_weights = pd.DataFrame(np.transpose(single_trains[i].top_models[0].model.components_),
                                         columns=[f'Topic{j + 1}_R{self.random_state_range[i]}' for j in range(self.k)],
@@ -237,22 +245,20 @@ class Train:
             print(f"Saving train as {name}.h5")
 
             f = h5py.File(os.path.join(save_path, f"{name}.h5"), "w")
+            write_backend_metadata(f, self.backend_name, self.backend_kwargs)
 
             # models
             models = f.create_group("models")
             for i in range(len(self.top_models)):
                 random_state = self.random_state_range[i]
                 model = models.create_group(str(random_state))
-                model['components_'] = self.top_models[i].model.components_
-                model['exp_dirichlet_component_'] = self.top_models[i].model.exp_dirichlet_component_
-                model['n_batch_iter_'] = int(self.top_models[i].model.n_batch_iter_)
-                model['n_features_in_'] = self.top_models[i].model.n_features_in_
-                model['n_iter_'] = int(self.top_models[i].model.n_iter_)
-                model['bound_'] = float(self.top_models[i].model.bound_)
-                model['doc_topic_prior_'] = float(self.top_models[i].model.doc_topic_prior_)
-                model['topic_word_prior_'] = float(self.top_models[i].model.topic_word_prior_)
+                write_backend_metadata(
+                    model,
+                    self.top_models[i].backend_name,
+                    self.top_models[i].backend_kwargs,
+                )
+                write_lda_state(model, self.top_models[i].get_backend_state())
 
-            f['backend_name'] = self.backend_name.encode('utf-8')
             f['name'] = self.name.encode('utf-8')
             f['k'] = int(self.k)
             f['n_runs'] = int(self.n_runs)

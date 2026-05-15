@@ -28,11 +28,22 @@ python -m pip install -e .[dev]
 
 Copy [params.example.yml](params.example.yml) and replace the placeholder AnnData paths and output directory.
 
+For the checked-in IGVF smoke-test params file, you can deterministically rebuild the expected 1,000-cell subset with:
+
+```bash
+python workflow/nextflow/bin/prepare_igvf_subset.py
+```
+
+By default the helper downloads the public IGVF matrix file, samples 1,000 cells with seed `0`, and writes [tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE_subset_1000.h5ad](tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE_subset_1000.h5ad). Use `--force` to overwrite an existing subset.
+
 Key params:
 
 - `names`: dataset identifiers used in output file names
 - `count_adata`: map from dataset name to input `.h5ad`
 - `n_topics`: initial topic counts to evaluate
+- `train.backend`: backend used for each single-run training job (`sklearn` by default, `torch` when enabled)
+- `train.device`: target torch device (`auto`, `cpu`, `cuda`, or `mps`)
+- `train.dtype`: torch floating point precision passed to the backend
 - `train.random_states`: random seeds for single-run training
 - `top_model.*`: clustering and filtering settings for `calculate_leiden_clustering`
 - `plotting.interactive`: when `false` (default), the pipeline forces a non-GUI Matplotlib backend so plots are saved without opening interactive windows
@@ -56,6 +67,8 @@ nextflow run workflow/nextflow/main.nf \
 ```
 
 To allow interactive plotting for local exploratory runs, set `plotting.interactive: true` in your params file.
+
+To exercise the PyTorch backend through Nextflow, set `train.backend: torch` and then pick an explicit `train.device` if you do not want the backend to auto-resolve between CPU, CUDA, and MPS.
 
 Outputs are written under `workdir` using the same directory structure as the legacy workflow:
 
