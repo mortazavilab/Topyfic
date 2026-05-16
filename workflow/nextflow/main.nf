@@ -55,7 +55,7 @@ process SINGLE_TRAIN {
         --adata-path '${adata_path}' \
         --k ${topic} \
         --random-state ${random_state} \
-        --backend ${params.train.backend ?: 'sklearn'} \
+        --backend ${params.train.backend ?: 'default'} \
         --device ${params.train.device ?: 'auto'} \
         --dtype ${params.train.dtype ?: 'float32'} \
         --batch-size ${params.train.batch_size ?: 128} \

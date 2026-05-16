@@ -41,7 +41,7 @@ Key params:
 - `names`: dataset identifiers used in output file names
 - `count_adata`: map from dataset name to input `.h5ad`
 - `n_topics`: initial topic counts to evaluate
-- `train.backend`: backend used for each single-run training job (`sklearn` by default, `torch` when enabled)
+- `train.backend`: backend used for each single-run training job (`default` resolves to torch when available, otherwise sklearn)
 - `train.device`: target torch device (`auto`, `cpu`, `cuda`, or `mps`)
 - `train.dtype`: torch floating point precision passed to the backend
 - `train.random_states`: random seeds for single-run training
@@ -68,7 +68,7 @@ nextflow run workflow/nextflow/main.nf \
 
 To allow interactive plotting for local exploratory runs, set `plotting.interactive: true` in your params file.
 
-To exercise the PyTorch backend through Nextflow, set `train.backend: torch` and then pick an explicit `train.device` if you do not want the backend to auto-resolve between CPU, CUDA, and MPS.
+By default, the workflow uses `train.backend: default`, which resolves to torch when PyTorch is installed and otherwise falls back to sklearn. To force a backup path, set `train.backend: torch` with an explicit `train.device`, or set `train.backend: sklearn`.
 
 Outputs are written under `workdir` using the same directory structure as the legacy workflow:
 

@@ -6,6 +6,7 @@ import anndata
 
 from Topyfic.analysis import Analysis
 from Topyfic.lda_state import LDAState
+from Topyfic.backends import default_lda_backend_name
 from Topyfic.train import Train
 from Topyfic.utilsMakeModel import _neighbors_kwargs_for_adata, read_topModel, read_train
 
@@ -141,10 +142,11 @@ def test_train_hdf5_round_trip(tmp_path, synthetic_adata):
     assert output_file.exists()
 
     reloaded = read_train(str(output_file))
+    expected_backend = default_lda_backend_name()
 
     assert reloaded.name == train.name
     assert reloaded.k == train.k
-    assert reloaded.backend_name == "sklearn"
+    assert reloaded.backend_name == expected_backend
     assert len(reloaded.top_models) == len(train.top_models)
     assert reloaded.top_models[0].get_feature_name() == synthetic_adata.var_names.tolist()
     np.testing.assert_allclose(
@@ -171,10 +173,11 @@ def test_topmodel_hdf5_round_trip(tmp_path, synthetic_adata):
     assert output_file.exists()
 
     reloaded = read_topModel(str(output_file))
+    expected_backend = default_lda_backend_name()
 
     assert reloaded.name == top_model.name
     assert reloaded.N == top_model.N
-    assert reloaded.backend_name == "sklearn"
+    assert reloaded.backend_name == expected_backend
     assert reloaded.get_feature_name() == top_model.get_feature_name()
     np.testing.assert_allclose(reloaded.model.components_, top_model.model.components_)
 

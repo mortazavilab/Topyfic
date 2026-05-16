@@ -4,6 +4,7 @@ import pandas as pd
 import scanpy as sc
 import click
 
+from Topyfic.backends import default_lda_backend_name, resolve_lda_backend_name
 from Topyfic.utilsMakeModel import make_analysis_class, make_topModel, read_topModel, read_train, train_model
 
 
@@ -80,8 +81,8 @@ def _load_colors_topics(table_path):
               type=int)
 @click.option('--backend', 'backend_name',
               help='internal LDA backend used for training',
-              type=click.Choice(['sklearn', 'torch']),
-              default='sklearn',
+              type=click.Choice(['default', 'sklearn', 'torch']),
+              default='default',
               show_default=True)
 @click.option('--device',
               help='device passed to the torch backend',
@@ -122,7 +123,7 @@ def train_model_command(name,
                         random_states=(),
                         random_state_range=None,
                         n_thread=5,
-                        backend_name='sklearn',
+                        backend_name='default',
                         device='auto',
                         dtype='float32',
                         learning_method='online',
@@ -130,6 +131,7 @@ def train_model_command(name,
                         max_iter=10,
                         n_jobs=None,
                         save_path=""):
+    backend_name = resolve_lda_backend_name(backend_name)
     backend_kwargs = {}
     if backend_name == 'torch':
         backend_kwargs = {'device': device, 'dtype': dtype}

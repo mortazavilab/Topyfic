@@ -57,6 +57,35 @@ def test_train_model_cli_passes_backend_and_device_options(tmp_path, synthetic_a
     assert captured["data"].shape == synthetic_adata.shape
 
 
+def test_train_model_cli_defaults_to_resolved_backend(tmp_path, synthetic_adata, monkeypatch):
+    data_path = tmp_path / "input.h5ad"
+    synthetic_adata.write_h5ad(data_path)
+    captured = {}
+
+    def fake_train_model(**kwargs):
+        captured.update(kwargs)
+
+    monkeypatch.setattr(main_module, "train_model", fake_train_model)
+    monkeypatch.setattr(main_module, "resolve_lda_backend_name", lambda _: "torch")
+
+    result = CliRunner().invoke(
+        main_module.cli,
+        [
+            "train_model",
+            "--name",
+            "demo",
+            "--data",
+            str(data_path),
+            "-k",
+            "2",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert captured["backend_name"] == "torch"
+    assert captured["backend_kwargs"] == {"device": "auto", "dtype": "float32"}
+
+
 def test_make_topmodel_cli_loads_train_files(tmp_path, synthetic_adata, monkeypatch):
     data_path = tmp_path / "input.h5ad"
     synthetic_adata.write_h5ad(data_path)

@@ -1,6 +1,7 @@
 import argparse
 
 import Topyfic
+from Topyfic.backends import resolve_lda_backend_name
 
 from common import ensure_output_dir, load_adata_inputs, save_path_arg
 
@@ -11,7 +12,7 @@ def parse_args():
     parser.add_argument('--adata-path', required=True)
     parser.add_argument('--k', required=True, type=int)
     parser.add_argument('--random-state', required=True, type=int)
-    parser.add_argument('--backend', default='sklearn')
+    parser.add_argument('--backend', default='default')
     parser.add_argument('--device', default='auto')
     parser.add_argument('--dtype', default='float32')
     parser.add_argument('--batch-size', default=128, type=int)
@@ -25,14 +26,15 @@ def main():
     args = parse_args()
     output_dir = ensure_output_dir(args.output_dir)
     adata = load_adata_inputs([args.adata_path])
+    backend_name = resolve_lda_backend_name(args.backend)
 
     train = Topyfic.Train(
         name=f"{args.name}_{args.k}_{args.random_state}",
         k=args.k,
         n_runs=1,
         random_state_range=[args.random_state],
-        backend_name=args.backend,
-        backend_kwargs={} if args.backend != 'torch' else {
+        backend_name=backend_name,
+        backend_kwargs={} if backend_name != 'torch' else {
             'device': args.device,
             'dtype': args.dtype,
         },

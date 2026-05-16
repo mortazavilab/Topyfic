@@ -12,7 +12,7 @@ import pickle
 from sklearn.decomposition import LatentDirichletAllocation
 import h5py
 
-from Topyfic.backends import create_lda_backend
+from Topyfic.backends import create_lda_backend, resolve_lda_backend_name
 from Topyfic.persistence import write_backend_metadata, write_lda_state
 from Topyfic.topModel import TopModel
 
@@ -40,7 +40,7 @@ class Train:
                  k,
                  n_runs=100,
                  random_state_range=None,
-                 backend_name="sklearn",
+                 backend_name=None,
                  backend_kwargs=None):
 
         if random_state_range is None:
@@ -52,7 +52,7 @@ class Train:
         self.k = k
         self.n_runs = n_runs
         self.random_state_range = random_state_range
-        self.backend_name = backend_name
+        self.backend_name = resolve_lda_backend_name(backend_name)
         self.backend_kwargs = {} if backend_kwargs is None else dict(backend_kwargs)
         self.top_models = []
         self._backend = None

@@ -2,9 +2,9 @@ import pytest
 import numpy as np
 from anndata import AnnData
 from scipy import sparse as sp
-from scipy.optimize import linear_sum_assignment
 
-from Topyfic.backends import TorchLDABackend, create_lda_backend
+from Topyfic.backends import TorchLDABackend, create_lda_backend, default_lda_backend_name
+from Topyfic.benchmarking import topic_alignment_cost
 from Topyfic.backends.torch_backend import torch
 from Topyfic.train import Train
 from Topyfic.utilsMakeModel import combine_topModels, filter_LDA_model, initialize_rLDA_model, read_topModel, read_train
@@ -21,7 +21,7 @@ def test_create_lda_backend_rejects_unknown_backend():
         create_lda_backend("does-not-exist")
 
 
-def test_train_defaults_to_sklearn_backend(synthetic_adata):
+def test_train_defaults_to_available_backend(synthetic_adata):
     train = Train(name="demo", k=2, n_runs=1, random_state_range=[0])
     train.run_LDA_models(
         synthetic_adata,
@@ -32,8 +32,9 @@ def test_train_defaults_to_sklearn_backend(synthetic_adata):
         n_thread=1,
     )
 
-    assert train.backend_name == "sklearn"
-    assert train.top_models[0].backend_name == "sklearn"
+    expected_backend = default_lda_backend_name()
+    assert train.backend_name == expected_backend
+    assert train.top_models[0].backend_name == expected_backend
 
 
 def test_backend_property_reuses_backend_instance(synthetic_adata):
@@ -77,16 +78,6 @@ def test_train_sklearn_backend_accepts_sparse_input(synthetic_adata):
 
 def test_torch_backend_resolves_cpu_without_torch():
     assert TorchLDABackend.resolve_device("cpu") == "cpu"
-
-
-def _topic_alignment_cost(left, right):
-    left = left / left.sum(axis=1, keepdims=True)
-    right = right / right.sum(axis=1, keepdims=True)
-    numerator = left @ right.T
-    denominator = np.linalg.norm(left, axis=1, keepdims=True) * np.linalg.norm(right, axis=1, keepdims=True).T
-    similarity = numerator / denominator
-    rows, cols = linear_sum_assignment(1 - similarity)
-    return rows, cols, 1 - similarity[rows, cols]
 
 
 def _run_torch_train_on_device(synthetic_adata, device, dtype="float32", max_iter=10):
@@ -425,7 +416,7 @@ def test_torch_backend_topics_track_sklearn_on_synthetic_data(synthetic_adata):
         n_thread=1,
     )
 
-    _, alignment, costs = _topic_alignment_cost(
+    _, alignment, costs = topic_alignment_cost(
         sklearn_train.top_models[0].model.components_,
         torch_train.top_models[0].model.components_,
     )
@@ -469,7 +460,7 @@ def test_torch_backend_mps_matches_cpu(synthetic_adata):
     cpu_train = _run_torch_train_on_device(synthetic_adata, device="cpu")
     mps_train = _run_torch_train_on_device(synthetic_adata, device="mps")
 
-    _, alignment, costs = _topic_alignment_cost(
+    _, alignment, costs = topic_alignment_cost(
         cpu_train.top_models[0].model.components_,
         mps_train.top_models[0].model.components_,
     )
@@ -489,7 +480,7 @@ def test_torch_backend_cuda_matches_cpu(synthetic_adata):
     cpu_train = _run_torch_train_on_device(synthetic_adata, device="cpu")
     cuda_train = _run_torch_train_on_device(synthetic_adata, device="cuda")
 
-    _, alignment, costs = _topic_alignment_cost(
+    _, alignment, costs = topic_alignment_cost(
         cpu_train.top_models[0].model.components_,
         cuda_train.top_models[0].model.components_,
     )

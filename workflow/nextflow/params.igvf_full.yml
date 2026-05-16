@@ -1,17 +1,17 @@
 names:
-  - parse
-  - 10x
+  - igvf_full
 
 count_adata:
-  parse: /path/to/parse.h5ad
-  10x: /path/to/10x.h5ad
+  igvf_full: ./tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE.h5ad
 
 n_topics:
   - 5
   - 10
+  - 15
+  - 20
 
-organism: mouse
-workdir: ./results
+organism: human
+workdir: ./results/igvf_full
 
 train:
   backend: default
@@ -20,18 +20,17 @@ train:
   random_states:
     - 0
     - 1
-    - 2
-  batch_size: 128
+  batch_size: 256
   max_iter: 5
   n_jobs: 1
 
 top_model:
-  n_top_genes: null
+  n_top_genes: 100
   resolution: 1
-  max_iter_harmony: 10
+  max_iter_harmony: 5
   min_cell_participation: null
 
 plotting:
   interactive: false
 
-merge: true
+merge: false

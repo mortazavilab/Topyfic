@@ -11,7 +11,7 @@ organism: human
 workdir: ./results/igvf_subset
 
 train:
-  backend: sklearn
+  backend: default
   device: auto
   dtype: float32
   random_states:

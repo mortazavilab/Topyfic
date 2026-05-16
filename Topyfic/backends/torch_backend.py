@@ -180,12 +180,26 @@ class TorchLDABackend(LDABackend):
 
         sufficient_stats = None
         if collect_sufficient_stats:
-            sufficient_stats = torch.zeros_like(exp_e_log_beta)
             topic_word_contrib = weighted_counts.unsqueeze(1) * exp_theta_rows * exp_beta_cols
-            for topic_index in range(exp_e_log_beta.shape[0]):
-                sufficient_stats[topic_index].index_add_(0, cols, topic_word_contrib[:, topic_index])
+            sufficient_stats = self._accumulate_sufficient_stats(
+                cols=cols,
+                topic_word_contrib=topic_word_contrib,
+                n_components=exp_e_log_beta.shape[0],
+                n_features=exp_e_log_beta.shape[1],
+            )
 
         return gamma_batch, exp_e_log_theta, sufficient_stats
+
+    def _accumulate_sufficient_stats(self, cols, topic_word_contrib, n_components, n_features):
+        flat_stats = torch.zeros(
+            n_components * n_features,
+            device=topic_word_contrib.device,
+            dtype=topic_word_contrib.dtype,
+        )
+        topic_offsets = torch.arange(n_components, device=cols.device, dtype=cols.dtype) * int(n_features)
+        flat_indices = cols.unsqueeze(1) + topic_offsets.unsqueeze(0)
+        flat_stats.index_add_(0, flat_indices.reshape(-1), topic_word_contrib.reshape(-1))
+        return flat_stats.reshape(n_components, n_features)
 
     def _infer_gamma_batch(self,
                            prepared_batch,

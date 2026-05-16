@@ -11,7 +11,20 @@ BACKEND_REGISTRY = {
 }
 
 
-def create_lda_backend(name="sklearn", **options):
+def default_lda_backend_name():
+    if TorchLDABackend.is_available():
+        return "torch"
+    return "sklearn"
+
+
+def resolve_lda_backend_name(name=None):
+    if name in {None, "", "default"}:
+        return default_lda_backend_name()
+    return name
+
+
+def create_lda_backend(name=None, **options):
+    name = resolve_lda_backend_name(name)
     try:
         backend_cls = BACKEND_REGISTRY[name]
     except KeyError as exc:
@@ -40,5 +53,7 @@ __all__ = [
     "TorchLDABackend",
     "TorchLDAModel",
     "create_lda_backend",
+    "default_lda_backend_name",
     "infer_backend_name",
+    "resolve_lda_backend_name",
 ]

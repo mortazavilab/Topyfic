@@ -25,7 +25,7 @@ import yaml
 from yaml.loader import SafeLoader
 import h5py
 
-from Topyfic.backends import create_lda_backend, infer_backend_name
+from Topyfic.backends import create_lda_backend, infer_backend_name, resolve_lda_backend_name
 from Topyfic.persistence import read_backend_metadata, read_lda_state
 from Topyfic.train import Train
 from Topyfic.analysis import Analysis
@@ -82,7 +82,7 @@ def train_model(name,
                 batch_size=1000,
                 max_iter=10,
                 n_jobs=None,
-                backend_name="sklearn",
+                backend_name=None,
                 backend_kwargs=None):
     """
     Training model and save it
@@ -115,11 +115,13 @@ def train_model(name,
     :type backend_kwargs: dict
 
     """
+    resolved_backend_name = resolve_lda_backend_name(backend_name)
+
     train = Train(name=name,
                   k=k,
                   n_runs=n_runs,
                   random_state_range=random_state_range,
-                  backend_name=backend_name,
+                  backend_name=resolved_backend_name,
                   backend_kwargs=backend_kwargs)
     train.run_LDA_models(
         data,

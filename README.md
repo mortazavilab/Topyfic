@@ -17,6 +17,13 @@ Topyfic's full documentation can be found at [here](https://mortazavilab.github.
 
 Topyfic currently targets Python 3.12 through 3.14.
 
+By default, Topyfic now prefers the PyTorch backend when PyTorch is installed. With the default `device=auto` setting, that means:
+
+- NVIDIA systems use CUDA when available
+- Apple Silicon systems use MPS when available
+- other systems fall back to PyTorch on CPU
+- if PyTorch is not installed, Topyfic falls back to the sklearn backend
+
 **IMPORTANT**: If you upgrade Topyfic from any version below 0.4.5 you need to run this
 
 ```
@@ -32,6 +39,18 @@ Install the most recent release, run
 
 `pip install Topyfic`
 
+If you want the default accelerated backend, install PyTorch separately after installing Topyfic.
+
+For Apple Silicon, the standard wheel is usually sufficient:
+
+`pip install torch`
+
+For Linux NVIDIA systems, install a wheel that matches the server's CUDA runtime and driver stack. For example:
+
+`pip install torch --index-url https://download.pytorch.org/whl/cu128`
+
+If you do not install PyTorch, Topyfic will continue to work with the sklearn backend.
+
 ### Install with the most recent commits
 git cloning the [Topyfic repository](https://github.com/mortazavilab/Topyfic), going to the Topyfic directory, run
 
@@ -40,6 +59,21 @@ git cloning the [Topyfic repository](https://github.com/mortazavilab/Topyfic), g
 For local development, install the project in editable mode:
 
 `pip install -e .`
+
+To install development and test dependencies as well:
+
+`pip install -e .[dev]`
+
+### Backend selection
+
+The Python API and CLI now default to the torch backend when PyTorch is installed.
+
+The CLI keeps both backup paths available explicitly:
+
+- force torch on CPU: `python -m Topyfic.main train_model --backend torch --device cpu ...`
+- force sklearn: `python -m Topyfic.main train_model --backend sklearn ...`
+
+If you omit `--backend`, Topyfic resolves the default automatically.
 
 ## Tutorials
 
