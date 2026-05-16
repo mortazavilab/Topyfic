@@ -75,6 +75,30 @@ The CLI keeps both backup paths available explicitly:
 
 If you omit `--backend`, Topyfic resolves the default automatically.
 
+### Remote CUDA workflow
+
+For a remote Linux server with NVIDIA GPUs, the tested workflow path is:
+
+```bash
+python3.13 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install torch --index-url https://download.pytorch.org/whl/cu128
+python -m pip install -e .[dev]
+python -m pytest tests -q
+nextflow run workflow/nextflow/main.nf \
+  -params-file workflow/nextflow/params.igvf_full.yml
+```
+
+If Nextflow is launched from a shell that is not using the repository virtual environment, put the venv at the front of `PATH` so workflow processes pick up the correct Python:
+
+```bash
+PATH="$PWD/.venv/bin:$PATH" nextflow run workflow/nextflow/main.nf \
+  -params-file workflow/nextflow/params.igvf_full.yml
+```
+
+The checked-in `workflow/nextflow/params.igvf_full.yml` runs the full IGVF dataset at `k = 5, 10, 15, 20` and keeps the per-seed train intermediates, combined train objects, topModels, topic UMAPs, cluster mappings, and analysis outputs.
+
 ## Tutorials
 
 In general, you need to make three objects (Train, TopModel and Analysis). 

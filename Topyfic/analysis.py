@@ -6,6 +6,7 @@ from scipy import stats
 import warnings
 import random
 import pickle
+import joblib
 from scipy.cluster.hierarchy import ward, dendrogram, leaves_list
 from statsmodels.stats.multitest import fdrcorrection
 
@@ -1016,6 +1017,4 @@ class Analysis:
             name = f"analysis_{self.top_model.name}"
         print(f"Saving analysis class as {name}.p")
 
-        picklefile = open(f"{save_path}{name}.p", "wb")
-        pickle.dump(self, picklefile)
-        picklefile.close()
+        joblib.dump(self, f"{save_path}{name}.p", compress=3)

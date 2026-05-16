@@ -358,9 +358,7 @@ class TopModel:
         if file_format == "pickle":
             print(f"Saving topModel as {name}.p")
 
-            picklefile = open(f"{save_path}{name}.p", "wb")
-            pickle.dump(self, picklefile)
-            picklefile.close()
+            joblib.dump(self, f"{save_path}{name}.p", compress=3)
 
         if file_format == "HDF5":
             print(f"Saving topModel as {name}.h5")

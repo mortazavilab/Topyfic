@@ -39,7 +39,7 @@ def validateParams() {
 
 process SINGLE_TRAIN {
     tag "${name}/${topic}/seed=${random_state}"
-    publishDir({ "${params.workdir}/${name}/${topic}/train" }, mode: 'copy', overwrite: true)
+    publishDir({ "${params.workdir}/${name}/${topic}/train" }, mode: 'copy', overwrite: true, enabled: params.train?.publish_single_runs ?: true)
 
     input:
     tuple val(name), val(topic), val(random_state), val(adata_path)

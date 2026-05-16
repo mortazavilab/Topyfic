@@ -17,6 +17,7 @@ train:
   backend: default
   device: auto
   dtype: float32
+  publish_single_runs: true
   random_states:
     - 0
     - 1

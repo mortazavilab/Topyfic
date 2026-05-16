@@ -70,6 +70,30 @@ To allow interactive plotting for local exploratory runs, set `plotting.interact
 
 By default, the workflow uses `train.backend: default`, which resolves to torch when PyTorch is installed and otherwise falls back to sklearn. To force a backup path, set `train.backend: torch` with an explicit `train.device`, or set `train.backend: sklearn`.
 
+### Remote CUDA run
+
+For a remote Linux server with NVIDIA GPUs, the tested workflow sequence is:
+
+```bash
+python3.13 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install torch --index-url https://download.pytorch.org/whl/cu128
+python -m pip install -e .[dev]
+python -m pytest tests -q
+nextflow run workflow/nextflow/main.nf \
+  -params-file workflow/nextflow/params.igvf_full.yml
+```
+
+If `nextflow` is launched outside the repository virtual environment, put `.venv/bin` at the front of `PATH` so the worker processes import the installed `Topyfic` package instead of the system Python:
+
+```bash
+PATH="$PWD/.venv/bin:$PATH" nextflow run workflow/nextflow/main.nf \
+  -params-file workflow/nextflow/params.igvf_full.yml
+```
+
+The checked-in full-data params file runs the full IGVF dataset at `k = 5, 10, 15, 20` and keeps the per-seed train outputs in addition to the combined train, topmodel, UMAP, cluster mapping, and analysis artifacts.
+
 Outputs are written under `workdir` using the same directory structure as the legacy workflow:
 
 - `{workdir}/{name}/{n_topic}/train/`

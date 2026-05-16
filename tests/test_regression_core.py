@@ -8,7 +8,7 @@ from Topyfic.analysis import Analysis
 from Topyfic.lda_state import LDAState
 from Topyfic.backends import default_lda_backend_name
 from Topyfic.train import Train
-from Topyfic.utilsMakeModel import _neighbors_kwargs_for_adata, read_topModel, read_train
+from Topyfic.utilsMakeModel import _neighbors_kwargs_for_adata, read_analysis, read_topModel, read_train
 
 
 def test_make_single_lda_model_produces_expected_shapes(synthetic_adata):
@@ -199,6 +199,28 @@ def test_analysis_cell_participation_matches_input_shape(synthetic_adata):
     assert analysis.cell_participation.shape == (synthetic_adata.n_obs, train.k)
     assert analysis.cell_participation.obs_names.tolist() == synthetic_adata.obs_names.tolist()
     assert analysis.cell_participation.var_names.tolist() == ["Topic_1", "Topic_2"]
+
+
+def test_analysis_pickle_round_trip(tmp_path, synthetic_adata):
+    train = Train(name="demo", k=2, n_runs=1, random_state_range=[0])
+    train.run_LDA_models(
+        synthetic_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=5,
+        n_jobs=1,
+        n_thread=1,
+    )
+
+    analysis = Analysis(Top_model=train.top_models[0])
+    analysis.calculate_cell_participation(synthetic_adata)
+    analysis.save_analysis(save_path=f"{tmp_path}/")
+
+    reloaded = read_analysis(f"{tmp_path}/analysis_{analysis.top_model.name}.p")
+
+    assert reloaded.top_model.name == analysis.top_model.name
+    assert reloaded.cell_participation.shape == analysis.cell_participation.shape
+    assert reloaded.cell_participation.obs_names.tolist() == analysis.cell_participation.obs_names.tolist()
 
 
 def test_neighbors_kwargs_shrink_pca_for_small_topic_tables():

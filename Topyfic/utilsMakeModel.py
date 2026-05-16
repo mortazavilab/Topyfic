@@ -609,8 +609,11 @@ def read_train(file):
         raise ValueError('Train file type is not correct!')
 
     if file.endswith('.p'):
-        picklefile = open(file, 'rb')
-        train = pickle.load(picklefile)
+        try:
+            train = joblib.load(file)
+        except Exception:
+            with open(file, 'rb') as picklefile:
+                train = pickle.load(picklefile)
         if not hasattr(train, 'backend_name'):
             train.backend_name = 'sklearn'
         if not hasattr(train, 'backend_kwargs'):
@@ -690,8 +693,11 @@ def read_topModel(file):
         raise ValueError('TopModel file type is not correct!')
 
     if file.endswith('.p'):
-        picklefile = open(file, 'rb')
-        top_model = pickle.load(picklefile)
+        try:
+            top_model = joblib.load(file)
+        except Exception:
+            with open(file, 'rb') as picklefile:
+                top_model = pickle.load(picklefile)
         if not hasattr(top_model, 'backend_name'):
             top_model.backend_name = 'sklearn'
         if not hasattr(top_model, 'backend_kwargs'):
@@ -784,8 +790,11 @@ def read_analysis(file):
     if not os.path.isfile(file):
         raise ValueError('Analysis object not found at given path!')
 
-    picklefile = open(file, 'rb')
-    analysis = pickle.load(picklefile)
+    try:
+        analysis = joblib.load(file)
+    except Exception:
+        with open(file, 'rb') as picklefile:
+            analysis = pickle.load(picklefile)
 
     print(f"Reading Analysis done!")
     return analysis
