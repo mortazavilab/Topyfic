@@ -10,7 +10,7 @@ n_topics:
   - 15
   - 20
 
-organism: human
+organism: mouse
 workdir: ./results/igvf_full
 
 train:
@@ -18,11 +18,13 @@ train:
   device: auto
   dtype: float32
   publish_single_runs: true
+  max_concurrent: null
   random_states:
     - 0
     - 1
   batch_size: 256
   max_iter: 5
+  max_doc_update_iter: null
   n_jobs: 1
 
 top_model:

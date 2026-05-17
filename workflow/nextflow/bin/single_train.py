@@ -17,6 +17,7 @@ def parse_args():
     parser.add_argument('--dtype', default='float32')
     parser.add_argument('--batch-size', default=128, type=int)
     parser.add_argument('--max-iter', default=5, type=int)
+    parser.add_argument('--max-doc-update-iter', type=int)
     parser.add_argument('--n-jobs', default=1, type=int)
     parser.add_argument('--output-dir', required=True)
     return parser.parse_args()
@@ -39,13 +40,17 @@ def main():
             'dtype': args.dtype,
         },
     )
-    train.run_LDA_models(
-        adata,
-        batch_size=args.batch_size,
-        max_iter=args.max_iter,
-        n_jobs=args.n_jobs,
-        n_thread=1,
-    )
+
+    run_kwargs = {
+        'batch_size': args.batch_size,
+        'max_iter': args.max_iter,
+        'n_jobs': args.n_jobs,
+        'n_thread': 1,
+    }
+    if args.max_doc_update_iter is not None:
+        run_kwargs['max_doc_update_iter'] = args.max_doc_update_iter
+
+    train.run_LDA_models(adata, **run_kwargs)
     train.save_train(save_path=save_path_arg(output_dir))
 
 

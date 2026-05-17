@@ -18,12 +18,14 @@ train:
   device: auto
   dtype: float32
   publish_single_runs: true
+  max_concurrent: null
   random_states:
     - 0
     - 1
     - 2
   batch_size: 128
   max_iter: 5
+  max_doc_update_iter: null
   n_jobs: 1
 
 top_model:

@@ -12,7 +12,7 @@ from Topyfic.lda_state import LDAState
 @dataclass(frozen=True)
 class LDAFitResult:
     model: Any
-    document_topic_matrix: np.ndarray
+    document_topic_matrix: np.ndarray | None
 
 
 class LDABackend(ABC):

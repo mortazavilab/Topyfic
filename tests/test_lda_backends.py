@@ -35,6 +35,54 @@ def test_train_defaults_to_available_backend(synthetic_adata):
     expected_backend = default_lda_backend_name()
     assert train.backend_name == expected_backend
     assert train.top_models[0].backend_name == expected_backend
+    assert train.top_models[0].document_topic_matrix.shape == (synthetic_adata.n_obs, train.k)
+    np.testing.assert_allclose(train.top_models[0].document_topic_matrix.sum(axis=1), 1.0, atol=1e-5)
+
+
+def test_topmodel_transform_reuses_fit_document_topic_matrix(monkeypatch, synthetic_adata):
+    train = Train(name="demo", k=2, n_runs=1, random_state_range=[0])
+    train.run_LDA_models(
+        synthetic_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=5,
+        n_jobs=1,
+        n_thread=1,
+    )
+
+    top_model = train.top_models[0]
+
+    def fail_transform(*args, **kwargs):
+        raise AssertionError("backend.transform should not run for the original training matrix")
+
+    monkeypatch.setattr(top_model.backend, "transform", fail_transform)
+    transformed = top_model.transform(synthetic_adata.X)
+
+    np.testing.assert_allclose(transformed, top_model.document_topic_matrix)
+
+
+def test_topmodel_transform_caches_repeated_non_training_input(monkeypatch, synthetic_adata):
+    train = Train(name="demo", k=2, n_runs=1, random_state_range=[0])
+    train.run_LDA_models(
+        synthetic_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=5,
+        n_jobs=1,
+        n_thread=1,
+    )
+
+    top_model = train.top_models[0]
+    copied_input = sp.csr_matrix(synthetic_adata.X)
+    first = top_model.transform(copied_input)
+
+    def fail_transform(*args, **kwargs):
+        raise AssertionError("backend.transform should not run for a cached repeated input")
+
+    monkeypatch.setattr(top_model.backend, "transform", fail_transform)
+    second = top_model.transform(copied_input)
+
+    np.testing.assert_allclose(second, first)
 
 
 def test_backend_property_reuses_backend_instance(synthetic_adata):
@@ -119,6 +167,37 @@ def test_torch_backend_fit_returns_probability_matrix(synthetic_adata):
 
 
 @pytest.mark.skipif(not TorchLDABackend.is_available(), reason="torch is not installed")
+def test_torch_backend_fit_can_skip_document_topic_matrix(synthetic_adata):
+    backend = TorchLDABackend(device="cpu", dtype="float64")
+
+    fit_result = backend.fit(
+        data_matrix=synthetic_adata.X,
+        n_components=2,
+        random_state=0,
+        learning_method="batch",
+        max_iter=15,
+        return_document_topic_matrix=False,
+    )
+
+    assert fit_result.document_topic_matrix is None
+    assert fit_result.model.components_.shape == (2, synthetic_adata.n_vars)
+def test_sklearn_backend_fit_can_skip_document_topic_matrix(synthetic_adata):
+    backend = create_lda_backend("sklearn")
+
+    fit_result = backend.fit(
+        data_matrix=synthetic_adata.X,
+        n_components=2,
+        random_state=0,
+        learning_method="batch",
+        max_iter=15,
+        return_document_topic_matrix=False,
+    )
+
+    assert fit_result.document_topic_matrix is None
+    assert fit_result.model.components_.shape == (2, synthetic_adata.n_vars)
+
+
+@pytest.mark.skipif(not TorchLDABackend.is_available(), reason="torch is not installed")
 def test_torch_backend_state_round_trip_preserves_model(synthetic_adata):
     backend = TorchLDABackend(device="cpu", dtype="float64")
 
@@ -162,9 +241,34 @@ def test_train_can_use_torch_backend_on_cpu(synthetic_adata):
     )
 
     assert train.top_models[0].backend_name == "torch"
+    assert train.top_models[0].document_topic_matrix.shape == (synthetic_adata.n_obs, train.k)
     transformed = train.top_models[0].transform(synthetic_adata.X)
     assert transformed.shape == (synthetic_adata.n_obs, train.k)
     np.testing.assert_allclose(transformed.sum(axis=1), 1.0, atol=1e-5)
+
+
+@pytest.mark.skipif(not TorchLDABackend.is_available(), reason="torch is not installed")
+def test_train_can_skip_document_topic_matrix(synthetic_adata):
+    train = Train(
+        name="demo",
+        k=2,
+        n_runs=1,
+        random_state_range=[0],
+        backend_name="torch",
+        backend_kwargs={"device": "cpu", "dtype": "float64"},
+    )
+
+    train.run_LDA_models(
+        synthetic_adata,
+        learning_method="batch",
+        batch_size=2,
+        max_iter=15,
+        n_jobs=1,
+        n_thread=1,
+        return_document_topic_matrix=False,
+    )
+
+    assert train.top_models[0].document_topic_matrix is None
 
 
 @pytest.mark.skipif(not TorchLDABackend.is_available(), reason="torch is not installed")
@@ -220,6 +324,10 @@ def test_torch_train_hdf5_round_trip_preserves_backend_metadata(tmp_path, synthe
     assert reloaded.top_models[0].backend_name == "torch"
     assert reloaded.top_models[0].backend_kwargs == {"device": "cpu", "dtype": "float64"}
     assert reloaded.top_models[0].get_feature_name() == synthetic_adata.var_names.tolist()
+    np.testing.assert_allclose(
+        reloaded.top_models[0].document_topic_matrix,
+        train.top_models[0].document_topic_matrix,
+    )
 
     transformed = reloaded.top_models[0].transform(synthetic_adata.X)
     assert transformed.shape == (synthetic_adata.n_obs, 2)
@@ -328,6 +436,7 @@ def test_torch_topmodel_hdf5_round_trip_preserves_backend_metadata(tmp_path, syn
     assert reloaded.backend_name == "torch"
     assert reloaded.backend_kwargs == {"device": "cpu", "dtype": "float64"}
     assert reloaded.get_feature_name() == synthetic_adata.var_names.tolist()
+    np.testing.assert_allclose(reloaded.document_topic_matrix, top_model.document_topic_matrix)
 
     transformed = reloaded.transform(synthetic_adata.X)
     assert transformed.shape == (synthetic_adata.n_obs, 2)

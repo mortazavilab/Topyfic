@@ -97,7 +97,7 @@ PATH="$PWD/.venv/bin:$PATH" nextflow run workflow/nextflow/main.nf \
   -params-file workflow/nextflow/params.igvf_full.yml
 ```
 
-The checked-in `workflow/nextflow/params.igvf_full.yml` runs the full IGVF dataset at `k = 5, 10, 15, 20` and keeps the per-seed train intermediates, combined train objects, topModels, topic UMAPs, cluster mappings, and analysis outputs.
+The checked-in `workflow/nextflow/params.igvf_full.yml` runs the full mouse IGVF dataset at `k = 5, 10, 15, 20` and keeps the per-seed train intermediates, combined train objects, topModels, topic UMAPs, cluster mappings, and analysis outputs.
 
 ## Tutorials
 

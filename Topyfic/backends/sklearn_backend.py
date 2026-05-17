@@ -19,6 +19,7 @@ class SklearnLDABackend(LDABackend):
             max_iter=10,
             n_jobs=None,
             **kwargs):
+        return_document_topic_matrix = bool(kwargs.pop("return_document_topic_matrix", True))
         model = LatentDirichletAllocation(
             n_components=n_components,
             random_state=random_state,
@@ -28,7 +29,11 @@ class SklearnLDABackend(LDABackend):
             n_jobs=n_jobs,
             **kwargs,
         )
-        document_topic_matrix = model.fit_transform(data_matrix)
+        document_topic_matrix = None
+        if return_document_topic_matrix:
+            document_topic_matrix = model.fit_transform(data_matrix)
+        else:
+            model.fit(data_matrix)
 
         return LDAFitResult(model=model, document_topic_matrix=document_topic_matrix)
 

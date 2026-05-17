@@ -1,7 +1,20 @@
+import importlib.util
+from pathlib import Path
+
 from click.testing import CliRunner
 import pandas as pd
 
 import Topyfic.main as main_module
+
+
+def _load_workflow_bin_module(monkeypatch, module_name):
+    module_path = Path(__file__).resolve().parents[1] / "workflow" / "nextflow" / "bin" / module_name
+    monkeypatch.syspath_prepend(str(module_path.parent))
+    spec = importlib.util.spec_from_file_location(f"test_{module_name.replace('.', '_')}", module_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
 
 
 def test_train_model_cli_passes_backend_and_device_options(tmp_path, synthetic_adata, monkeypatch):
@@ -158,3 +171,101 @@ def test_make_analysis_cli_loads_topmodel_and_colors(tmp_path, synthetic_adata, 
     assert captured["top_model"] is sentinel
     assert captured["data"].shape == synthetic_adata.shape
     assert captured["colors_topics"].index.tolist() == ["Topic_1"]
+
+
+def test_single_train_passes_max_doc_update_iter(tmp_path, synthetic_adata, monkeypatch):
+    single_train_module = _load_workflow_bin_module(monkeypatch, "single_train.py")
+    output_dir = tmp_path / "single_train"
+    captured = {}
+
+    class DummyTrain:
+        def __init__(self, **kwargs):
+            captured["backend_kwargs"] = kwargs["backend_kwargs"]
+
+        def run_LDA_models(self, *args, **kwargs):
+            captured["run_shape"] = args[0].shape
+            captured["run_kwargs"] = kwargs
+
+        def save_train(self, save_path=""):
+            captured["save_path"] = save_path
+
+    monkeypatch.setattr(single_train_module, "ensure_output_dir", lambda path: Path(path))
+    monkeypatch.setattr(single_train_module, "load_adata_inputs", lambda paths: synthetic_adata)
+    monkeypatch.setattr(single_train_module, "resolve_lda_backend_name", lambda backend: "torch")
+    monkeypatch.setattr(single_train_module.Topyfic, "Train", DummyTrain)
+    monkeypatch.setattr(
+        single_train_module,
+        "parse_args",
+        lambda: single_train_module.argparse.Namespace(
+            name="igvf_full",
+            adata_path="input.h5ad",
+            k=10,
+            random_state=7,
+            backend="torch",
+            device="cuda",
+            dtype="float32",
+            batch_size=128,
+            max_iter=5,
+            max_doc_update_iter=100,
+            n_jobs=1,
+            output_dir=output_dir.as_posix(),
+        ),
+    )
+
+    single_train_module.main()
+
+    assert captured["backend_kwargs"] == {"device": "cuda", "dtype": "float32"}
+    assert captured["run_shape"] == synthetic_adata.shape
+    assert captured["run_kwargs"]["batch_size"] == 128
+    assert captured["run_kwargs"]["max_iter"] == 5
+    assert captured["run_kwargs"]["max_doc_update_iter"] == 100
+    assert captured["run_kwargs"]["n_jobs"] == 1
+
+
+def test_single_train_omits_null_max_doc_update_iter(tmp_path, synthetic_adata, monkeypatch):
+    single_train_module = _load_workflow_bin_module(monkeypatch, "single_train.py")
+    output_dir = tmp_path / "single_train_default"
+    captured = {}
+
+    class DummyTrain:
+        def __init__(self, **kwargs):
+            captured["backend_kwargs"] = kwargs["backend_kwargs"]
+
+        def run_LDA_models(self, *args, **kwargs):
+            captured["run_shape"] = args[0].shape
+            captured["run_kwargs"] = kwargs
+
+        def save_train(self, save_path=""):
+            captured["save_path"] = save_path
+
+    monkeypatch.setattr(single_train_module, "ensure_output_dir", lambda path: Path(path))
+    monkeypatch.setattr(single_train_module, "load_adata_inputs", lambda paths: synthetic_adata)
+    monkeypatch.setattr(single_train_module, "resolve_lda_backend_name", lambda backend: "torch")
+    monkeypatch.setattr(single_train_module.Topyfic, "Train", DummyTrain)
+    monkeypatch.setattr(
+        single_train_module,
+        "parse_args",
+        lambda: single_train_module.argparse.Namespace(
+            name="igvf_full",
+            adata_path="input.h5ad",
+            k=10,
+            random_state=7,
+            backend="torch",
+            device="auto",
+            dtype="float32",
+            batch_size=128,
+            max_iter=5,
+            max_doc_update_iter=None,
+            n_jobs=1,
+            output_dir=output_dir.as_posix(),
+        ),
+    )
+
+    single_train_module.main()
+
+    assert captured["backend_kwargs"] == {"device": "auto", "dtype": "float32"}
+    assert captured["run_shape"] == synthetic_adata.shape
+    assert captured["run_kwargs"]["batch_size"] == 128
+    assert captured["run_kwargs"]["max_iter"] == 5
+    assert captured["run_kwargs"]["n_jobs"] == 1
+    assert "max_doc_update_iter" not in captured["run_kwargs"]

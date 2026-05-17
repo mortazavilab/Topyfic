@@ -115,6 +115,12 @@ class TorchLDABackend(LDABackend):
         row_sums = matrix.sum(dim=1, keepdim=True).clamp_min(1e-12)
         return matrix / row_sums
 
+    @staticmethod
+    def _exp_dirichlet_expectation(matrix):
+        return torch.exp(
+            torch.special.digamma(matrix) - torch.special.digamma(matrix.sum(dim=1, keepdim=True))
+        )
+
     def _prepare_sparse_batches(self, data_matrix, batch_size=None):
         matrix_csr = self._to_csr_matrix(data_matrix)
         n_docs = int(matrix_csr.shape[0])
@@ -130,8 +136,7 @@ class TorchLDABackend(LDABackend):
         for batch_start in range(0, n_docs, batch_size):
             batch_end = min(batch_start + batch_size, n_docs)
             batch_csr = matrix_csr[batch_start:batch_end]
-            row_lengths = np.diff(batch_csr.indptr)
-            rows = np.repeat(np.arange(batch_csr.shape[0], dtype=np.int64), row_lengths)
+            rows = np.repeat(np.arange(batch_csr.shape[0], dtype=np.int64), np.diff(batch_csr.indptr))
             cols = batch_csr.indices.astype(np.int64, copy=False)
             counts = batch_csr.data.astype(numpy_dtype, copy=False)
             row_sums = np.asarray(batch_csr.sum(axis=1)).reshape(-1).astype(numpy_dtype, copy=False)
@@ -161,14 +166,13 @@ class TorchLDABackend(LDABackend):
                         counts,
                         exp_e_log_beta,
                         collect_sufficient_stats,
-                        exp_beta_cols=None):
-        exp_e_log_theta = torch.exp(
-            torch.special.digamma(gamma_batch) - torch.special.digamma(gamma_batch.sum(dim=1, keepdim=True))
-        )
+                        exp_beta_cols=None,
+                        sufficient_stats_buffer=None):
+        exp_e_log_theta = self._exp_dirichlet_expectation(gamma_batch)
 
         if rows.numel() == 0:
             sufficient_stats = None
-            if collect_sufficient_stats:
+            if collect_sufficient_stats and sufficient_stats_buffer is None:
                 sufficient_stats = torch.zeros_like(exp_e_log_beta)
             return gamma_batch, exp_e_log_theta, sufficient_stats
 
@@ -184,21 +188,29 @@ class TorchLDABackend(LDABackend):
             sufficient_stats = self._accumulate_sufficient_stats(
                 cols=cols,
                 topic_word_contrib=topic_word_contrib,
-                n_components=exp_e_log_beta.shape[0],
                 n_features=exp_e_log_beta.shape[1],
+                output_buffer=sufficient_stats_buffer,
             )
 
         return gamma_batch, exp_e_log_theta, sufficient_stats
 
-    def _accumulate_sufficient_stats(self, cols, topic_word_contrib, n_components, n_features):
-        flat_stats = torch.zeros(
-            n_components * n_features,
-            device=topic_word_contrib.device,
-            dtype=topic_word_contrib.dtype,
-        )
+    def _accumulate_sufficient_stats(self, cols, topic_word_contrib, n_features, output_buffer=None):
+        n_components = topic_word_contrib.shape[1]
+        target_buffer = output_buffer
+        if output_buffer is None:
+            flat_stats = torch.zeros(
+                n_components * n_features,
+                device=topic_word_contrib.device,
+                dtype=topic_word_contrib.dtype,
+            )
+        else:
+            flat_stats = output_buffer.reshape(-1)
+
         topic_offsets = torch.arange(n_components, device=cols.device, dtype=cols.dtype) * int(n_features)
         flat_indices = cols.unsqueeze(1) + topic_offsets.unsqueeze(0)
         flat_stats.index_add_(0, flat_indices.reshape(-1), topic_word_contrib.reshape(-1))
+        if target_buffer is not None:
+            return target_buffer
         return flat_stats.reshape(n_components, n_features)
 
     def _infer_gamma_batch(self,
@@ -207,13 +219,14 @@ class TorchLDABackend(LDABackend):
                            doc_topic_prior,
                            max_doc_update_iter,
                            mean_change_tol,
-                           collect_sufficient_stats):
+                           collect_sufficient_stats,
+                           sufficient_stats_buffer=None):
         n_docs = prepared_batch.n_docs
         n_components = exp_e_log_beta.shape[0]
         if n_docs == 0:
             empty_gamma = torch.empty((0, n_components), device=self.device, dtype=self._torch_dtype())
             empty_stats = None
-            if collect_sufficient_stats:
+            if collect_sufficient_stats and sufficient_stats_buffer is None:
                 empty_stats = torch.zeros_like(exp_e_log_beta)
             return empty_gamma, empty_stats
 
@@ -232,21 +245,22 @@ class TorchLDABackend(LDABackend):
 
         if rows.numel() == 0:
             sufficient_stats = None
-            if collect_sufficient_stats:
+            if collect_sufficient_stats and sufficient_stats_buffer is None:
                 sufficient_stats = torch.zeros_like(exp_e_log_beta)
             return gamma_batch, sufficient_stats
 
+        per_doc_topic = torch.zeros_like(gamma_batch)
+
         for _ in range(max_doc_update_iter):
-            exp_e_log_theta = torch.exp(
-                torch.special.digamma(gamma_batch) - torch.special.digamma(gamma_batch.sum(dim=1, keepdim=True))
-            )
+            exp_e_log_theta = self._exp_dirichlet_expectation(gamma_batch)
             exp_theta_rows = exp_e_log_theta.index_select(0, rows)
             norm_phi = (exp_theta_rows * exp_beta_cols).sum(dim=1).clamp_min(1e-12)
             weighted_counts = counts / norm_phi
             doc_topic_contrib = weighted_counts.unsqueeze(1) * exp_beta_cols
 
-            per_doc_topic = torch.zeros_like(gamma_batch)
+            per_doc_topic.zero_()
             per_doc_topic.index_add_(0, rows, doc_topic_contrib)
+
             next_gamma = float(doc_topic_prior) + exp_e_log_theta * per_doc_topic
 
             if torch.mean(torch.abs(next_gamma - gamma_batch)) < mean_change_tol:
@@ -263,6 +277,7 @@ class TorchLDABackend(LDABackend):
             exp_e_log_beta=exp_e_log_beta,
             collect_sufficient_stats=collect_sufficient_stats,
             exp_beta_cols=exp_beta_cols,
+            sufficient_stats_buffer=sufficient_stats_buffer,
         )
 
         return gamma_batch, sufficient_stats
@@ -284,9 +299,7 @@ class TorchLDABackend(LDABackend):
             sufficient_stats = torch.zeros_like(lambda_parameter)
 
         if exp_e_log_beta is None:
-            exp_e_log_beta = torch.exp(
-                torch.special.digamma(lambda_parameter) - torch.special.digamma(lambda_parameter.sum(dim=1, keepdim=True))
-            )
+            exp_e_log_beta = self._exp_dirichlet_expectation(lambda_parameter)
 
         batch_start = 0
         for prepared_batch in prepared_matrix.batches:
@@ -298,9 +311,10 @@ class TorchLDABackend(LDABackend):
                 max_doc_update_iter=max_doc_update_iter,
                 mean_change_tol=mean_change_tol,
                 collect_sufficient_stats=collect_sufficient_stats,
+                sufficient_stats_buffer=sufficient_stats,
             )
             gamma[batch_start:batch_end] = batch_gamma
-            if collect_sufficient_stats:
+            if collect_sufficient_stats and batch_stats is not sufficient_stats:
                 sufficient_stats += batch_stats
             batch_start = batch_end
 
@@ -340,6 +354,7 @@ class TorchLDABackend(LDABackend):
             n_jobs=None,
             **kwargs):
         self._require_torch()
+        return_document_topic_matrix = bool(kwargs.pop("return_document_topic_matrix", True))
 
         if learning_method not in {"batch", "online"}:
             raise ValueError("learning_method must be 'batch' or 'online'")
@@ -362,9 +377,7 @@ class TorchLDABackend(LDABackend):
 
         gamma = None
         for _ in range(int(max_iter)):
-            exp_e_log_beta = torch.exp(
-                torch.special.digamma(lambda_parameter) - torch.special.digamma(lambda_parameter.sum(dim=1, keepdim=True))
-            )
+            exp_e_log_beta = self._exp_dirichlet_expectation(lambda_parameter)
             gamma, sufficient_stats = self._infer_gamma(
                 prepared_matrix=prepared_matrix,
                 lambda_parameter=lambda_parameter,
@@ -376,9 +389,7 @@ class TorchLDABackend(LDABackend):
             )
             lambda_parameter = sufficient_stats + float(topic_word_prior)
 
-        exp_dirichlet_component = torch.exp(
-            torch.special.digamma(lambda_parameter) - torch.special.digamma(lambda_parameter.sum(dim=1, keepdim=True))
-        )
+        exp_dirichlet_component = self._exp_dirichlet_expectation(lambda_parameter)
         document_topic_matrix = self._normalize_rows(gamma)
         bound = self._estimate_bound(prepared_matrix, document_topic_matrix, lambda_parameter)
 
@@ -395,7 +406,11 @@ class TorchLDABackend(LDABackend):
             dtype=self.dtype,
         )
 
-        return self._fit_result_type()(model=model, document_topic_matrix=document_topic_matrix.detach().cpu().numpy())
+        document_topic_matrix_output = None
+        if return_document_topic_matrix:
+            document_topic_matrix_output = document_topic_matrix.detach().cpu().numpy()
+
+        return self._fit_result_type()(model=model, document_topic_matrix=document_topic_matrix_output)
 
     def transform(self, model, data_matrix):
         prepared_matrix = self._prepare_sparse_batches(

@@ -8,13 +8,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import h5py
+from scipy import sparse as sp
 
 sns.set_context('paper')
 warnings.filterwarnings('ignore')
 
 from Topyfic.backends import create_lda_backend, infer_backend_name
 from Topyfic.lda_state import LDAState
-from Topyfic.persistence import write_backend_metadata, write_lda_state
+from Topyfic.persistence import write_backend_metadata, write_document_topic_matrix, write_lda_state
 from Topyfic.topic import Topic
 from Topyfic.utilsAnalyseModel import MA_plot
 
@@ -43,6 +44,8 @@ class TopModel:
                  gene_weights=None,
                  gene_information=None,
                  model=None,
+                 document_topic_matrix=None,
+                 training_data_cache_key=None,
                  backend_name=None,
                  backend_kwargs=None):
         if gene_weights is None and topics is None:
@@ -62,12 +65,24 @@ class TopModel:
         self.name = name
         self.N = N
         self.model = model
+        self.document_topic_matrix = document_topic_matrix
+        self._training_data_cache_key = training_data_cache_key
+        self._transform_cache_key = None
+        self._transform_cache_value = None
         if backend_name is None:
             backend_name = infer_backend_name(model)
         self.backend_name = backend_name
         self.backend_kwargs = {} if backend_kwargs is None else dict(backend_kwargs)
         self._backend = None
         self._backend_cache_key = None
+
+    @staticmethod
+    def data_matrix_cache_key(data_matrix):
+        if sp.issparse(data_matrix):
+            sparse_nnz = data_matrix.nnz
+        else:
+            sparse_nnz = None
+        return (id(data_matrix), tuple(getattr(data_matrix, "shape", ())), sparse_nnz)
 
     @property
     def backend(self):
@@ -78,7 +93,18 @@ class TopModel:
         return self._backend
 
     def transform(self, data_matrix):
-        return self.backend.transform(self.model, data_matrix)
+        data_cache_key = self.data_matrix_cache_key(data_matrix)
+
+        if self.document_topic_matrix is not None and self._training_data_cache_key == data_cache_key:
+            return np.asarray(self.document_topic_matrix).copy()
+
+        if self._transform_cache_key == data_cache_key and self._transform_cache_value is not None:
+            return self._transform_cache_value.copy()
+
+        transformed = self.backend.transform(self.model, data_matrix)
+        self._transform_cache_key = data_cache_key
+        self._transform_cache_value = np.asarray(transformed).copy()
+        return transformed
 
     def get_backend_state(self):
         return self.backend.get_state(
@@ -369,6 +395,7 @@ class TopModel:
             model = f.create_group("model")
             write_backend_metadata(model, self.backend_name, self.backend_kwargs)
             write_lda_state(model, self.get_backend_state())
+            write_document_topic_matrix(f, self.document_topic_matrix)
 
             # topics
             topics = f.create_group("topics")

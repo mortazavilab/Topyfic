@@ -34,7 +34,7 @@ For the checked-in IGVF smoke-test params file, you can deterministically rebuil
 python workflow/nextflow/bin/prepare_igvf_subset.py
 ```
 
-By default the helper downloads the public IGVF matrix file, samples 1,000 cells with seed `0`, and writes [tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE_subset_1000.h5ad](tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE_subset_1000.h5ad). Use `--force` to overwrite an existing subset.
+By default the helper downloads the public mouse IGVF matrix file, samples 1,000 cells with seed `0`, and writes [tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE_subset_1000.h5ad](tutorials/IGVFFI3320ZCCE/IGVFFI3320ZCCE_subset_1000.h5ad). Use `--force` to overwrite an existing subset.
 
 Key params:
 
@@ -44,6 +44,8 @@ Key params:
 - `train.backend`: backend used for each single-run training job (`default` resolves to torch when available, otherwise sklearn)
 - `train.device`: target torch device (`auto`, `cpu`, `cuda`, or `mps`)
 - `train.dtype`: torch floating point precision passed to the backend
+- `train.max_concurrent`: optional Nextflow-side cap on concurrent `SINGLE_TRAIN` tasks; set this to `1` on a single-GPU server when you want to avoid oversubscribing the device
+- `train.max_doc_update_iter`: optional override for the backend document-update cap; leave it `null` to use the backend default (`50` for torch today, `100` for sklearn), or set an explicit value such as `50` or `100` for controlled comparisons
 - `train.random_states`: random seeds for single-run training
 - `top_model.*`: clustering and filtering settings for `calculate_leiden_clustering`
 - `plotting.interactive`: when `false` (default), the pipeline forces a non-GUI Matplotlib backend so plots are saved without opening interactive windows
@@ -92,7 +94,15 @@ PATH="$PWD/.venv/bin:$PATH" nextflow run workflow/nextflow/main.nf \
   -params-file workflow/nextflow/params.igvf_full.yml
 ```
 
-The checked-in full-data params file runs the full IGVF dataset at `k = 5, 10, 15, 20` and keeps the per-seed train outputs in addition to the combined train, topmodel, UMAP, cluster mapping, and analysis artifacts.
+The checked-in full-data params file runs the full mouse IGVF dataset at `k = 5, 10, 15, 20` and keeps the per-seed train outputs in addition to the combined train, topmodel, UMAP, cluster mapping, and analysis artifacts.
+
+For single-GPU performance experiments, set `train.max_concurrent: 1` in your params file. The workflow reads that setting from `nextflow.config` and applies it as a `maxForks` limit for `SINGLE_TRAIN` tasks without changing the pipeline DAG.
+
+To compare CUDA runs with different document-update caps, pass `--train.max_doc_update_iter 50`, `--train.max_doc_update_iter 100`, or another integer on the CLI, or set `train.max_doc_update_iter` in your params file.
+
+For the current optimization pass, the most useful files to copy back from the remote server are `trace.txt`, `report.html`, `timeline.html`, and `nextflow.log` from the report directory.
+
+If you need to target a specific Nextflow binary, set `NEXTFLOW_BIN=/path/to/nextflow` before calling the helper.
 
 Outputs are written under `workdir` using the same directory structure as the legacy workflow:
 

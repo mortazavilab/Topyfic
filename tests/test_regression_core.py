@@ -28,6 +28,7 @@ def test_make_single_lda_model_produces_expected_shapes(synthetic_adata):
     assert top_model.name == "demo_7"
     assert top_model.N == 2
     assert top_model.model.components_.shape == (2, synthetic_adata.n_vars)
+    assert top_model.document_topic_matrix.shape == (synthetic_adata.n_obs, 2)
     assert top_model.get_gene_weights().shape == (synthetic_adata.n_vars, 2)
     assert top_model.get_feature_name() == synthetic_adata.var_names.tolist()
 
@@ -153,6 +154,10 @@ def test_train_hdf5_round_trip(tmp_path, synthetic_adata):
         reloaded.top_models[0].model.components_,
         train.top_models[0].model.components_,
     )
+    np.testing.assert_allclose(
+        reloaded.top_models[0].document_topic_matrix,
+        train.top_models[0].document_topic_matrix,
+    )
 
 
 def test_topmodel_hdf5_round_trip(tmp_path, synthetic_adata):
@@ -180,6 +185,7 @@ def test_topmodel_hdf5_round_trip(tmp_path, synthetic_adata):
     assert reloaded.backend_name == expected_backend
     assert reloaded.get_feature_name() == top_model.get_feature_name()
     np.testing.assert_allclose(reloaded.model.components_, top_model.model.components_)
+    np.testing.assert_allclose(reloaded.document_topic_matrix, top_model.document_topic_matrix)
 
 
 def test_analysis_cell_participation_matches_input_shape(synthetic_adata):

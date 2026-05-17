@@ -31,6 +31,32 @@ def validateParams() {
         error "Missing count_adata entries for: ${undefinedInputs.join(', ')}"
     }
 
+    if (params.train?.max_concurrent != null) {
+        try {
+            params.train.max_concurrent = params.train.max_concurrent as Integer
+        }
+        catch (Exception ignored) {
+            error "train.max_concurrent must be an integer when provided"
+        }
+
+        if ((params.train.max_concurrent as Integer) < 1) {
+            error "train.max_concurrent must be >= 1 when provided"
+        }
+    }
+
+    if (params.train?.max_doc_update_iter != null) {
+        try {
+            params.train.max_doc_update_iter = params.train.max_doc_update_iter as Integer
+        }
+        catch (Exception ignored) {
+            error "train.max_doc_update_iter must be an integer when provided"
+        }
+
+        if ((params.train.max_doc_update_iter as Integer) < 1) {
+            error "train.max_doc_update_iter must be >= 1 when provided"
+        }
+    }
+
     params.count_adata = (params.count_adata as Map).collectEntries { key, value ->
         [(key): file(value.toString()).toAbsolutePath().toString()]
     }
@@ -45,10 +71,11 @@ process SINGLE_TRAIN {
     tuple val(name), val(topic), val(random_state), val(adata_path)
 
     output:
-    tuple val(name), val(topic), val(adata_path), path("train_${name}_${topic}_${random_state}.p")
+    tuple val(name), val(topic), val(adata_path), path("train_${name}_${topic}_${random_state}.p"), emit: train
 
     script:
     def pythonCommand = params.plotting?.interactive ? 'python' : 'MPLBACKEND=Agg python'
+    def maxDocUpdateIterArg = params.train?.max_doc_update_iter != null ? "        --max-doc-update-iter ${params.train.max_doc_update_iter} \\\n" : ''
     """
     ${pythonCommand} ${projectDir}/bin/single_train.py \
         --name ${name} \
@@ -60,7 +87,7 @@ process SINGLE_TRAIN {
         --dtype ${params.train.dtype ?: 'float32'} \
         --batch-size ${params.train.batch_size ?: 128} \
         --max-iter ${params.train.max_iter ?: 5} \
-        --n-jobs ${params.train.n_jobs ?: 1} \
+${maxDocUpdateIterArg}        --n-jobs ${params.train.n_jobs ?: 1} \
         --output-dir .
     """
 
@@ -237,7 +264,8 @@ workflow {
             }
         }
 
-    singleTrains = SINGLE_TRAIN(singleTrainJobs)
+    singleTrainResults = SINGLE_TRAIN(singleTrainJobs)
+    singleTrains = singleTrainResults.train
 
     combinedTrainJobs = singleTrains
         .map { name, topic, adataPath, trainFile ->

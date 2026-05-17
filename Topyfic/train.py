@@ -13,7 +13,7 @@ from sklearn.decomposition import LatentDirichletAllocation
 import h5py
 
 from Topyfic.backends import create_lda_backend, resolve_lda_backend_name
-from Topyfic.persistence import write_backend_metadata, write_lda_state
+from Topyfic.persistence import write_backend_metadata, write_document_topic_matrix, write_lda_state
 from Topyfic.topModel import TopModel
 
 warnings.filterwarnings("ignore")
@@ -138,6 +138,8 @@ class Train:
                                       N=gene_weights.shape[1],
                                       gene_weights=gene_weights,
                                       model=lda_model,
+                                      document_topic_matrix=fit_result.document_topic_matrix,
+                                      training_data_cache_key=TopModel.data_matrix_cache_key(data.X),
                                       backend_name=self.backend_name,
                                       backend_kwargs=self.backend_kwargs)
 
@@ -264,6 +266,7 @@ class Train:
                     self.top_models[i].backend_kwargs,
                 )
                 write_lda_state(model, self.top_models[i].get_backend_state())
+                write_document_topic_matrix(model, self.top_models[i].document_topic_matrix)
 
             f['name'] = self.name.encode('utf-8')
             f['k'] = int(self.k)

@@ -9,7 +9,7 @@ import pandas as pd
 from Topyfic.lda_state import LDAState
 
 
-PERSISTENCE_VERSION = 2
+PERSISTENCE_VERSION = 3
 STRING_DTYPE = h5py.string_dtype(encoding="utf-8")
 
 
@@ -85,6 +85,27 @@ def read_backend_metadata(handle, default_name="sklearn", default_kwargs=None):
     persistence_version = int(handle.attrs.get("topyfic_persistence_version", 1))
 
     return backend_name or default_name, backend_kwargs, persistence_version
+
+
+def write_document_topic_matrix(handle, document_topic_matrix, name="document_topic_matrix"):
+    if name in handle:
+        del handle[name]
+
+    if document_topic_matrix is None:
+        return
+
+    handle.create_dataset(
+        name,
+        data=np.asarray(document_topic_matrix),
+        compression="gzip",
+        compression_opts=3,
+    )
+
+
+def read_document_topic_matrix(handle, name="document_topic_matrix"):
+    if name not in handle:
+        return None
+    return np.asarray(handle[name])
 
 
 def write_lda_state(handle, state: LDAState):

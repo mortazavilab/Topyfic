@@ -26,7 +26,7 @@ from yaml.loader import SafeLoader
 import h5py
 
 from Topyfic.backends import create_lda_backend, infer_backend_name, resolve_lda_backend_name
-from Topyfic.persistence import read_backend_metadata, read_lda_state
+from Topyfic.persistence import read_backend_metadata, read_document_topic_matrix, read_lda_state
 from Topyfic.train import Train
 from Topyfic.analysis import Analysis
 from Topyfic.lda_state import LDAState
@@ -623,6 +623,8 @@ def read_train(file):
                 top_model.backend_name = 'sklearn'
             if not hasattr(top_model, 'backend_kwargs'):
                 top_model.backend_kwargs = {}
+            if not hasattr(top_model, 'document_topic_matrix'):
+                top_model.document_topic_matrix = None
 
     if file.endswith('.h5'):
         f = h5py.File(file, 'r')
@@ -646,6 +648,7 @@ def read_train(file):
                 default_kwargs=backend_kwargs,
             )
             state = read_lda_state(model_group)
+            document_topic_matrix = read_document_topic_matrix(model_group)
             components, exp_dirichlet_component, others = state.to_frames()
             model = initialize_lda_model(
                 components,
@@ -659,6 +662,7 @@ def read_train(file):
                                  N=k,
                                  gene_weights=components.T,
                                  model=model,
+                                 document_topic_matrix=document_topic_matrix,
                                  backend_name=model_backend_name,
                                  backend_kwargs=model_backend_kwargs)
             top_models.append(top_model)
@@ -702,6 +706,8 @@ def read_topModel(file):
             top_model.backend_name = 'sklearn'
         if not hasattr(top_model, 'backend_kwargs'):
             top_model.backend_kwargs = {}
+        if not hasattr(top_model, 'document_topic_matrix'):
+            top_model.document_topic_matrix = None
 
     if file.endswith('.h5'):
         f = h5py.File(file, 'r')
@@ -755,6 +761,7 @@ def read_topModel(file):
             default_kwargs=backend_kwargs,
         )
         state = read_lda_state(f['model'])
+        document_topic_matrix = read_document_topic_matrix(f)
         components, exp_dirichlet_component, others = state.to_frames()
         model = initialize_lda_model(
             components,
@@ -768,6 +775,7 @@ def read_topModel(file):
                              N=N,
                              topics=topics,
                              model=model,
+                             document_topic_matrix=document_topic_matrix,
                              backend_name=model_backend_name,
                              backend_kwargs=model_backend_kwargs)
 
